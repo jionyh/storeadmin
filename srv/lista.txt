@@ -1,0 +1,83 @@
+Categorias e subcategorias
+
+Peixaria
+•	Salmão - kg
+•	Atum - kg
+•	Camarão - embalagem/kg
+
+Produtos orientais
+•	Nori - pacote
+•	Arroz - kg
+•	Vinagre de arroz - litro
+•	Soja - litro
+•	Hondachi - unidade
+•	Ajinomoto - unidade
+•	Mirim - unidade
+•	Kimuchi - unidade
+•	Panko - kilo
+•	Gergelim branco - unidade
+•	Gergelim preto - unidade
+•	Massa de crepe - unidade
+•	Minicrepe - caixa
+•	Guiozá - pacote
+•	Camarão tempurá - bandeja/pacote
+•	Ovas - unidade
+•	Agridoce - litro
+•	Gengibre - unidade
+•	Wasabi - unidade
+•	Soja takeaway - unidade
+•	Wasabi takeaway - unidade
+•	Alga wakame - unidade
+•	Shirachi - unidade
+•	Togarachi - unidade
+•	Sopa miso - unidade
+•	Sakê - garrafa
+•	Pasta de miso - unidade
+•	Tofu - unidade
+
+Vegetais/Verduras
+•	Rúcula - caixa
+•	Tomate cereja - caixa
+•	Alho francês - unidade
+•	Cebolinha - pacote
+•	Pepino japonês (embalado) - caixa/kg
+•	Pepino normal - caixa/kg
+•	Cenoura - kg
+•	Alface - embalagem
+
+Frutas
+•	Abacate - kg/embalagem
+•	Morango - caixa
+•	Limão - kg/embalagem
+•	Lima - kg/embalagem
+•	Laranja - kg/embalagem
+•	Maçã verde - kg/embalagem
+•	Manga  - kg/caixa
+
+Mercearia
+•	Farinha de trigo - kg/embalagem
+•	Açúcar - kg/embalagem
+•	Arroz carolino - kg/embalagem
+•	Azeite - unidade
+•	Sal grosso - unidade
+•	Sal fino - unidade
+•	Cebola frita - pacote
+•	Doritos - pacote
+•	Tabasco - unidade
+•	Cream cheese - kg/balde
+•	Maionese - kg/balde
+
+Bebidas
+•	Vodka - unidade
+•	Gin Gordons - unidade
+•	Gin Sharish/Martin Miller’s - unidade
+•	Beirão - unidade
+•	Groselha - unidade
+•	Safari - unidade
+•	Baileys- unidade
+•	Sagres branca - unidade/grade
+•	Bandida do pomar - unidade/grade
+•	Coca cola zero - unidade/grade
+•	Água das pedras - unidade/grade
+•	Cartuxa branco - unidade
+•	Herdade dos Grous - unidade
