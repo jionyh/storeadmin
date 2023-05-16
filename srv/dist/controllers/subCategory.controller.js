@@ -15,14 +15,13 @@ const prisma_1 = require("../lib/prisma");
 const subCategorySchema = zod_1.z.object({
     id: zod_1.z.number().optional(),
     categoryId: zod_1.z.string().transform(i => parseInt(i)),
-    name: zod_1.z.string().toLowerCase(),
-    unit: zod_1.z.string()
+    name: zod_1.z.string().toLowerCase()
 });
 exports.subCategory = {
     addSubCategory: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const { categoryId, name, unit } = subCategorySchema.parse(req.body);
+        const { categoryId, name } = subCategorySchema.parse(req.body);
         const data = {
-            categoryId, name, unit
+            categoryId, name
         };
         const addSubCat = yield prisma_1.prisma.subCategory.create({ data });
         if (!addSubCat) {
@@ -32,11 +31,29 @@ exports.subCategory = {
         res.json({ sucess: true, data: addSubCat });
     }),
     getAllSubCategories: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        const { cat } = req.query;
+        if (cat) {
+            const data = yield prisma_1.prisma.subCategory.findMany({
+                where: {
+                    categoryId: parseInt(cat)
+                },
+                select: {
+                    id: true,
+                    name: true,
+                    cat: {
+                        select: {
+                            name: true
+                        }
+                    }
+                },
+            });
+            res.json({ sucess: true, data: data });
+            return;
+        }
         const data = yield prisma_1.prisma.subCategory.findMany({
             select: {
                 id: true,
                 name: true,
-                unit: true,
                 cat: {
                     select: {
                         name: true

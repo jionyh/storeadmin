@@ -1,6 +1,6 @@
 import { DatePicker } from '@/components/DatePicker'
 import { Layout } from '@/layout/Layout'
-import { Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer } from '@chakra-ui/react'
+import { Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableContainer } from '@chakra-ui/react'
 
 import { Vendas as data } from '@/utils/data'
 

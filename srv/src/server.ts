@@ -1,11 +1,21 @@
 import dotenv from 'dotenv'
+import fs from 'fs'
+import app from './app'
+import https from 'https'
+
 dotenv.config()
 
-const PORT = parseInt(`${process.env.PORT || 3001}`)
+//Colocando certificado ssl na api
+const credentials = {
+    key:fs.readFileSync('src/cert/key.pem'),
+    cert:fs.readFileSync('src/cert/cert.pem')
+}
 
-import app from './app'
 
-app.listen(PORT, '127.0.0.1',()=>{
+const PORT = parseInt(`${process.env.PORT || 4001}`)
+
+//cria-se o app pelo node
+const server = https.createServer(credentials, app).listen(PORT,()=>{
     console.clear()
     console.log(`Server running at ${PORT}.`)
 })

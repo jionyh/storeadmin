@@ -16,9 +16,9 @@ app.use((0, helmet_1.default)());
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use(routes_1.default);
-app.use((req, res, next) => {
-    res.json({ hello: 'world' });
-});
+/* app.use((req:Request, res:Response, next:NextFunction)=>{
+    res.json({hello: 'world'})
+}) */
 app.use((error, req, res, next) => {
     res.status(500).send(error.message);
 });

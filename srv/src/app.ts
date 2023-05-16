@@ -18,9 +18,9 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use(router)
 
-app.use((req:Request, res:Response, next:NextFunction)=>{
+/* app.use((req:Request, res:Response, next:NextFunction)=>{
     res.json({hello: 'world'})
-})
+}) */
 
 app.use((error: Error, req: Request, res:Response, next:NextFunction)=>{
     res.status(500).send(error.message)

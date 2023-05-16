@@ -30,12 +30,18 @@ model Category {
   @@map("categories")
 }
 
+model Unit {
+  id           Int        @id @default(autoincrement())
+  name         String
+  abbreviation String     @db.VarChar(3)
+  Purchase     Purchase[]
+}
+
 model SubCategory {
   id         Int        @id @default(autoincrement())
   name       String
-  unit       String
-  cat        Category   @relation(fields: [categoryId], references: [id])
   categoryId Int
+  cat        Category   @relation(fields: [categoryId], references: [id])
   Purchase   Purchase[]
 
   @@map("subcategories")
@@ -47,10 +53,12 @@ model Purchase {
   value    Float
   createAt DateTime @default(now())
 
+  unit        Unit        @relation(fields: [unitId], references: [id])
   subcategory SubCategory @relation(fields: [itemId], references: [id])
   user        User        @relation(fields: [userId], references: [id])
   itemId      Int
   userId      Int
+  unitId      Int
 
   @@map("purchases")
 }
