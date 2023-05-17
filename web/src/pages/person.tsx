@@ -19,7 +19,7 @@ function BookingForm() {
           state={state}
           setState={setState}
           id={i}
-          key={persons.length + Math.random()}
+          key={i}
         />
       ))}
       <button

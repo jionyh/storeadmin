@@ -1,7 +1,7 @@
 import { ReactElement } from 'react'
 import Header from '@/components/Header'
 
-import { Box, Input, Stack, Select, NumberInput, Heading } from '@chakra-ui/react'
+import { Box, Heading } from '@chakra-ui/react'
 import Head from 'next/head'
 
 type Props = {
@@ -11,11 +11,9 @@ type Props = {
 
 export const Layout = ({ children, title }: Props) => {
   return (
-    <Box className='container max-w-[480px]'>
+    <Box className="container max-w-[480px]">
       <Header />
-      <Heading
-        textAlign={'center'}
-        size={'xl'}>
+      <Heading mt="5px" textAlign="center" color="gray.700" size="xl">
         {title}
       </Heading>
       <Head>
