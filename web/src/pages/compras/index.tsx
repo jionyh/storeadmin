@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { DatePicker } from '@/components/DatePicker'
 import { Layout } from '@/layout/Layout'
 import {
@@ -8,19 +9,20 @@ import {
   Th,
   Td,
   TableContainer,
-  list,
   Tfoot,
+  Button,
 } from '@chakra-ui/react'
-import { Compras as data } from '@/utils/data'
-import axios, { Axios } from 'axios'
+import axios from 'axios'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 import { PurchaseList } from '@/types/PurchaseType'
+import { Empty } from '@/components/EmptyPurchases'
+import { LoadingSpinner } from '@/components/LoadingSpinner'
 
 const Compras = () => {
   const [date, setDate] = useState(dayjs().format())
-  const [list, setList] = useState<PurchaseList>({})
+  const [list, setList] = useState<PurchaseList>()
   const [loading, setLoading] = useState(true)
 
   const fetchDay = async () => {
@@ -36,27 +38,23 @@ const Compras = () => {
     fetchDay()
   }, [date])
 
-  useEffect(() => {
-    console.log(list)
-  }, [list])
-
   return (
     <Layout title="Compras">
       <>
-        <div className="mx-5 flex items-center justify-between">
-          <div></div>
+        <div className="m-5 flex items-center justify-end">
           <Link href="/compras/add">
-            <button className="mb-2 cursor-pointer rounded-lg bg-red-500 p-2 text-base text-white hover:bg-red-600">
+            <Button size={'sm'} colorScheme="red">
               Nova Compra
-            </button>
+            </Button>
           </Link>
         </div>
         <DatePicker clickFn={setDate} />
         <div className="mt-5 flex justify-center">
           <TableContainer className="w-full border">
             <Table className="">
-              {loading && <div>Carregando dados...</div>}
-              {!loading && list.data.length > 0 && (
+              {loading && <LoadingSpinner />}
+              {!loading && list!.data.length === 0 && <Empty title="compras" />}
+              {!loading && list && list.data.length > 0 && (
                 <>
                   {list.data.map((item, index) => (
                     <>
@@ -74,16 +72,16 @@ const Compras = () => {
                             <Td>
                               {item.quantity} {item.unit}
                             </Td>
-                            <Td>€ {item.valor}</Td>
+                            <Td>€ {item.valor.toFixed(2)}</Td>
                           </Tr>
                         </Tbody>
                       ))}
                     </>
                   ))}
-                  <Tfoot background="red.300" fontWeight="bold">
+                  <Tfoot background="red.200" fontWeight="bold">
                     <Td>Total</Td>
                     <Td></Td>
-                    <Td>€ {list.total}</Td>
+                    <Td>€ {list.total.toFixed(2)}</Td>
                   </Tfoot>
                 </>
               )}

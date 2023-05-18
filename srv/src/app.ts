@@ -1,5 +1,5 @@
 import 'express-async-errors'
-import express, {Request, Response, NextFunction} from 'express'
+import express, { Request, Response, NextFunction } from 'express'
 import cors from 'cors'
 import morgan from 'morgan'
 import helmet from 'helmet'
@@ -22,8 +22,8 @@ app.use(router)
     res.json({hello: 'world'})
 }) */
 
-app.use((error: Error, req: Request, res:Response, next:NextFunction)=>{
-    res.status(500).send(error.message)
+app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
+  res.status(500).send(error.message)
 })
 
 export default app

@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
+    "lint": "eslint src --ext .ts --fix",    
     "compile": "npx tsc",
     "start": "node ./dist/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -23,11 +24,13 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
+    "@rocketseat/eslint-config": "^1.2.0",
     "@types/cors": "^2.8.13",
     "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.17",
     "@types/helmet": "^4.0.0",
     "@types/morgan": "^1.9.4",
+    "eslint": "^8.40.0",
     "prisma": "^4.14.0",
     "ts-node": "^10.9.1",
     "tsx": "^3.12.7",

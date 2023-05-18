@@ -48,6 +48,7 @@ export const DatePicker = ({ clickFn }: Props) => {
 
   useEffect(() => {
     addDayToArray()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dia])
 
   return (

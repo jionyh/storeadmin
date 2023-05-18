@@ -1,4 +1,5 @@
 import { ComprasInput } from '@/components/ComprasInput'
+import { LoadingSpinner } from '@/components/LoadingSpinner'
 import { Layout } from '@/layout/Layout'
 import { ProductList } from '@/types/ProductList'
 import { ProductType } from '@/types/ProductType'
@@ -13,7 +14,7 @@ const AdicionarCompras = () => {
     itemId: '',
     userId: '',
     unitId: '',
-    qtd: '',
+    quantity: '',
     value: '',
   }
 
@@ -25,10 +26,11 @@ const AdicionarCompras = () => {
   /* State para guardar o array que vai para o backend */
   const [list, setList] = useState<ProductList[]>([listInitialState])
 
+  // eslint-disable-next-line no-unused-vars
   const [loading, setLoading] = useState(true)
   const [loadingProducts, setLoadingProducts] = useState(true)
   const [loadingPage, setLoadingPage] = useState(true)
-  const [error, setError] = useState()
+  const [error, setError] = useState<any>(undefined)
 
   const fetchData = async () => {
     setLoading(true)
@@ -83,23 +85,23 @@ const AdicionarCompras = () => {
   }
 
   /* Função para adicionar novos campos ao form */
-
   const handleAddInputs = () => {
     setList([...list, listInitialState])
     console.log(list)
   }
 
+  /* Função que envia os dados para o backend */
   const handleSaveInputs = () => {
     for (const i in list) {
       const msg = {
         item: list[i].itemId,
-        quantidade: list[i].qtd,
+        quantidade: list[i].quantity,
         unidade: list[i].unitId,
         valor: list[i].value,
       }
-      console.log(msg)
+      console.log('msg', msg)
     }
-    console.log(list)
+    console.log('list', list)
   }
 
   useEffect(() => {
@@ -116,7 +118,7 @@ const AdicionarCompras = () => {
     <Layout title="Adicionar Compras">
       <>
         {error && <div>Não foi possivel atender a sua solicitação</div>}
-        {loadingPage && <div>Carregando</div>}
+        {loadingPage && <LoadingSpinner />}
         {!loadingPage && !error && (
           <>
             <hr className="mb-4" />

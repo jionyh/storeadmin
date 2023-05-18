@@ -1,7 +1,6 @@
 import { ProductList } from '@/types/ProductList'
 import { ProductType } from '@/types/ProductType'
 import { UnitType } from '@/types/UnitType'
-import { TriangleDownIcon } from '@chakra-ui/icons'
 import {
   Box,
   Center,
@@ -14,7 +13,7 @@ import {
   Select,
   Stack,
 } from '@chakra-ui/react'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 export type Props = {
   productList: ProductType[]
@@ -106,9 +105,9 @@ export const ComprasInput = ({
               border="1px"
               borderColor="gray.300"
               type="number"
-              name="qtd"
+              name="quantity"
               variant="filled"
-              value={state.qtd}
+              value={state.quantity}
               onChange={(e: React.ChangeEvent) => handleAddProducts(e)}
               placeholder="Quantidade"
             />

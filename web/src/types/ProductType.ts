@@ -1,7 +1,7 @@
 export type ProductType = {
-    id: number
+  id: number
+  name: string
+  cat: {
     name: string
-    cat:{
-        name: string
-    }
+  }
 }

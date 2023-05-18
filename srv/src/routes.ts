@@ -5,7 +5,6 @@ import { unit } from './controllers/unit.controller'
 import { purchase } from './controllers/purchase.controller'
 const router = express.Router()
 
-
 router.post('/categories', category.createCategory)
 router.get('/categories', category.getAllCategories)
 
@@ -15,7 +14,6 @@ router.get('/categories/sub', subCategory.getAllSubCategories)
 router.post('/compras', purchase.createPurchase)
 router.get('/compras', purchase.getPurchases)
 
-router.get('/unit',unit.getAllUnit)
-
+router.get('/unit', unit.getAllUnit)
 
 export default router
