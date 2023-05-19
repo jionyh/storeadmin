@@ -1,11 +1,11 @@
 /* eslint-disable array-callback-return */
-import { Request, Response, name } from 'express'
+import { Request, Response } from 'express'
 import { z } from 'zod'
 import dayjs from 'dayjs'
 
 import { prisma } from '../lib/prisma'
 import { PurchaseListType } from '../types/PurchaseListType'
-import { category } from './category.controller'
+import { Capitalize } from '../utils/capitalizeFirstLetter'
 
 const purchaseSchema = z
   .object({
@@ -24,16 +24,17 @@ const purchaseSchema = z
     quantity: z
       .string()
       .nonempty()
-      .transform((i) => parseInt(i)),
+      .transform((i) => parseFloat(i)),
     value: z
       .string()
       .nonempty()
-      .transform((i) => parseInt(i)),
+      .transform((i) => parseFloat(i)),
   })
   .array()
 
 export const purchase = {
   createPurchase: async (req: Request, res: Response) => {
+    console.log(req.body)
     const data = purchaseSchema.safeParse(req.body)
 
     if (data.success === false) {
@@ -49,16 +50,18 @@ export const purchase = {
 
     const parsedData = data.data
 
+    console.log(parsedData)
+
     try {
       const addPurchases = await prisma.purchase.createMany({
         data: parsedData,
       })
 
       if (!addPurchases) {
-        res.json({ sucess: false })
+        res.json({ success: false })
         return
       }
-      res.json({ sucess: true, addPurchases })
+      res.json({ success: true, addPurchases })
     } catch (e: any) {
       res.status(400).json({ status: false, error: e.meta.field_name })
     }
@@ -111,7 +114,7 @@ export const purchase = {
         category: purchases[i].subcategory.cat.id,
         id: purchases[i].id,
         catId: purchases[i].subcategory.cat.id,
-        name: purchases[i].subcategory.name,
+        name: Capitalize(purchases[i].subcategory.name),
         quantity: purchases[i].quantity,
         unit: purchases[i].unit.abbreviation,
         valor: purchases[i].value,
@@ -134,5 +137,23 @@ export const purchase = {
       })
       .filter((item) => item !== undefined)
     res.json({ sucess: true, data: result, total: soma })
+  },
+
+  deletePurchase: async (req: Request, res: Response) => {
+    const { id } = req.params
+
+    if (!id) {
+      res.status(400).json({ status: false, error: 'id não enviado!' })
+    }
+    const deletedPurchase = await prisma.purchase.delete({
+      where: { id: parseInt(id as string) },
+    })
+    if (!deletedPurchase) {
+      res.status(400).json({ status: false, error: 'Compra não localizada!' })
+    }
+
+    res.status(200).json({
+      status: true,
+    })
   },
 }

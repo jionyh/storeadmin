@@ -8,11 +8,14 @@ const fs_1 = __importDefault(require("fs"));
 const app_1 = __importDefault(require("./app"));
 const https_1 = __importDefault(require("https"));
 dotenv_1.default.config();
+// Colocando certificado ssl na api
 const credentials = {
-    key: fs_1.default.readFileSync('./cert/key.pem'),
-    cert: fs_1.default.readFileSync('./cert/cert.pem')
+    key: fs_1.default.readFileSync('src/cert/key.pem'),
+    cert: fs_1.default.readFileSync('src/cert/cert.pem'),
 };
 const PORT = parseInt(`${process.env.PORT || 4001}`);
+// cria-se o app pelo node
+// eslint-disable-next-line no-unused-vars
 const server = https_1.default.createServer(credentials, app_1.default).listen(PORT, () => {
     console.clear();
     console.log(`Server running at ${PORT}.`);

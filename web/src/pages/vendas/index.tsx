@@ -25,10 +25,15 @@ const Vendas = () => {
       { name: 'outros', value: '49,00' },
     ],
   }
+
+  const handleDate = (e: string) => {
+    console.log(date)
+    setDate(e)
+  }
   return (
     <Layout title="Vendas">
       <>
-        <DatePicker clickFn={setDate} />
+        <DatePicker clickFn={handleDate} />
         <div className="mt-5 flex justify-center">
           <TableContainer className="w-full border">
             <Table>

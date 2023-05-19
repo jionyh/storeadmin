@@ -21,15 +21,16 @@ import { Empty } from '@/components/EmptyPurchases'
 import { LoadingSpinner } from '@/components/LoadingSpinner'
 
 const Compras = () => {
-  const [date, setDate] = useState(dayjs().format())
+  const [date, setDate] = useState(dayjs().format('YYYY-MM-DD'))
   const [list, setList] = useState<PurchaseList>()
   const [loading, setLoading] = useState(true)
 
   const fetchDay = async () => {
     setLoading(true)
-    const res = await axios.get(`https://localhost:4001/compras?date=${date}`)
+    const res = await axios.get(`https://jiony.dev:4001/compras?date=${date}`)
     if (res) {
       setList(res.data)
+      console.log('fetch', res.data)
     }
     setLoading(false)
   }
@@ -37,6 +38,10 @@ const Compras = () => {
   useEffect(() => {
     fetchDay()
   }, [date])
+
+  useEffect(() => {
+    fetchDay()
+  }, [])
 
   return (
     <Layout title="Compras">

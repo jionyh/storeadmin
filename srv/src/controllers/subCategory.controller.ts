@@ -3,6 +3,7 @@ import { z } from 'zod'
 
 import { prisma } from '../lib/prisma'
 import { Capitalize } from '../utils/capitalizeFirstLetter'
+import { ProductList } from '../types/ProductList'
 
 const subCategorySchema = z
   .object({
@@ -50,7 +51,15 @@ export const subCategory = {
         },
       })
 
-      const data = Capitalize(response)
+      const data: ProductList[] = []
+
+      for (const i in response) {
+        data.push({
+          id: response[i].id,
+          name: Capitalize(response[i].name),
+          cat: Capitalize(response[i].cat.name),
+        })
+      }
 
       res.json({ sucess: true, data })
       return

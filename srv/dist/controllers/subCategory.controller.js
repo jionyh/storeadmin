@@ -12,18 +12,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.subCategory = void 0;
 const zod_1 = require("zod");
 const prisma_1 = require("../lib/prisma");
-const subCategorySchema = zod_1.z.object({
+const capitalizeFirstLetter_1 = require("../utils/capitalizeFirstLetter");
+const subCategorySchema = zod_1.z
+    .object({
     id: zod_1.z.number().optional(),
-    categoryId: zod_1.z.string().transform(i => parseInt(i)),
-    name: zod_1.z.string().toLowerCase()
-});
+    categoryId: zod_1.z.string().transform((i) => parseInt(i)),
+    name: zod_1.z.string().toLowerCase(),
+})
+    .array();
 exports.subCategory = {
     addSubCategory: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const { categoryId, name } = subCategorySchema.parse(req.body);
-        const data = {
-            categoryId, name
-        };
-        const addSubCat = yield prisma_1.prisma.subCategory.create({ data });
+        const data = subCategorySchema.parse(req.body);
+        const addSubCat = yield prisma_1.prisma.subCategory.createMany({ data });
         if (!addSubCat) {
             res.json({ sucess: false });
             return;
@@ -33,21 +33,32 @@ exports.subCategory = {
     getAllSubCategories: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const { cat } = req.query;
         if (cat) {
-            const data = yield prisma_1.prisma.subCategory.findMany({
+            const response = yield prisma_1.prisma.subCategory.findMany({
                 where: {
-                    categoryId: parseInt(cat)
+                    categoryId: parseInt(cat),
+                },
+                orderBy: {
+                    name: 'asc',
                 },
                 select: {
                     id: true,
                     name: true,
                     cat: {
                         select: {
-                            name: true
-                        }
-                    }
+                            name: true,
+                        },
+                    },
                 },
             });
-            res.json({ sucess: true, data: data });
+            const data = [];
+            for (const i in response) {
+                data.push({
+                    id: response[i].id,
+                    name: (0, capitalizeFirstLetter_1.Capitalize)(response[i].name),
+                    cat: (0, capitalizeFirstLetter_1.Capitalize)(response[i].cat.name),
+                });
+            }
+            res.json({ sucess: true, data });
             return;
         }
         const data = yield prisma_1.prisma.subCategory.findMany({
@@ -56,15 +67,15 @@ exports.subCategory = {
                 name: true,
                 cat: {
                     select: {
-                        name: true
-                    }
-                }
+                        name: true,
+                    },
+                },
             },
         });
         if (!data) {
             res.json({ error: true });
             return;
         }
-        res.json({ sucess: true, data: data });
-    })
+        res.json({ sucess: true, data });
+    }),
 };

@@ -58,6 +58,7 @@ export const ComprasInput = ({
       <Stack>
         <div className="">
           <Select
+            required
             border="1px"
             borderColor="gray.300"
             name="itemId"
@@ -76,6 +77,7 @@ export const ComprasInput = ({
           </Select>
         </div>
         <Select
+          required
           border="1px"
           borderColor="gray.300"
           name="unitId"
@@ -102,6 +104,7 @@ export const ComprasInput = ({
               children={abbreviation}
             />
             <Input
+              required
               border="1px"
               borderColor="gray.300"
               type="number"
@@ -120,6 +123,7 @@ export const ComprasInput = ({
               children="€"
             />
             <Input
+              required
               border="1px"
               borderColor="gray.300"
               type="number"

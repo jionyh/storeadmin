@@ -1,18 +1,21 @@
+/* eslint-disable no-prototype-builtins */
 import { ComprasInput } from '@/components/ComprasInput'
 import { LoadingSpinner } from '@/components/LoadingSpinner'
 import { Layout } from '@/layout/Layout'
 import { ProductList } from '@/types/ProductList'
 import { ProductType } from '@/types/ProductType'
 import { CategoryType, UnitType } from '@/types/UnitType'
-import { AddIcon, CheckIcon } from '@chakra-ui/icons'
+import { AddIcon, CheckIcon, CloseIcon } from '@chakra-ui/icons'
 import { Button, Flex, Wrap } from '@chakra-ui/react'
 import axios from 'axios'
+import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 
 const AdicionarCompras = () => {
+  const router = useRouter()
   const listInitialState = {
     itemId: '',
-    userId: '',
+    userId: '1',
     unitId: '',
     quantity: '',
     value: '',
@@ -35,7 +38,7 @@ const AdicionarCompras = () => {
   const fetchData = async () => {
     setLoading(true)
     try {
-      const res = await axios.get('https://localhost:4001/unit')
+      const res = await axios.get('https://jiony.dev:4001/unit')
       setUnitList(res.data.data)
       setLoading(false)
 
@@ -50,7 +53,7 @@ const AdicionarCompras = () => {
     setLoadingPage(true)
 
     try {
-      const res = await axios.get(`https://localhost:4001/categories/`)
+      const res = await axios.get(`https://jiony.dev:4001/categories/`)
       setCategoryList(res.data.data)
     } catch (e) {
       setError('Falha')
@@ -64,7 +67,7 @@ const AdicionarCompras = () => {
     setList([listInitialState])
     try {
       const res = await axios.get(
-        `https://localhost:4001/categories/sub?cat=${activeCategory}`,
+        `https://jiony.dev:4001/categories/sub?cat=${activeCategory}`,
       )
       setProductList(res.data.data)
       setLoadingProducts(false)
@@ -74,6 +77,18 @@ const AdicionarCompras = () => {
       setError('Falha ao carregar!')
     }
     setLoadingProducts(false)
+  }
+
+  const fetchPostCreatePurchase = async () => {
+    const res = await axios.post('https://jiony.dev:4001/compras', list)
+
+    if (res.data.success) {
+      alert('Compras adicionadas com sucesso!')
+      router.replace('/compras')
+      return
+    }
+    console.log(res.data)
+    alert('Ocorreu um erro! Tente novamente mais tarde.')
   }
 
   /* Função para lidar com a adição no array de dados que vai para o backend */
@@ -90,18 +105,34 @@ const AdicionarCompras = () => {
     console.log(list)
   }
 
+  const handleRemoveInputs = (i: any) => {
+    if (i !== 0) {
+      const newFormValues = [...list]
+      newFormValues.splice(i, 1)
+      setList(newFormValues)
+    }
+  }
+
   /* Função que envia os dados para o backend */
   const handleSaveInputs = () => {
-    for (const i in list) {
-      const msg = {
-        item: list[i].itemId,
-        quantidade: list[i].quantity,
-        unidade: list[i].unitId,
-        valor: list[i].value,
+    const errors = []
+    list.forEach((item, i) => {
+      for (const key in item) {
+        if (item.hasOwnProperty(key) && (item as any)[key] === '') {
+          errors.push({
+            lista: i + 1,
+            campo: key,
+          })
+        }
       }
-      console.log('msg', msg)
+    })
+    if (errors.length === 0) {
+      console.log('passou')
+      console.log(list)
+      fetchPostCreatePurchase()
+      return
     }
-    console.log('list', list)
+    alert('Preencha os campos!')
   }
 
   useEffect(() => {
@@ -142,14 +173,26 @@ const AdicionarCompras = () => {
             {!loadingProducts && (
               <>
                 {list.map((list, i) => (
-                  <ComprasInput
-                    key={i}
-                    index={i}
-                    state={list}
-                    handleAdd={handleProductListAdd}
-                    productList={productList!}
-                    unitList={unitList!}
-                  />
+                  <>
+                    {i !== 0 && (
+                      <div className="flex justify-end pr-4">
+                        <CloseIcon
+                          cursor="pointer"
+                          color="red.500"
+                          boxSize={3}
+                          onClick={() => handleRemoveInputs(i)}
+                        />
+                      </div>
+                    )}
+                    <ComprasInput
+                      key={i}
+                      index={i}
+                      state={list}
+                      handleAdd={handleProductListAdd}
+                      productList={productList!}
+                      unitList={unitList!}
+                    />
+                  </>
                 ))}
 
                 <Flex mr="12px" justify="end" gap="8px">
