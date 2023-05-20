@@ -38,7 +38,7 @@ const AdicionarCompras = () => {
   const fetchData = async () => {
     setLoading(true)
     try {
-      const res = await axios.get('https://jiony.dev:4001/unit')
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_PATH}/unit`)
       setUnitList(res.data.data)
       setLoading(false)
 
@@ -53,7 +53,9 @@ const AdicionarCompras = () => {
     setLoadingPage(true)
 
     try {
-      const res = await axios.get(`https://jiony.dev:4001/categories/`)
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_PATH}/categories/`,
+      )
       setCategoryList(res.data.data)
     } catch (e) {
       setError('Falha')
@@ -67,7 +69,7 @@ const AdicionarCompras = () => {
     setList([listInitialState])
     try {
       const res = await axios.get(
-        `https://jiony.dev:4001/categories/sub?cat=${activeCategory}`,
+        `${process.env.NEXT_PUBLIC_API_PATH}/categories/sub?cat=${activeCategory}`,
       )
       setProductList(res.data.data)
       setLoadingProducts(false)
@@ -80,7 +82,10 @@ const AdicionarCompras = () => {
   }
 
   const fetchPostCreatePurchase = async () => {
-    const res = await axios.post('https://jiony.dev:4001/compras', list)
+    const res = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_PATH}/compras`,
+      list,
+    )
 
     if (res.data.success) {
       alert('Compras adicionadas com sucesso!')
@@ -148,7 +153,7 @@ const AdicionarCompras = () => {
   return (
     <Layout title="Adicionar Compras">
       <>
-        {error && <div>Não foi possivel atender a sua solicitação</div>}
+        {error && <div>Não foi possível atender a sua solicitação</div>}
         {loadingPage && <LoadingSpinner />}
         {!loadingPage && !error && (
           <>

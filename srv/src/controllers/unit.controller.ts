@@ -10,6 +10,7 @@ export const unit = {
       res.json({ status: false })
       return
     }
+    console.log(units)
 
     res.json({ status: true, data: units })
   },

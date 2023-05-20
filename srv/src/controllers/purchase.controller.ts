@@ -136,7 +136,7 @@ export const purchase = {
         }
       })
       .filter((item) => item !== undefined)
-    res.json({ sucess: true, data: result, total: soma })
+    res.json({ success: true, data: result, total: soma.toFixed(2) })
   },
 
   deletePurchase: async (req: Request, res: Response) => {
