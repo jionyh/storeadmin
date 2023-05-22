@@ -4,4 +4,5 @@ export interface ProductList {
   unitId: string
   quantity: string
   value: string
+  supplier?: string
 }

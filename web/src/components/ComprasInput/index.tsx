@@ -141,6 +141,17 @@ export const ComprasInput = ({
             />
           </InputGroup>
         </Flex>
+        <Input
+          isDisabled={disabled}
+          border="1px"
+          borderColor="gray.300"
+          type="text"
+          name="supplier"
+          variant="filled"
+          value={state.supplier}
+          onChange={(e: React.ChangeEvent) => handleAddProducts(e)}
+          placeholder="Fornecedor"
+        />
         <Center>
           <Divider
             w={'50%'}

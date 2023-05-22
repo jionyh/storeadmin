@@ -83,7 +83,7 @@ export const ModalCompras = ({ obj, info, callback }: Props) => {
   const toast = useToast()
   const { isOpen, onClose } = useDisclosure(obj)
   const [data, setData] = useState(info)
-  const [value, setValue] = useState(info.valor)
+  const [value, setValue] = useState(info.value)
   const [quantity, setQuantity] = useState(info.quantity)
 
   const handleEdit = async () => {
@@ -120,7 +120,7 @@ export const ModalCompras = ({ obj, info, callback }: Props) => {
 
   useEffect(() => {
     setData(info)
-    setValue(info.valor)
+    setValue(info.value)
     setQuantity(info.quantity)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen])
@@ -178,7 +178,7 @@ export const ModalCompras = ({ obj, info, callback }: Props) => {
                   </FormControl>
                 </Flex>
                 <FormControl variant="floating" id="first-name">
-                  <Input disabled value="fulano da esquina" />
+                  <Input disabled value={data.supplier} />
                   <FormLabel>Fornecedor</FormLabel>
                 </FormControl>
               </Stack>

@@ -1,6 +1,6 @@
 /* eslint-disable no-use-before-define */
 export interface PurchaseList {
-  sucess: boolean
+  success: boolean
   data: D[]
   total: number
 }
@@ -17,5 +17,6 @@ export interface Purchase {
   name: string
   quantity: string
   unit: string
-  valor: string
+  value: string
+  supplier?: string
 }

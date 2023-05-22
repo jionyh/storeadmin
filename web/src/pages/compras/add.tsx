@@ -19,6 +19,7 @@ const AdicionarCompras = () => {
     unitId: '',
     quantity: '',
     value: '',
+    supplier: '',
   }
 
   const [unitList, setUnitList] = useState<UnitType[]>()
@@ -130,7 +131,11 @@ const AdicionarCompras = () => {
     const errors = []
     list.forEach((item, i) => {
       for (const key in item) {
-        if (item.hasOwnProperty(key) && (item as any)[key] === '') {
+        if (
+          item.hasOwnProperty(key) &&
+          (item as any)[key] === '' &&
+          key !== 'supplier'
+        ) {
           errors.push({
             lista: i + 1,
             campo: key,
@@ -164,29 +169,26 @@ const AdicionarCompras = () => {
         {loadingPage && <LoadingSpinner />}
         {!loadingPage && !error && (
           <>
-            <hr className="mb-4" />
-            <div className="flex items-center justify-center gap-0.5 text-sm">
-              <Wrap spacing="2px" justify="center">
-                {categoryList!.map((cat, i) => (
-                  <Button
-                    key={cat.id}
-                    size="sm"
-                    isDisabled={disabled}
-                    colorScheme="blue"
-                    rounded="0px"
-                    variant="outline"
-                    isActive={activeCategory === cat.id.toString()}
-                    onClick={() => setActiveCategory(cat.id.toString())}
-                  >
-                    {cat.name}
-                  </Button>
-                ))}
-              </Wrap>
-            </div>
-            {!loadingProducts && (
+            <Wrap mb="20px" spacing="2px" justify="center">
+              {categoryList!.map((cat, i) => (
+                <Button
+                  key={cat.id}
+                  size="sm"
+                  isDisabled={disabled}
+                  colorScheme="blue"
+                  rounded="0px"
+                  variant="outline"
+                  isActive={activeCategory === cat.id.toString()}
+                  onClick={() => setActiveCategory(cat.id.toString())}
+                >
+                  {cat.name}
+                </Button>
+              ))}
+            </Wrap>
+            {!loadingProducts && unitList && (
               <>
                 {list.map((list, i) => (
-                  <>
+                  <React.Fragment key={i}>
                     {i !== 0 && (
                       <div className="flex justify-end pr-4">
                         <CloseIcon
@@ -203,10 +205,10 @@ const AdicionarCompras = () => {
                       state={list}
                       handleAdd={handleProductListAdd}
                       productList={productList!}
-                      unitList={unitList!}
+                      unitList={unitList}
                       disabled={disabled}
                     />
-                  </>
+                  </React.Fragment>
                 ))}
 
                 <Flex mr="12px" justify="end" gap="8px">

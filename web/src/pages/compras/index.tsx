@@ -38,7 +38,8 @@ const Compras = () => {
     name: '',
     quantity: '',
     unit: '',
-    valor: '',
+    value: '',
+    supplier: '',
   })
   const alert = useDisclosure()
   const loader = useDisclosure()
@@ -102,7 +103,7 @@ const Compras = () => {
   return (
     <Layout title="Compras">
       <>
-        <div className="m-5 flex items-center justify-end">
+        <div className="mb-5 mr-5 flex items-center justify-end">
           <Link href="/compras/add">
             <Button size={'sm'} colorScheme="red">
               Nova Compra
@@ -134,21 +135,24 @@ const Compras = () => {
                       </Thead>
                       {item.produto.map((item, index) => (
                         <Tbody key={index}>
-                          <Tr onClick={() => openModal(item)}>
+                          <Tr>
                             <Td
+                              onClick={() => openModal(item)}
                               height="auto"
-                              maxWidth="200px"
-                              className="whitespace-break-spaces"
+                              width="240px"
+                              className="whitespace-normal"
                             >
                               {item.name}
                             </Td>
-                            <Td maxWidth="90px">
+                            <Td onClick={() => openModal(item)} maxWidth="90px">
                               <Text>
                                 {item.quantity} {item.unit}
                               </Text>
                             </Td>
-                            <Td maxWidth="90px">€ {item.valor}</Td>
-                            <Td maxWidth="30px">
+                            <Td onClick={() => openModal(item)} maxWidth="90px">
+                              € {item.value}
+                            </Td>
+                            <Td width="50px">
                               <CloseIcon
                                 color="red.500"
                                 boxSize={3}
