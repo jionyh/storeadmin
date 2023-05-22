@@ -137,6 +137,7 @@ const Compras = () => {
                         <Tbody key={index}>
                           <Tr>
                             <Td
+                              cursor="pointer"
                               onClick={() => openModal(item)}
                               height="auto"
                               width="240px"
@@ -144,12 +145,20 @@ const Compras = () => {
                             >
                               {item.name}
                             </Td>
-                            <Td onClick={() => openModal(item)} maxWidth="90px">
+                            <Td
+                              cursor="pointer"
+                              onClick={() => openModal(item)}
+                              maxWidth="90px"
+                            >
                               <Text>
                                 {item.quantity} {item.unit}
                               </Text>
                             </Td>
-                            <Td onClick={() => openModal(item)} maxWidth="90px">
+                            <Td
+                              cursor="pointer"
+                              onClick={() => openModal(item)}
+                              maxWidth="90px"
+                            >
                               € {item.value}
                             </Td>
                             <Td width="50px">
