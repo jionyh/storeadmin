@@ -1,9 +1,9 @@
 export interface PurchaseListType {
-  category: number
   id: number
   catId: number
   name: string
-  quantity: number
+  quantity: string
   unit: string
-  valor: number
+  value: string
+  supplier?: string
 }

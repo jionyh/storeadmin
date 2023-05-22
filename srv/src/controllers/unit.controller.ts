@@ -1,17 +1,27 @@
 import { Request, Response } from 'express'
 
 import { prisma } from '../lib/prisma'
+import { Capitalize } from '../utils/capitalizeFirstLetter'
 
 export const unit = {
   getAllUnit: async (req: Request, res: Response) => {
-    const units = await prisma.unit.findMany()
+    const data = await prisma.unit.findMany()
 
-    if (!units) {
-      res.json({ status: false })
+    if (!data) {
+      res.json({ success: false })
       return
     }
-    console.log(units)
 
-    res.json({ status: true, data: units })
+    const units = []
+
+    for (const i in data) {
+      units.push({
+        id: data[i].id,
+        name: Capitalize(data[i].name),
+        abbreviation: data[i].abbreviation.toUpperCase(),
+      })
+    }
+
+    res.json({ success: true, data: units })
   },
 }

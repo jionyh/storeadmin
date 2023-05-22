@@ -14,6 +14,7 @@ router.get('/categories/sub', subCategory.getAllSubCategories)
 router.post('/compras', purchase.createPurchase)
 router.get('/compras', purchase.getPurchases)
 router.delete('/compras/:id', purchase.deletePurchase)
+router.patch('/compras/:id', purchase.editPurchase)
 
 router.get('/unit', unit.getAllUnit)
 

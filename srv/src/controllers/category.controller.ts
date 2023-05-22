@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { z } from 'zod'
 
 import { prisma } from '../lib/prisma'
+import { Capitalize } from '../utils/capitalizeFirstLetter'
 
 const categorySchema = z.object({
   id: z.number().optional(),
@@ -19,16 +20,25 @@ export const category = {
     })
 
     if (!addCategory) {
-      res.json({ sucess: false })
+      res.json({ success: false })
       return
     }
 
-    res.json({ sucess: true, data: addCategory })
+    res.json({ success: true, data: addCategory })
   },
 
   getAllCategories: async (req: Request, res: Response) => {
     const data = await prisma.category.findMany()
 
-    res.json({ sucess: true, data })
+    const categories = []
+
+    for (const i in data) {
+      categories.push({
+        id: data[i].id,
+        name: Capitalize(data[i].name),
+      })
+    }
+
+    res.json({ success: true, data: categories })
   },
 }
