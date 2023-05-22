@@ -11,6 +11,7 @@ import {
   TableContainer,
   Tfoot,
   Button,
+  Text,
   useDisclosure,
   useToast,
 } from '@chakra-ui/react'
@@ -19,18 +20,28 @@ import axios from 'axios'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
-import { PurchaseList } from '@/types/PurchaseType'
+import { Purchase, PurchaseList } from '@/types/PurchaseType'
 import { Empty } from '@/components/EmptyPurchases'
 import { LoadingSpinner } from '@/components/LoadingSpinner'
 import { Alert } from '@/components/Alert'
 import { Loader } from '@/components/Loader'
+import { ModalCompras } from '@/components/ComprasModal'
 
 const Compras = () => {
   const toast = useToast()
   const [date, setDate] = useState(dayjs().format('YYYY-MM-DD'))
   const [list, setList] = useState<PurchaseList>()
   const [delProduct, setDelProduct] = useState('')
+  const [modalInfo, setModalInfo] = useState<Purchase>({
+    id: 0,
+    catId: 0,
+    name: '',
+    quantity: '',
+    unit: '',
+    valor: '',
+  })
   const alert = useDisclosure()
+  const loader = useDisclosure()
   const modal = useDisclosure()
   const [loading, setLoading] = useState(true)
 
@@ -52,12 +63,12 @@ const Compras = () => {
 
   const deleteProduct = async () => {
     alert.onClose()
-    modal.onOpen()
+    loader.onOpen()
     try {
       await axios.delete(
         `${process.env.NEXT_PUBLIC_API_PATH}/compras/${delProduct}`,
       )
-      modal.onClose()
+      loader.onClose()
       toast({
         title: 'Produto Deletado!',
         status: 'success',
@@ -66,14 +77,18 @@ const Compras = () => {
       fetchDay()
       return
     } catch (e) {
-      modal.onClose()
+      loader.onClose()
       toast({
         title: 'Erro ao deletar o Produto!',
         status: 'error',
         isClosable: true,
       })
-      console.log(e)
     }
+  }
+
+  const openModal = (data: any) => {
+    setModalInfo(data)
+    modal.onOpen()
   }
 
   useEffect(() => {
@@ -95,7 +110,7 @@ const Compras = () => {
           </Link>
         </div>
         <DatePicker clickFn={setDate} />
-        <div className="mt-5 flex justify-center">
+        <div className="mt-5 ">
           {loading && <LoadingSpinner />}
           {!loading && list!.data.length === 0 && (
             <div className="mt-20">
@@ -105,7 +120,7 @@ const Compras = () => {
 
           {!loading && list && list.data.length > 0 && (
             <>
-              <TableContainer overflowX="hidden">
+              <TableContainer>
                 <Table colorScheme="linkedin" size={'md'}>
                   {list.data.map((item, index) => (
                     <React.Fragment key={index}>
@@ -119,13 +134,21 @@ const Compras = () => {
                       </Thead>
                       {item.produto.map((item, index) => (
                         <Tbody key={index}>
-                          <Tr>
-                            <Td>{item.name}</Td>
-                            <Td>
-                              {item.quantity} {item.unit}
+                          <Tr onClick={() => openModal(item)}>
+                            <Td
+                              height="auto"
+                              maxWidth="200px"
+                              className="whitespace-break-spaces"
+                            >
+                              {item.name}
                             </Td>
-                            <Td>€ {item.valor.toFixed(2)}</Td>
-                            <Td textAlign="right">
+                            <Td maxWidth="90px">
+                              <Text>
+                                {item.quantity} {item.unit}
+                              </Text>
+                            </Td>
+                            <Td maxWidth="90px">€ {item.valor}</Td>
+                            <Td maxWidth="30px">
                               <CloseIcon
                                 color="red.500"
                                 boxSize={3}
@@ -152,7 +175,8 @@ const Compras = () => {
           )}
         </div>
         <Alert obj={alert} title="Deletar Produto?" fn={deleteProduct} />
-        <Loader obj={modal} />
+        <Loader obj={loader} />
+        <ModalCompras obj={modal} info={modalInfo} callback={fetchDay} />
       </>
     </Layout>
   )

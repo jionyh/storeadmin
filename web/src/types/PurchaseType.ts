@@ -8,15 +8,14 @@ export interface PurchaseList {
 export interface D {
   id: number
   name: string
-  produto: Pr[]
+  produto: Purchase[]
 }
 
-export interface Pr {
-  category: number
+export interface Purchase {
   id: number
   catId: number
   name: string
-  quantity: number
+  quantity: string
   unit: string
-  valor: number
+  valor: string
 }

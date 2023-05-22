@@ -21,6 +21,7 @@ export type Props = {
   index: number
   handleAdd: (e: any, index: any) => void
   state: ProductList
+  disabled: boolean
 }
 
 export const ComprasInput = ({
@@ -29,6 +30,7 @@ export const ComprasInput = ({
   handleAdd,
   index,
   state,
+  disabled,
 }: Props) => {
   const [abbreviation, setAbbreviation] = useState('')
 
@@ -59,6 +61,7 @@ export const ComprasInput = ({
         <div className="">
           <Select
             required
+            isDisabled={disabled}
             border="1px"
             borderColor="gray.300"
             name="itemId"
@@ -78,6 +81,7 @@ export const ComprasInput = ({
         </div>
         <Select
           required
+          isDisabled={disabled}
           border="1px"
           borderColor="gray.300"
           name="unitId"
@@ -105,6 +109,7 @@ export const ComprasInput = ({
             />
             <Input
               required
+              isDisabled={disabled}
               border="1px"
               borderColor="gray.300"
               type="number"
@@ -124,6 +129,7 @@ export const ComprasInput = ({
             />
             <Input
               required
+              isDisabled={disabled}
               border="1px"
               borderColor="gray.300"
               type="number"

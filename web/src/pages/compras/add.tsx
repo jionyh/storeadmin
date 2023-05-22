@@ -34,6 +34,7 @@ const AdicionarCompras = () => {
   const [loadingProducts, setLoadingProducts] = useState(true)
   const [loadingPage, setLoadingPage] = useState(true)
   const [error, setError] = useState<any>(undefined)
+  const [disabled, setdisabled] = useState(false)
 
   const fetchData = async () => {
     setLoading(true)
@@ -45,8 +46,8 @@ const AdicionarCompras = () => {
       return
     } catch (e) {
       setError('Falha ao carregar!')
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   const fetchCategories = async () => {
@@ -57,11 +58,11 @@ const AdicionarCompras = () => {
         `${process.env.NEXT_PUBLIC_API_PATH}/categories/`,
       )
       setCategoryList(res.data.data)
+      setLoadingPage(false)
     } catch (e) {
       setError('Falha')
+      setLoadingPage(false)
     }
-
-    setLoadingPage(false)
   }
 
   const fetchProductsData = async () => {
@@ -77,23 +78,29 @@ const AdicionarCompras = () => {
       return
     } catch (e) {
       setError('Falha ao carregar!')
+      setLoadingProducts(false)
     }
-    setLoadingProducts(false)
   }
 
   const fetchPostCreatePurchase = async () => {
-    const res = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_PATH}/compras`,
-      list,
-    )
+    setdisabled(true)
+    try {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_PATH}/compras`,
+        list,
+      )
 
-    if (res.data.success) {
-      alert('Compras adicionadas com sucesso!')
-      router.replace('/compras')
-      return
+      if (res.data.success) {
+        alert('Compras adicionadas com sucesso!')
+        router.replace('/compras')
+        setdisabled(false)
+        return
+      }
+    } catch (e) {
+      alert('Ocorreu um erro! Tente novamente mais tarde.')
+      console.log(e)
+      setdisabled(false)
     }
-    console.log(res.data)
-    alert('Ocorreu um erro! Tente novamente mais tarde.')
   }
 
   /* Função para lidar com a adição no array de dados que vai para o backend */
@@ -162,12 +169,13 @@ const AdicionarCompras = () => {
               <Wrap spacing="2px" justify="center">
                 {categoryList!.map((cat, i) => (
                   <Button
+                    key={cat.id}
                     size="sm"
+                    isDisabled={disabled}
                     colorScheme="blue"
                     rounded="0px"
                     variant="outline"
                     isActive={activeCategory === cat.id.toString()}
-                    key={cat.id}
                     onClick={() => setActiveCategory(cat.id.toString())}
                   >
                     {cat.name}
@@ -196,6 +204,7 @@ const AdicionarCompras = () => {
                       handleAdd={handleProductListAdd}
                       productList={productList!}
                       unitList={unitList!}
+                      disabled={disabled}
                     />
                   </>
                 ))}
@@ -203,6 +212,7 @@ const AdicionarCompras = () => {
                 <Flex mr="12px" justify="end" gap="8px">
                   <Button
                     size={'sm'}
+                    isDisabled={disabled}
                     leftIcon={<AddIcon />}
                     colorScheme="blue"
                     onClick={handleAddInputs}
@@ -211,6 +221,8 @@ const AdicionarCompras = () => {
                   </Button>
                   <Button
                     size={'sm'}
+                    isLoading={disabled}
+                    loadingText="Salvando dados!"
                     leftIcon={<CheckIcon />}
                     colorScheme="green"
                     onClick={handleSaveInputs}
