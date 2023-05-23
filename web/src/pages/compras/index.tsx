@@ -16,7 +16,6 @@ import {
   useToast,
 } from '@chakra-ui/react'
 import { CloseIcon } from '@chakra-ui/icons'
-import axios from 'axios'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
@@ -26,6 +25,7 @@ import { LoadingSpinner } from '@/components/LoadingSpinner'
 import { Alert } from '@/components/Alert'
 import { Loader } from '@/components/Loader'
 import { ModalCompras } from '@/components/ComprasModal'
+import { api } from '@/libs/axios'
 
 const Compras = () => {
   const toast = useToast()
@@ -48,8 +48,8 @@ const Compras = () => {
 
   const fetchDay = async () => {
     setLoading(true)
-    const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_PATH}/compras?date=${date}`,
+    const res = await api.get(
+      `/compras?date=${dayjs(date).format('YYYY-MM-DD')}`,
     )
     if (res) {
       setList(res.data)
@@ -66,9 +66,7 @@ const Compras = () => {
     alert.onClose()
     loader.onOpen()
     try {
-      await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_PATH}/compras/${delProduct}`,
-      )
+      await api.delete(`/compras/${delProduct}`)
       loader.onClose()
       toast({
         title: 'Produto Deletado!',

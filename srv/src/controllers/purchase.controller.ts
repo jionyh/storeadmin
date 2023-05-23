@@ -68,16 +68,32 @@ export const purchase = {
     const { date } = req.query
 
     const purchaseList: PurchaseListType[] = []
+    console.log(
+      'gte',
+      dayjs(date as string)
+        .startOf('day')
+        .format('YYYY-MM-DD HH:mm:ss.SSS'),
+    )
+    console.log(
+      'lte',
+      dayjs(date as string)
+        .endOf('day')
+        .format('YYYY-MM-DD HH:mm:ss.SSS'),
+    )
 
     const purchases = await prisma.purchase.findMany({
       where: {
         createAt: {
-          lt: date
+          gte: date
             ? dayjs(date as string)
-                .add(1, 'day')
-                .format()
+                .startOf('day')
+                .toDate()
             : undefined,
-          gt: date ? dayjs(date as string).format() : undefined,
+          lte: date
+            ? dayjs(date as string)
+                .endOf('day')
+                .toDate()
+            : undefined,
         },
       },
       include: {
