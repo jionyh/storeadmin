@@ -1,4 +1,8 @@
 export const Capitalize = (data: string) => {
+  if (!data) {
+    return ''
+  }
+
   const splitName = data.split(' ')
 
   for (const i in splitName) {
