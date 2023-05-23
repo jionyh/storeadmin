@@ -48,7 +48,7 @@ model Purchase {
   id          Int         @id @default(autoincrement())
   quantity    Float
   value       Float
-  createAt    DateTime    @default(now())
+  createAt    DateTime    @default(now()) @db.Date
   itemId      Int
   userId      Int
   unitId      Int
@@ -69,6 +69,7 @@ model paymentsMethods {
 model sales {
   id              Int             @id @default(autoincrement())
   value           Float
+  createAt        DateTime        @default(now()) @db.Date
   paymentId       Int
   paymentsMethods paymentsMethods @relation(fields: [paymentId], references: [id])
 }
