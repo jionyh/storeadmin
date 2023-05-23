@@ -1,49 +1,43 @@
 /* eslint-disable no-prototype-builtins */
-import { ComprasInput } from '@/components/ComprasInput'
 import { LoadingSpinner } from '@/components/LoadingSpinner'
 import { Layout } from '@/layout/Layout'
-import { ProductList } from '@/types/ProductList'
-import { ProductType } from '@/types/ProductType'
-import { CategoryType, UnitType } from '@/types/UnitType'
+import { api } from '@/libs/axios'
+import { Payments, SaleListPost } from '@/types/SaleType'
 import { AddIcon, CheckIcon, CloseIcon } from '@chakra-ui/icons'
-import { Button, Flex, Wrap } from '@chakra-ui/react'
-import axios from 'axios'
+import { Button, Flex, useDisclosure, useToast } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
+import { VendasInput } from '@/components/VendasInput'
+import { Loader } from '@/components/Loader'
+import { Alert } from '@/components/Alert'
 
 const AdicionarVendas = () => {
+  const toast = useToast()
   const router = useRouter()
+  const loader = useDisclosure()
+  const alert = useDisclosure()
   const listInitialState = {
-    itemId: '',
-    userId: '1',
-    unitId: '',
-    quantity: '',
     value: '',
-    supplier: '',
+    paymentId: '',
   }
 
-  const [unitList, setUnitList] = useState<UnitType[]>()
-  const [categoryList, setCategoryList] = useState<CategoryType[]>()
-  const [productList, setProductList] = useState<ProductType[]>()
-  const [activeCategory, setActiveCategory] = useState('1')
+  const [paymentOptions, setPaymentOptions] = useState<Payments[]>()
 
   /* State para guardar o array que vai para o backend */
-  const [list, setList] = useState<ProductList[]>([listInitialState])
+  const [list, setList] = useState<SaleListPost[]>([listInitialState])
 
   // eslint-disable-next-line no-unused-vars
   const [loading, setLoading] = useState(true)
-  const [loadingProducts, setLoadingProducts] = useState(true)
-  const [loadingPage, setLoadingPage] = useState(true)
   const [error, setError] = useState<any>(undefined)
   const [disabled, setdisabled] = useState(false)
 
   const fetchData = async () => {
     setLoading(true)
     try {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_PATH}/unit`)
-      setUnitList(res.data.data)
+      const res = await api.get(`/payments`)
+      setPaymentOptions(res.data.data)
       setLoading(false)
-
+      console.log(res.data.data)
       return
     } catch (e) {
       setError('Falha ao carregar!')
@@ -51,64 +45,46 @@ const AdicionarVendas = () => {
     }
   }
 
-  const fetchCategories = async () => {
-    setLoadingPage(true)
-
-    try {
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_PATH}/categories/`,
-      )
-      setCategoryList(res.data.data)
-      setLoadingPage(false)
-    } catch (e) {
-      setError('Falha')
-      setLoadingPage(false)
-    }
-  }
-
-  const fetchProductsData = async () => {
-    setLoadingProducts(true)
-    setList([listInitialState])
-    try {
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_PATH}/categories/sub?cat=${activeCategory}`,
-      )
-      setProductList(res.data.data)
-      setLoadingProducts(false)
-
-      return
-    } catch (e) {
-      setError('Falha ao carregar!')
-      setLoadingProducts(false)
-    }
+  const handleAdd = () => {
+    alert.onOpen()
   }
 
   const fetchPostCreatePurchase = async () => {
+    alert.onClose()
+    loader.onOpen()
     setdisabled(true)
+
     try {
-      const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_PATH}/compras`,
-        list,
-      )
+      const res = await api.post(`/vendas`, list)
 
       if (res.data.success) {
-        alert('Compras adicionadas com sucesso!')
-        router.replace('/compras')
+        router.replace('/vendas')
         setdisabled(false)
+        toast({
+          title: 'Venda Adiciona com sucesso!',
+          status: 'success',
+          isClosable: true,
+        })
+        loader.onClose()
         return
       }
     } catch (e) {
-      alert('Ocorreu um erro! Tente novamente mais tarde.')
       console.log(e)
+      toast({
+        title: 'Erro ao adicionar a venda. Tenta novamente!',
+        status: 'error',
+        isClosable: true,
+      })
+      loader.onClose()
       setdisabled(false)
     }
   }
 
   /* Função para lidar com a adição no array de dados que vai para o backend */
-  const handleProductListAdd = (e: any, index: number) => {
+  const handleSaleListAdd = (e: any, index: number) => {
     const { name, value } = e.target
     const plist: any = [...list]
-    plist[index][name] = value
+    plist[index][name] = value.replace(',', '.')
     setList(plist)
   }
 
@@ -126,66 +102,18 @@ const AdicionarVendas = () => {
     }
   }
 
-  /* Função que envia os dados para o backend */
-  const handleSaveInputs = () => {
-    const errors = []
-    list.forEach((item, i) => {
-      for (const key in item) {
-        if (
-          item.hasOwnProperty(key) &&
-          (item as any)[key] === '' &&
-          key !== 'supplier'
-        ) {
-          errors.push({
-            lista: i + 1,
-            campo: key,
-          })
-        }
-      }
-    })
-    if (errors.length === 0) {
-      console.log('passou')
-      console.log(list)
-      fetchPostCreatePurchase()
-      return
-    }
-    alert('Preencha os campos!')
-  }
-
   useEffect(() => {
-    fetchCategories()
     fetchData()
   }, [])
-
-  useEffect(() => {
-    fetchProductsData()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeCategory])
 
   return (
     <Layout title="Adicionar Vendas">
       <>
         {error && <div>Não foi possível atender a sua solicitação</div>}
-        {loadingPage && <LoadingSpinner />}
-        {!loadingPage && !error && (
+        {loading && <LoadingSpinner />}
+        {!loading && !error && (
           <>
-            <Wrap mb="20px" spacing="2px" justify="center">
-              {categoryList!.map((cat, i) => (
-                <Button
-                  key={cat.id}
-                  size="sm"
-                  isDisabled={disabled}
-                  colorScheme="blue"
-                  rounded="0px"
-                  variant="outline"
-                  isActive={activeCategory === cat.id.toString()}
-                  onClick={() => setActiveCategory(cat.id.toString())}
-                >
-                  {cat.name}
-                </Button>
-              ))}
-            </Wrap>
-            {!loadingProducts && unitList && (
+            {!loading && paymentOptions !== undefined && (
               <>
                 {list.map((list, i) => (
                   <React.Fragment key={i}>
@@ -199,13 +127,12 @@ const AdicionarVendas = () => {
                         />
                       </div>
                     )}
-                    <ComprasInput
+                    <VendasInput
                       key={i}
                       index={i}
                       state={list}
-                      handleAdd={handleProductListAdd}
-                      productList={productList!}
-                      unitList={unitList}
+                      handleAdd={handleSaleListAdd}
+                      paymentOptions={paymentOptions}
                       disabled={disabled}
                     />
                   </React.Fragment>
@@ -227,7 +154,7 @@ const AdicionarVendas = () => {
                     loadingText="Salvando dados!"
                     leftIcon={<CheckIcon />}
                     colorScheme="green"
-                    onClick={handleSaveInputs}
+                    onClick={handleAdd}
                   >
                     Salvar
                   </Button>
@@ -236,6 +163,12 @@ const AdicionarVendas = () => {
             )}
           </>
         )}
+        <Alert
+          obj={alert}
+          title="Adicionar nova venda?"
+          fn={fetchPostCreatePurchase}
+        />
+        <Loader obj={loader} />
       </>
     </Layout>
   )

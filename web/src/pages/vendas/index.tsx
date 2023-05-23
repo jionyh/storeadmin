@@ -19,28 +19,25 @@ import { CloseIcon } from '@chakra-ui/icons'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
-import { Purchase, PurchaseList } from '@/types/PurchaseType'
+import 'dayjs/locale/pt-br'
 import { Empty } from '@/components/EmptyPurchases'
 import { LoadingSpinner } from '@/components/LoadingSpinner'
 import { Alert } from '@/components/Alert'
 import { Loader } from '@/components/Loader'
-import { ModalCompras } from '@/components/ComprasModal'
+import { ModalVendas } from '../../components/VendasModal'
 import { api } from '@/libs/axios'
-import Compras from '../compras'
+import { SaleInfoModal, SalesList } from '@/types/SaleType'
 
 const Vendas = () => {
+  dayjs.locale('pt-br')
   const toast = useToast()
   const [date, setDate] = useState(dayjs().format('YYYY-MM-DD'))
-  const [list, setList] = useState<PurchaseList>()
+  const [list, setList] = useState<SalesList>()
   const [delProduct, setDelProduct] = useState('')
-  const [modalInfo, setModalInfo] = useState<Purchase>({
+  const [modalInfo, setModalInfo] = useState<SaleInfoModal>({
     id: 0,
-    catId: 0,
-    name: '',
-    quantity: '',
-    unit: '',
     value: '',
-    supplier: '',
+    payment: '',
   })
   const alert = useDisclosure()
   const loader = useDisclosure()
@@ -50,7 +47,7 @@ const Vendas = () => {
   const fetchDay = async () => {
     setLoading(true)
     const res = await api.get(
-      `/compras?date=${dayjs(date).format('YYYY-MM-DD')}`,
+      `/vendas?date=${dayjs(date).format('YYYY-MM-DD')}`,
     )
     if (res) {
       setList(res.data)
@@ -58,8 +55,8 @@ const Vendas = () => {
     setLoading(false)
   }
 
-  const handleDeleteProduct = (id: number) => {
-    setDelProduct(id.toString())
+  const handleDeleteProduct = (id: string) => {
+    setDelProduct(id)
     alert.onOpen()
   }
 
@@ -67,7 +64,7 @@ const Vendas = () => {
     alert.onClose()
     loader.onOpen()
     try {
-      await api.delete(`/compras/${delProduct}`)
+      await api.delete(`/vendas/${delProduct}`)
       loader.onClose()
       toast({
         title: 'Produto Deletado!',
@@ -87,6 +84,7 @@ const Vendas = () => {
   }
 
   const openModal = (data: any) => {
+    console.log(data)
     setModalInfo(data)
     modal.onOpen()
   }
@@ -114,7 +112,7 @@ const Vendas = () => {
           {loading && <LoadingSpinner />}
           {!loading && list!.data.length === 0 && (
             <div className="mt-20">
-              <Empty title="compras" />
+              <Empty title="vendas" />
             </div>
           )}
 
@@ -124,39 +122,32 @@ const Vendas = () => {
                 <Table colorScheme="linkedin" size={'md'}>
                   {list.data.map((item, index) => (
                     <React.Fragment key={index}>
-                      <Thead key={index}>
+                      <Thead>
                         <Tr className="bg-blue-100">
-                          <Th>{item.name}</Th>
-                          <Th></Th>
+                          <Th>{dayjs(item.day).format('DD [de] MMMM')}</Th>
                           <Th></Th>
                           <Th></Th>
                         </Tr>
                       </Thead>
-                      {item.produto.map((item, index) => (
+                      {item.data.map((data, index) => (
                         <Tbody key={index}>
                           <Tr>
+                            <Td onClick={() => openModal(data)} maxWidth="90px">
+                              <Text>{data.payment}</Text>
+                            </Td>
                             <Td
-                              onClick={() => openModal(item)}
-                              height="auto"
-                              width="240px"
-                              className="whitespace-normal"
+                              textAlign="end"
+                              onClick={() => openModal(data)}
+                              maxWidth="90px"
                             >
-                              {item.name}
-                            </Td>
-                            <Td onClick={() => openModal(item)} maxWidth="90px">
-                              <Text>
-                                {item.quantity} {item.unit}
-                              </Text>
-                            </Td>
-                            <Td onClick={() => openModal(item)} maxWidth="90px">
-                              € {item.value}
+                              € {data.value}
                             </Td>
                             <Td width="50px">
                               <CloseIcon
                                 color="red.500"
                                 boxSize={3}
                                 cursor="pointer"
-                                onClick={() => handleDeleteProduct(item.id)}
+                                onClick={() => handleDeleteProduct(data.id)}
                               />
                             </Td>
                           </Tr>
@@ -167,8 +158,7 @@ const Vendas = () => {
                   <Tfoot background="red.200" fontWeight="bold">
                     <Tr>
                       <Th>Total</Th>
-                      <Th></Th>
-                      <Th>€ {list.total}</Th>
+                      <Th textAlign="end">€ {list.total}</Th>
                       <Th></Th>
                     </Tr>
                   </Tfoot>
@@ -177,9 +167,9 @@ const Vendas = () => {
             </>
           )}
         </div>
-        <Alert obj={alert} title="Deletar Produto?" fn={deleteProduct} />
+        <Alert obj={alert} title="Deletar venda?" fn={deleteProduct} />
         <Loader obj={loader} />
-        <ModalCompras obj={modal} info={modalInfo} callback={fetchDay} />
+        <ModalVendas obj={modal} info={modalInfo} callback={fetchDay} />
       </>
     </Layout>
   )

@@ -3,32 +3,75 @@ import { Request, Response } from 'express'
 import { z } from 'zod'
 import dayjs from 'dayjs'
 import { prisma } from '../lib/prisma'
-import { Capitalize } from '../utils/capitalizeFirstLetter'
+// import { Capitalize } from '../utils/capitalizeFirstLetter'
+import { SalesReturn } from '../types/Sales'
 
 export const sale = {
   getAllSales: async (req: Request, res: Response) => {
+    const { date } = req.query
+
     try {
-      const sales = await prisma.sales.findMany({
-        orderBy: {
-          id: 'asc',
-        },
-        include: {
-          paymentsMethods: true,
+      const sales = await prisma.sale.findMany({
+        orderBy: { id: 'asc' },
+        include: { paymentsMethods: true },
+        where: {
+          createAt: {
+            gte: date
+              ? dayjs(date as string)
+                  .startOf('day')
+                  .toDate()
+              : undefined,
+            lte: date
+              ? dayjs(date as string)
+                  .endOf('day')
+                  .toDate()
+              : undefined,
+          },
         },
       })
 
-      const formatReturn = []
+      const formatReturn: SalesReturn[] = []
 
-      for (const i in sales) {
-        formatReturn.push({
-          id: sales[i].id,
-          payment: Capitalize(sales[i].paymentsMethods.name),
-          value: sales[i].value.toFixed(2),
-          date: dayjs(sales[i].createAt).format('DD/MM/YYYY'),
+      sales.forEach((item) => {
+        // Constante que retorna o index ou -1 caso ache no array a condição abaixo
+        const existingDayIndex = formatReturn.findIndex((entry) => {
+          const d = dayjs(item.createAt).format('YYYY-MM-DD')
+          console.log(d, entry.day)
+          return entry.day === d
         })
-      }
+        console.log(item.id, existingDayIndex)
 
-      res.status(200).json({ success: true, data: formatReturn })
+        // Se o array retorna -1, adiciona ao array usando o index encontrado acima
+        if (existingDayIndex !== -1) {
+          formatReturn[existingDayIndex].data.push({
+            id: item.id,
+            value: item.value.toFixed(2).toString(),
+            payment: item.paymentsMethods.name,
+          })
+          // Senão, ele adiciona com o day e cria o objeto novo dentro do array
+        } else {
+          formatReturn.push({
+            day: dayjs(item.createAt).format('YYYY-MM-DD'),
+            data: [
+              {
+                id: item.id,
+                value: item.value.toFixed(2).toString(),
+                payment: item.paymentsMethods.name,
+              },
+            ],
+          })
+        }
+      })
+
+      const soma = sales.reduce((soma, obj) => {
+        return soma + obj.value
+      }, 0)
+
+      res.status(200).json({
+        success: true,
+        total: soma.toFixed(2).toString(),
+        data: formatReturn,
+      })
     } catch (e) {
       res.status(400).json({ success: false, message: e })
     }
@@ -53,7 +96,7 @@ export const sale = {
     }
 
     try {
-      const addSale = await prisma.sales.createMany({ data: parse.data })
+      const addSale = await prisma.sale.createMany({ data: parse.data })
       res.status(200).json({ success: true, data: addSale })
     } catch (e) {
       res.status(400).json({ success: false, message: e })
@@ -67,7 +110,7 @@ export const sale = {
       return
     }
     try {
-      await prisma.sales.delete({
+      await prisma.sale.delete({
         where: { id: parseInt(id as string) },
       })
 
@@ -104,7 +147,7 @@ export const sale = {
     }
 
     try {
-      const updatedPurchase = await prisma.sales.update({
+      const updatedPurchase = await prisma.sale.update({
         where: { id: parseInt(id as string) },
         data: parse.data,
       })

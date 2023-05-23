@@ -11,13 +11,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.unit = void 0;
 const prisma_1 = require("../lib/prisma");
+const capitalizeFirstLetter_1 = require("../utils/capitalizeFirstLetter");
 exports.unit = {
     getAllUnit: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const units = yield prisma_1.prisma.unit.findMany();
-        if (!units) {
-            res.json({ status: false });
+        const data = yield prisma_1.prisma.unit.findMany();
+        if (!data) {
+            res.json({ success: false });
             return;
         }
-        res.json({ status: true, data: units });
+        const units = [];
+        for (const i in data) {
+            units.push({
+                id: data[i].id,
+                name: (0, capitalizeFirstLetter_1.Capitalize)(data[i].name),
+                abbreviation: data[i].abbreviation.toUpperCase(),
+            });
+        }
+        res.json({ success: true, data: units });
     }),
 };

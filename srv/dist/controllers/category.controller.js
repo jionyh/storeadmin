@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.category = void 0;
 const zod_1 = require("zod");
 const prisma_1 = require("../lib/prisma");
+const capitalizeFirstLetter_1 = require("../utils/capitalizeFirstLetter");
 const categorySchema = zod_1.z.object({
     id: zod_1.z.number().optional(),
     name: zod_1.z.string(),
@@ -25,13 +26,20 @@ exports.category = {
             },
         });
         if (!addCategory) {
-            res.json({ sucess: false });
+            res.json({ success: false });
             return;
         }
-        res.json({ sucess: true, data: addCategory });
+        res.json({ success: true, data: addCategory });
     }),
     getAllCategories: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const data = yield prisma_1.prisma.category.findMany();
-        res.json({ sucess: true, data });
+        const categories = [];
+        for (const i in data) {
+            categories.push({
+                id: data[i].id,
+                name: (0, capitalizeFirstLetter_1.Capitalize)(data[i].name),
+            });
+        }
+        res.json({ success: true, data: categories });
     }),
 };

@@ -39,11 +39,11 @@ const purchaseSchema = zod_1.z
         .string()
         .nonempty()
         .transform((i) => parseFloat(i)),
+    supplier: zod_1.z.string().transform((i) => (i === '' ? '---' : i)),
 })
     .array();
 exports.purchase = {
     createPurchase: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        console.log(req.body);
         const data = purchaseSchema.safeParse(req.body);
         if (data.success === false) {
             const errors = data.error.issues
@@ -56,7 +56,6 @@ exports.purchase = {
             return;
         }
         const parsedData = data.data;
-        console.log(parsedData);
         try {
             const addPurchases = yield prisma_1.prisma.purchase.createMany({
                 data: parsedData,
@@ -77,12 +76,16 @@ exports.purchase = {
         const purchases = yield prisma_1.prisma.purchase.findMany({
             where: {
                 createAt: {
-                    lt: date
+                    gte: date
                         ? (0, dayjs_1.default)(date)
-                            .add(1, 'day')
-                            .format()
+                            .startOf('day')
+                            .toDate()
                         : undefined,
-                    gt: date ? (0, dayjs_1.default)(date).format() : undefined,
+                    lte: date
+                        ? (0, dayjs_1.default)(date)
+                            .endOf('day')
+                            .toDate()
+                        : undefined,
                 },
             },
             include: {
@@ -105,22 +108,22 @@ exports.purchase = {
         });
         const category = yield prisma_1.prisma.category.findMany();
         if (!purchases) {
-            res.json({ sucess: false });
+            res.json({ success: false });
             return;
         }
         for (const i in purchases) {
             purchaseList.push({
-                category: purchases[i].subcategory.cat.id,
                 id: purchases[i].id,
                 catId: purchases[i].subcategory.cat.id,
                 name: (0, capitalizeFirstLetter_1.Capitalize)(purchases[i].subcategory.name),
-                quantity: purchases[i].quantity,
+                quantity: purchases[i].quantity.toString(),
                 unit: purchases[i].unit.abbreviation,
-                valor: purchases[i].value,
+                value: purchases[i].value.toFixed(2).toString(),
+                supplier: (0, capitalizeFirstLetter_1.Capitalize)(purchases[i].supplier) || '',
             });
         }
         const soma = purchaseList.reduce((soma, obj) => {
-            return soma + obj.valor;
+            return soma + parseFloat(obj.value);
         }, 0);
         const result = category
             .map((el) => {
@@ -130,6 +133,64 @@ exports.purchase = {
             }
         })
             .filter((item) => item !== undefined);
-        res.json({ sucess: true, data: result, total: soma });
+        res.json({ success: true, data: result, total: soma.toFixed(2) });
+    }),
+    deletePurchase: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        const { id } = req.params;
+        if (!id) {
+            res.status(400).json({ success: false, error: 'id não enviado!' });
+            return;
+        }
+        const deletedPurchase = yield prisma_1.prisma.purchase.delete({
+            where: { id: parseInt(id) },
+        });
+        if (!deletedPurchase) {
+            res.status(400).json({ success: false, error: 'Compra não localizada!' });
+            return;
+        }
+        res.status(200).json({
+            success: true,
+        });
+    }),
+    editPurchase: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        const { id } = req.params;
+        if (!id) {
+            res.status(400).json({ success: false, error: 'id não enviado!' });
+            return;
+        }
+        const parse = zod_1.z
+            .object({
+            value: zod_1.z.coerce
+                .number({
+                required_error: 'Valor não enviado!',
+                invalid_type_error: 'Valor não enviado',
+            })
+                .nonnegative({ message: 'O valor não pode ser negativo!' })
+                .optional(),
+            quantity: zod_1.z.coerce
+                .number({
+                required_error: 'Quantidade não enviada!',
+                invalid_type_error: 'Quantidade não enviada',
+            })
+                .nonnegative({ message: 'A quantidade não pode ser negativa!' })
+                .optional(),
+        })
+            .safeParse(req.body);
+        if (!parse.success) {
+            res
+                .status(400)
+                .json({ success: false, erro: parse.error.issues[0].message });
+            return;
+        }
+        try {
+            const updatedPurchase = yield prisma_1.prisma.purchase.update({
+                where: { id: parseInt(id) },
+                data: parse.data,
+            });
+            res.status(200).json({ success: true, data: updatedPurchase });
+        }
+        catch (e) {
+            res.status(400).json({ success: false, data: e });
+        }
     }),
 };

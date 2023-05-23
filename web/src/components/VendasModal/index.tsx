@@ -1,4 +1,8 @@
-import { Purchase } from '@/types/PurchaseType'
+import { useEffect, useState } from 'react'
+import { Alert } from '../Alert'
+import { Loader } from '../Loader'
+import { api } from '@/libs/axios'
+import { SaleInfoModal } from '@/types/SaleType'
 import {
   Modal,
   ModalOverlay,
@@ -17,26 +21,14 @@ import {
   Stack,
   Flex,
   InputGroup,
-  InputRightAddon,
   InputLeftElement,
   useToast,
+  UseDisclosureProps,
 } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
-import { Alert } from '../Alert'
-import { Loader } from '../Loader'
-import { api } from '@/libs/axios'
 
 type Props = {
-  obj: {
-    isOpen: boolean
-    onOpen: () => void
-    onClose: () => void
-    onToggle: () => void
-    isControlled: boolean
-    getButtonProps: (props?: any) => any
-    getDisclosureProps: (props?: any) => any
-  }
-  info: Purchase
+  obj: UseDisclosureProps
+  info: SaleInfoModal
   callback: () => void
 }
 
@@ -77,27 +69,25 @@ export const theme = extendTheme({
   },
 })
 
-export const ModalCompras = ({ obj, info, callback }: Props) => {
+export const ModalVendas = ({ obj, info, callback }: Props) => {
   const alert = useDisclosure()
   const loader = useDisclosure()
   const toast = useToast()
   const { isOpen, onClose } = useDisclosure(obj)
   const [data, setData] = useState(info)
   const [value, setValue] = useState(info.value)
-  const [quantity, setQuantity] = useState(info.quantity)
 
   const handleEdit = async () => {
     alert.onClose()
     loader.onOpen()
-    if (value && quantity) {
+    if (value) {
       try {
-        await api.patch(`/compras/${data.id}`, {
+        await api.patch(`/vendas/${data.id}`, {
           value,
-          quantity,
         })
         loader.onClose()
         toast({
-          title: 'Produto Editado!',
+          title: 'Venda Editada!',
           status: 'success',
           isClosable: true,
         })
@@ -107,7 +97,7 @@ export const ModalCompras = ({ obj, info, callback }: Props) => {
       } catch (e) {
         loader.onClose()
         toast({
-          title: 'Erro ao Editar  o Produto!',
+          title: 'Erro ao editar a venda!',
           status: 'error',
           isClosable: true,
         })
@@ -118,13 +108,12 @@ export const ModalCompras = ({ obj, info, callback }: Props) => {
   useEffect(() => {
     setData(info)
     setValue(info.value)
-    setQuantity(info.quantity)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen])
 
   return (
     <>
-      <Alert obj={alert} title="Editar Produto?" fn={handleEdit} />
+      <Alert obj={alert} title="Editar venda?" fn={handleEdit} />
       <Loader obj={loader} />
       <ChakraProvider theme={theme}>
         <Modal
@@ -135,36 +124,24 @@ export const ModalCompras = ({ obj, info, callback }: Props) => {
         >
           <ModalOverlay />
           <ModalContent>
-            <ModalHeader>Editar Produto</ModalHeader>
+            <ModalHeader>Editar venda</ModalHeader>
             <ModalBody pb={6}>
               <Stack spacing="15px">
                 <FormControl variant="floating" id="first-name">
-                  <Input value={data.name} disabled />
+                  <Input value={info.payment} disabled />
                   <FormLabel>Produto</FormLabel>
                 </FormControl>
 
                 <Flex gap={5}>
                   <FormControl variant="floating" id="first-name">
                     <InputGroup>
-                      <Input
-                        value={quantity}
-                        onChange={(e) => setQuantity(e.target.value)}
-                      />
-                      <FormLabel>Quantidade</FormLabel>
-                      <InputRightAddon>{data.unit}</InputRightAddon>
-                    </InputGroup>
-
-                    <FormErrorMessage>
-                      Quantidade precisa ser preenchido!
-                    </FormErrorMessage>
-                  </FormControl>
-                  <FormControl variant="floating" id="first-name">
-                    <InputGroup>
                       <InputLeftElement textAlign="end">€</InputLeftElement>
                       <Input
                         textAlign="end"
                         value={value}
-                        onChange={(e) => setValue(e.target.value)}
+                        onChange={(e) =>
+                          setValue(e.target.value.replace(',', '.'))
+                        }
                       />
                       <FormLabel>Valor</FormLabel>
                     </InputGroup>
@@ -174,10 +151,6 @@ export const ModalCompras = ({ obj, info, callback }: Props) => {
                     </FormErrorMessage>
                   </FormControl>
                 </Flex>
-                <FormControl variant="floating" id="first-name">
-                  <Input disabled value={data.supplier} />
-                  <FormLabel>Fornecedor</FormLabel>
-                </FormControl>
               </Stack>
             </ModalBody>
 
