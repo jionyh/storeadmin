@@ -1,13 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.subCategory = void 0;
 const zod_1 = require("zod");
@@ -21,19 +12,19 @@ const subCategorySchema = zod_1.z
 })
     .array();
 exports.subCategory = {
-    addSubCategory: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    addSubCategory: async (req, res) => {
         const data = subCategorySchema.parse(req.body);
-        const addSubCat = yield prisma_1.prisma.subCategory.createMany({ data });
+        const addSubCat = await prisma_1.prisma.subCategory.createMany({ data });
         if (!addSubCat) {
             res.json({ sucess: false });
             return;
         }
         res.json({ sucess: true, data: addSubCat });
-    }),
-    getAllSubCategories: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    },
+    getAllSubCategories: async (req, res) => {
         const { cat } = req.query;
         if (cat) {
-            const response = yield prisma_1.prisma.subCategory.findMany({
+            const response = await prisma_1.prisma.subCategory.findMany({
                 where: {
                     categoryId: parseInt(cat),
                 },
@@ -61,7 +52,7 @@ exports.subCategory = {
             res.json({ sucess: true, data });
             return;
         }
-        const data = yield prisma_1.prisma.subCategory.findMany({
+        const data = await prisma_1.prisma.subCategory.findMany({
             select: {
                 id: true,
                 name: true,
@@ -77,5 +68,5 @@ exports.subCategory = {
             return;
         }
         res.json({ sucess: true, data });
-    }),
+    },
 };

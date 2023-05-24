@@ -1,13 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -43,7 +34,7 @@ const purchaseSchema = zod_1.z
 })
     .array();
 exports.purchase = {
-    createPurchase: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    createPurchase: async (req, res) => {
         const data = purchaseSchema.safeParse(req.body);
         if (data.success === false) {
             const errors = data.error.issues
@@ -57,7 +48,7 @@ exports.purchase = {
         }
         const parsedData = data.data;
         try {
-            const addPurchases = yield prisma_1.prisma.purchase.createMany({
+            const addPurchases = await prisma_1.prisma.purchase.createMany({
                 data: parsedData,
             });
             if (!addPurchases) {
@@ -69,11 +60,11 @@ exports.purchase = {
         catch (e) {
             res.status(400).json({ status: false, error: e.meta.field_name });
         }
-    }),
-    getPurchases: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    },
+    getPurchases: async (req, res) => {
         const { date } = req.query;
         const purchaseList = [];
-        const purchases = yield prisma_1.prisma.purchase.findMany({
+        const purchases = await prisma_1.prisma.purchase.findMany({
             where: {
                 createAt: {
                     gte: date
@@ -106,7 +97,7 @@ exports.purchase = {
                 },
             },
         });
-        const category = yield prisma_1.prisma.category.findMany();
+        const category = await prisma_1.prisma.category.findMany();
         if (!purchases) {
             res.json({ success: false });
             return;
@@ -129,19 +120,22 @@ exports.purchase = {
             .map((el) => {
             const haveCat = purchaseList.some((item) => item.catId === el.id);
             if (haveCat) {
-                return Object.assign(Object.assign({}, el), { produto: purchaseList.filter(({ catId }) => el.id === catId) });
+                return {
+                    ...el,
+                    produto: purchaseList.filter(({ catId }) => el.id === catId),
+                };
             }
         })
             .filter((item) => item !== undefined);
         res.json({ success: true, data: result, total: soma.toFixed(2) });
-    }),
-    deletePurchase: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    },
+    deletePurchase: async (req, res) => {
         const { id } = req.params;
         if (!id) {
             res.status(400).json({ success: false, error: 'id não enviado!' });
             return;
         }
-        const deletedPurchase = yield prisma_1.prisma.purchase.delete({
+        const deletedPurchase = await prisma_1.prisma.purchase.delete({
             where: { id: parseInt(id) },
         });
         if (!deletedPurchase) {
@@ -151,8 +145,8 @@ exports.purchase = {
         res.status(200).json({
             success: true,
         });
-    }),
-    editPurchase: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    },
+    editPurchase: async (req, res) => {
         const { id } = req.params;
         if (!id) {
             res.status(400).json({ success: false, error: 'id não enviado!' });
@@ -183,7 +177,7 @@ exports.purchase = {
             return;
         }
         try {
-            const updatedPurchase = yield prisma_1.prisma.purchase.update({
+            const updatedPurchase = await prisma_1.prisma.purchase.update({
                 where: { id: parseInt(id) },
                 data: parse.data,
             });
@@ -192,5 +186,5 @@ exports.purchase = {
         catch (e) {
             res.status(400).json({ success: false, data: e });
         }
-    }),
+    },
 };

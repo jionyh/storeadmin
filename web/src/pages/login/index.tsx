@@ -5,6 +5,9 @@ import Image from 'next/image'
 import React, { useState } from 'react'
 import { api } from '@/libs/axios'
 import { useRouter } from 'next/router'
+import Head from 'next/head'
+import cookies from 'js-cookie'
+
 const Login = () => {
   const router = useRouter()
   const [email, setEmail] = useState('')
@@ -18,6 +21,7 @@ const Login = () => {
         password,
       })
       if (res.data.success) {
+        cookies.set('token', res.data.token)
         router.push('/')
       }
     }
@@ -25,6 +29,9 @@ const Login = () => {
 
   return (
     <div className="flex h-screen items-center justify-center bg-red-500">
+      <Head>
+        <title>Login</title>
+      </Head>
       <div className="mx-10 flex flex-col items-center justify-center rounded-lg bg-gray-50 px-20 pb-12 pt-5 shadow-2xl">
         <Image src={Logo} alt="" />
         <div className="mt-11 flex flex-col gap-8">
