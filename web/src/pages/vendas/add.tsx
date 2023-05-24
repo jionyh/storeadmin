@@ -37,7 +37,6 @@ const AdicionarVendas = () => {
       const res = await api.get(`/payments`)
       setPaymentOptions(res.data.data)
       setLoading(false)
-      console.log(res.data.data)
       return
     } catch (e) {
       setError('Falha ao carregar!')
@@ -49,7 +48,7 @@ const AdicionarVendas = () => {
     alert.onOpen()
   }
 
-  const fetchPostCreatePurchase = async () => {
+  const fetchPostCreateSale = async () => {
     alert.onClose()
     loader.onOpen()
     setdisabled(true)
@@ -69,7 +68,6 @@ const AdicionarVendas = () => {
         return
       }
     } catch (e) {
-      console.log(e)
       toast({
         title: 'Erro ao adicionar a venda. Tenta novamente!',
         status: 'error',
@@ -91,7 +89,6 @@ const AdicionarVendas = () => {
   /* Função para adicionar novos campos ao form */
   const handleAddInputs = () => {
     setList([...list, listInitialState])
-    console.log(list)
   }
 
   const handleRemoveInputs = (i: any) => {
@@ -166,7 +163,7 @@ const AdicionarVendas = () => {
         <Alert
           obj={alert}
           title="Adicionar nova venda?"
-          fn={fetchPostCreatePurchase}
+          fn={fetchPostCreateSale}
         />
         <Loader obj={loader} />
       </>

@@ -7,8 +7,8 @@ dotenv.config()
 
 // Colocando certificado ssl na api
 const credentials = {
-  key: fs.readFileSync('src/cert/key.pem'),
-  cert: fs.readFileSync('src/cert/cert.pem'),
+  key: fs.readFileSync('./cert/key.pem'),
+  cert: fs.readFileSync('./cert/cert.pem'),
 }
 
 const PORT = parseInt(`${process.env.PORT || 4001}`)

@@ -29,10 +29,6 @@ export const VendasInput = ({
   const handleAddProducts = (e: React.ChangeEvent) => {
     handleAdd(e, index)
   }
-
-  console.log(paymentOptions)
-  console.log(state)
-
   return (
     <Box className="w-full p-2">
       <Stack>

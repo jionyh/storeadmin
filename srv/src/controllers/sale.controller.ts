@@ -9,6 +9,7 @@ import { SalesReturn } from '../types/Sales'
 export const sale = {
   getAllSales: async (req: Request, res: Response) => {
     const { date } = req.query
+    console.log('iniciou o get')
 
     try {
       const sales = await prisma.sale.findMany({
@@ -33,29 +34,34 @@ export const sale = {
       const formatReturn: SalesReturn[] = []
 
       sales.forEach((item) => {
-        // Constante que retorna o index ou -1 caso ache no array a condição abaixo
+        // Constante que retorna o primeiro index que satisfazer a condição de data.
+        // Retorna -1 se já achou ou não bateu a condição
         const existingDayIndex = formatReturn.findIndex((entry) => {
           const d = dayjs(item.createAt).format('YYYY-MM-DD')
-          console.log(d, entry.day)
           return entry.day === d
         })
-        console.log(item.id, existingDayIndex)
 
-        // Se o array retorna -1, adiciona ao array usando o index encontrado acima
+        // Se já existe o dia, adiciona apenas os campos de data ao dia
         if (existingDayIndex !== -1) {
+          // faz a soma e adiciona ao dia o total de vendas se já existe um índice
+          formatReturn[existingDayIndex].total = (
+            parseFloat(formatReturn[existingDayIndex].total) + item.value
+          ).toFixed(2)
+
           formatReturn[existingDayIndex].data.push({
             id: item.id,
-            value: item.value.toFixed(2).toString(),
+            value: item.value.toFixed(2),
             payment: item.paymentsMethods.name,
           })
-          // Senão, ele adiciona com o day e cria o objeto novo dentro do array
+          // Senão existe o dia, então adiciona o dia, o total  e a data dele
         } else {
           formatReturn.push({
             day: dayjs(item.createAt).format('YYYY-MM-DD'),
+            total: item.value.toFixed(2),
             data: [
               {
                 id: item.id,
-                value: item.value.toFixed(2).toString(),
+                value: item.value.toFixed(2),
                 payment: item.paymentsMethods.name,
               },
             ],
@@ -63,16 +69,12 @@ export const sale = {
         }
       })
 
-      const soma = sales.reduce((soma, obj) => {
-        return soma + obj.value
-      }, 0)
-
       res.status(200).json({
         success: true,
-        total: soma.toFixed(2).toString(),
         data: formatReturn,
       })
     } catch (e) {
+      console.log(e)
       res.status(400).json({ success: false, message: e })
     }
   },

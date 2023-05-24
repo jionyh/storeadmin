@@ -32,8 +32,8 @@ const Vendas = () => {
   dayjs.locale('pt-br')
   const toast = useToast()
   const [date, setDate] = useState(dayjs().format('YYYY-MM-DD'))
-  const [list, setList] = useState<SalesList>()
-  const [delProduct, setDelProduct] = useState('')
+  const [list, setList] = useState<SalesList[]>([])
+  const [delSale, setDelSale] = useState('')
   const [modalInfo, setModalInfo] = useState<SaleInfoModal>({
     id: 0,
     value: '',
@@ -50,24 +50,24 @@ const Vendas = () => {
       `/vendas?date=${dayjs(date).format('YYYY-MM-DD')}`,
     )
     if (res) {
-      setList(res.data)
+      setList(res.data.data)
     }
     setLoading(false)
   }
 
-  const handleDeleteProduct = (id: string) => {
-    setDelProduct(id)
+  const handleDeleteSale = (id: string) => {
+    setDelSale(id)
     alert.onOpen()
   }
 
-  const deleteProduct = async () => {
+  const deleteSale = async () => {
     alert.onClose()
     loader.onOpen()
     try {
-      await api.delete(`/vendas/${delProduct}`)
+      await api.delete(`/vendas/${delSale}`)
       loader.onClose()
       toast({
-        title: 'Produto Deletado!',
+        title: 'Venda Deletado!',
         status: 'success',
         isClosable: true,
       })
@@ -76,7 +76,7 @@ const Vendas = () => {
     } catch (e) {
       loader.onClose()
       toast({
-        title: 'Erro ao deletar o Produto!',
+        title: 'Erro ao deletar a venda!',
         status: 'error',
         isClosable: true,
       })
@@ -84,7 +84,6 @@ const Vendas = () => {
   }
 
   const openModal = (data: any) => {
-    console.log(data)
     setModalInfo(data)
     modal.onOpen()
   }
@@ -110,17 +109,17 @@ const Vendas = () => {
         <DatePicker clickFn={setDate} />
         <div className="mt-5 ">
           {loading && <LoadingSpinner />}
-          {!loading && list!.data.length === 0 && (
+          {!loading && list.length === 0 && (
             <div className="mt-20">
               <Empty title="vendas" />
             </div>
           )}
 
-          {!loading && list && list.data.length > 0 && (
+          {!loading && list && list.length > 0 && (
             <>
               <TableContainer>
                 <Table colorScheme="linkedin" size={'md'}>
-                  {list.data.map((item, index) => (
+                  {list.map((item, index) => (
                     <React.Fragment key={index}>
                       <Thead>
                         <Tr className="bg-blue-100">
@@ -130,7 +129,7 @@ const Vendas = () => {
                         </Tr>
                       </Thead>
                       {item.data.map((data, index) => (
-                        <Tbody key={index}>
+                        <Tbody key={index} fontSize="sm">
                           <Tr>
                             <Td onClick={() => openModal(data)} maxWidth="90px">
                               <Text>{data.payment}</Text>
@@ -147,27 +146,31 @@ const Vendas = () => {
                                 color="red.500"
                                 boxSize={3}
                                 cursor="pointer"
-                                onClick={() => handleDeleteProduct(data.id)}
+                                onClick={() => handleDeleteSale(data.id)}
                               />
                             </Td>
                           </Tr>
                         </Tbody>
                       ))}
+                      <Tfoot background="red.200">
+                        <Tr>
+                          <Th fontWeight="bold" fontSize="md">
+                            Total
+                          </Th>
+                          <Th fontWeight="bold" fontSize="md" textAlign="end">
+                            € {item.total}
+                          </Th>
+                          <Th></Th>
+                        </Tr>
+                      </Tfoot>
                     </React.Fragment>
                   ))}
-                  <Tfoot background="red.200" fontWeight="bold">
-                    <Tr>
-                      <Th>Total</Th>
-                      <Th textAlign="end">€ {list.total}</Th>
-                      <Th></Th>
-                    </Tr>
-                  </Tfoot>
                 </Table>
               </TableContainer>
             </>
           )}
         </div>
-        <Alert obj={alert} title="Deletar venda?" fn={deleteProduct} />
+        <Alert obj={alert} title="Deletar venda?" fn={deleteSale} />
         <Loader obj={loader} />
         <ModalVendas obj={modal} info={modalInfo} callback={fetchDay} />
       </>

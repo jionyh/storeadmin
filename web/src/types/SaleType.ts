@@ -1,13 +1,10 @@
 export type SalesList = {
-  success: boolean
-  total: number
+  day: string
+  total: string
   data: {
-    day: string
-    data: {
-      id: string
-      value: string
-      payment: string
-    }[]
+    id: string
+    value: string
+    payment: string
   }[]
 }
 

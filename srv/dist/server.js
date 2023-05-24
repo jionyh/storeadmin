@@ -10,8 +10,8 @@ const https_1 = __importDefault(require("https"));
 dotenv_1.default.config();
 // Colocando certificado ssl na api
 const credentials = {
-    key: fs_1.default.readFileSync('src/cert/key.pem'),
-    cert: fs_1.default.readFileSync('src/cert/cert.pem'),
+    key: fs_1.default.readFileSync('./cert/key.pem'),
+    cert: fs_1.default.readFileSync('./cert/cert.pem'),
 };
 const PORT = parseInt(`${process.env.PORT || 4001}`);
 // cria-se o app pelo node
