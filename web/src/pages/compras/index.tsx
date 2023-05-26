@@ -25,7 +25,7 @@ import { LoadingSpinner } from '@/components/LoadingSpinner'
 import { Alert } from '@/components/Alert'
 import { Loader } from '@/components/Loader'
 import { ModalCompras } from '@/components/ComprasModal'
-import { api } from '@/libs/axios'
+import api from '@/libs/axios'
 
 const Compras = () => {
   const toast = useToast()

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Alert } from '../Alert'
 import { Loader } from '../Loader'
-import { api } from '@/libs/axios'
+import api from '@/libs/axios'
 import { SaleInfoModal } from '@/types/SaleType'
 import {
   Modal,

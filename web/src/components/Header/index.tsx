@@ -1,10 +1,12 @@
 /* eslint-disable jsx-a11y/alt-text */
+import { Context } from '@/contexts/UserContext'
 import { HamburgerIcon } from '@chakra-ui/icons'
 import { Avatar, Box, Button, Image, Text, Fade } from '@chakra-ui/react'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 const Header = () => {
+  const { state } = useContext(Context)
   const [menuOpen, setMenuOpen] = useState(false)
 
   const handleMenuEvent = (event: MouseEvent) => {
@@ -47,7 +49,7 @@ const Header = () => {
           size={'md'}
           bg={'whiteAlpha.900'}
           color={'gray.900'}
-          name="Jiony Henrique"
+          name={state.user.name}
           src="https://bit.ly/broken-link"
         />
       </Box>

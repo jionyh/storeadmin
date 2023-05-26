@@ -1,7 +1,7 @@
 /* eslint-disable no-prototype-builtins */
 import { LoadingSpinner } from '@/components/LoadingSpinner'
 import { Layout } from '@/layout/Layout'
-import { api } from '@/libs/axios'
+import api from '@/libs/axios'
 import { Payments, SaleListPost } from '@/types/SaleType'
 import { AddIcon, CheckIcon, CloseIcon } from '@chakra-ui/icons'
 import { Button, Flex, useDisclosure, useToast } from '@chakra-ui/react'

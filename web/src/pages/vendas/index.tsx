@@ -25,7 +25,7 @@ import { LoadingSpinner } from '@/components/LoadingSpinner'
 import { Alert } from '@/components/Alert'
 import { Loader } from '@/components/Loader'
 import { ModalVendas } from '../../components/VendasModal'
-import { api } from '@/libs/axios'
+import api from '@/libs/axios'
 import { SaleInfoModal, SalesList } from '@/types/SaleType'
 
 const Vendas = () => {

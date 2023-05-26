@@ -1,21 +1,23 @@
 /* eslint-disable no-prototype-builtins */
 import { ComprasInput } from '@/components/ComprasInput'
 import { LoadingSpinner } from '@/components/LoadingSpinner'
+import { Context } from '@/contexts/UserContext'
 import { Layout } from '@/layout/Layout'
+import api from '@/libs/axios'
 import { ProductList } from '@/types/ProductList'
 import { ProductType } from '@/types/ProductType'
 import { CategoryType, UnitType } from '@/types/UnitType'
 import { AddIcon, CheckIcon, CloseIcon } from '@chakra-ui/icons'
 import { Button, Flex, Wrap } from '@chakra-ui/react'
-import axios from 'axios'
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 
 const AdicionarCompras = () => {
+  const { state } = useContext(Context)
   const router = useRouter()
   const listInitialState = {
     itemId: '',
-    userId: '1',
+    userId: state.user.id.toString(),
     unitId: '',
     quantity: '',
     value: '',
@@ -40,7 +42,7 @@ const AdicionarCompras = () => {
   const fetchData = async () => {
     setLoading(true)
     try {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_PATH}/unit`)
+      const res = await api.get(`/unit`)
       setUnitList(res.data.data)
       setLoading(false)
 
@@ -55,9 +57,7 @@ const AdicionarCompras = () => {
     setLoadingPage(true)
 
     try {
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_PATH}/categories/`,
-      )
+      const res = await api.get(`/categories/`)
       setCategoryList(res.data.data)
       setLoadingPage(false)
     } catch (e) {
@@ -70,9 +70,7 @@ const AdicionarCompras = () => {
     setLoadingProducts(true)
     setList([listInitialState])
     try {
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_PATH}/categories/sub?cat=${activeCategory}`,
-      )
+      const res = await api.get(`/categories/sub?cat=${activeCategory}`)
       setProductList(res.data.data)
       setLoadingProducts(false)
 
@@ -86,10 +84,7 @@ const AdicionarCompras = () => {
   const fetchPostCreatePurchase = async () => {
     setdisabled(true)
     try {
-      const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_PATH}/compras`,
-        list,
-      )
+      const res = await api.post(`/compras`, list)
 
       if (res.data.success) {
         alert('Compras adicionadas com sucesso!')
@@ -144,8 +139,6 @@ const AdicionarCompras = () => {
       }
     })
     if (errors.length === 0) {
-      console.log('passou')
-      console.log(list)
       fetchPostCreatePurchase()
       return
     }
@@ -156,6 +149,10 @@ const AdicionarCompras = () => {
     fetchCategories()
     fetchData()
   }, [])
+  useEffect(() => {
+    console.log(list)
+    console.log(state.user.id)
+  }, [list])
 
   useEffect(() => {
     fetchProductsData()

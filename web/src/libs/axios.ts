@@ -1,5 +1,16 @@
 import axios from 'axios'
+import Cookies from 'js-cookie'
 
-export const api = axios.create({
+const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_PATH,
+  headers: {
+    'Content-Type': 'application/json',
+  },
 })
+
+api.interceptors.request.use((config) => {
+  config.headers.Authorization = 'Bearer ' + Cookies.get('token')
+  return config
+})
+
+export default api
