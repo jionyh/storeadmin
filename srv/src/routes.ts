@@ -6,6 +6,7 @@ import { purchase } from './controllers/purchase.controller'
 import { sale } from './controllers/sale.controller'
 import { Auth } from './middlewares/auth'
 import { auth } from './controllers/auth.controller'
+import { user } from './controllers/user.controller'
 const router = express.Router()
 
 router.post('/signin', auth.signin)
@@ -27,6 +28,8 @@ router.get('/vendas', sale.getAllSales)
 router.post('/vendas', sale.createSale)
 router.delete('/vendas/:id', sale.deleteSale)
 router.patch('/vendas/:id', sale.editSale)
+
+router.post('/user', user.getUser)
 
 router.get('/payments', sale.getPayments)
 
