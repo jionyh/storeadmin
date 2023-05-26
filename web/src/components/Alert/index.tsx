@@ -35,6 +35,7 @@ export const Alert = ({ obj, title, fn }: Props) => {
       <AlertDialog
         isOpen={isOpen}
         isCentered
+        size="sm"
         leastDestructiveRef={cancelRef}
         onClose={onClose}
       >

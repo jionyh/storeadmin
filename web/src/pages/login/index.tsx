@@ -27,6 +27,12 @@ const Login = () => {
     }
   }
 
+  const handleKeyDown = (e: any) => {
+    if (e.keyCode === 13) {
+      handleLogin()
+    }
+  }
+
   return (
     <div className="flex h-screen items-center justify-center bg-red-500">
       <Head>
@@ -49,6 +55,7 @@ const Login = () => {
               type={show ? 'text' : 'password'}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              onKeyDown={handleKeyDown}
             />
             <InputRightElement>
               {show ? (

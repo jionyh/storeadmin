@@ -67,9 +67,11 @@ const AdicionarVendas = () => {
         loader.onClose()
         return
       }
+
+      throw Error('Verifique os campos')
     } catch (e) {
       toast({
-        title: 'Erro ao adicionar a venda. Tenta novamente!',
+        title: 'Erro ao adicionar a venda. Verifique os campos!',
         status: 'error',
         isClosable: true,
       })

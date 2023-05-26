@@ -1,5 +1,7 @@
 /* eslint-disable no-prototype-builtins */
+import { Alert } from '@/components/Alert'
 import { ComprasInput } from '@/components/ComprasInput'
+import { Loader } from '@/components/Loader'
 import { LoadingSpinner } from '@/components/LoadingSpinner'
 import { Context } from '@/contexts/UserContext'
 import { Layout } from '@/layout/Layout'
@@ -8,13 +10,17 @@ import { ProductList } from '@/types/ProductList'
 import { ProductType } from '@/types/ProductType'
 import { CategoryType, UnitType } from '@/types/UnitType'
 import { AddIcon, CheckIcon, CloseIcon } from '@chakra-ui/icons'
-import { Button, Flex, Wrap } from '@chakra-ui/react'
+import { Button, Flex, Wrap, useDisclosure, useToast } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import React, { useContext, useEffect, useState } from 'react'
 
 const AdicionarCompras = () => {
   const { state } = useContext(Context)
   const router = useRouter()
+  const alert = useDisclosure()
+  const loader = useDisclosure()
+  const toast = useToast()
+
   const listInitialState = {
     itemId: '',
     userId: state.user.id.toString(),
@@ -81,24 +87,6 @@ const AdicionarCompras = () => {
     }
   }
 
-  const fetchPostCreatePurchase = async () => {
-    setdisabled(true)
-    try {
-      const res = await api.post(`/compras`, list)
-
-      if (res.data.success) {
-        alert('Compras adicionadas com sucesso!')
-        router.replace('/compras')
-        setdisabled(false)
-        return
-      }
-    } catch (e) {
-      alert('Ocorreu um erro! Tente novamente mais tarde.')
-      console.log(e)
-      setdisabled(false)
-    }
-  }
-
   /* Função para lidar com a adição no array de dados que vai para o backend */
   const handleProductListAdd = (e: any, index: number) => {
     const { name, value } = e.target
@@ -110,7 +98,6 @@ const AdicionarCompras = () => {
   /* Função para adicionar novos campos ao form */
   const handleAddInputs = () => {
     setList([...list, listInitialState])
-    console.log(list)
   }
 
   const handleRemoveInputs = (i: any) => {
@@ -121,38 +108,46 @@ const AdicionarCompras = () => {
     }
   }
 
-  /* Função que envia os dados para o backend */
-  const handleSaveInputs = () => {
-    const errors = []
-    list.forEach((item, i) => {
-      for (const key in item) {
-        if (
-          item.hasOwnProperty(key) &&
-          (item as any)[key] === '' &&
-          key !== 'supplier'
-        ) {
-          errors.push({
-            lista: i + 1,
-            campo: key,
-          })
-        }
+  const handleAdd = () => {
+    alert.onOpen()
+  }
+
+  const fetchPostCreateSale = async () => {
+    alert.onClose()
+    loader.onOpen()
+    setdisabled(true)
+
+    try {
+      const res = await api.post(`/compras`, list)
+
+      if (res.data.success) {
+        router.replace('/compras')
+        setdisabled(false)
+        toast({
+          title: 'Compra Adiciona com sucesso!',
+          status: 'success',
+          isClosable: true,
+        })
+        loader.onClose()
+        return
       }
-    })
-    if (errors.length === 0) {
-      fetchPostCreatePurchase()
-      return
+      throw Error(res.data.error)
+    } catch (e) {
+      toast({
+        title: 'Erro ao adicionar a compra. Verifique os campos!',
+        status: 'error',
+        duration: 6000,
+        isClosable: true,
+      })
+      loader.onClose()
+      setdisabled(false)
     }
-    alert('Preencha os campos!')
   }
 
   useEffect(() => {
     fetchCategories()
     fetchData()
   }, [])
-  useEffect(() => {
-    console.log(list)
-    console.log(state.user.id)
-  }, [list])
 
   useEffect(() => {
     fetchProductsData()
@@ -224,7 +219,7 @@ const AdicionarCompras = () => {
                     loadingText="Salvando dados!"
                     leftIcon={<CheckIcon />}
                     colorScheme="green"
-                    onClick={handleSaveInputs}
+                    onClick={handleAdd}
                   >
                     Salvar
                   </Button>
@@ -233,6 +228,12 @@ const AdicionarCompras = () => {
             )}
           </>
         )}
+        <Alert
+          obj={alert}
+          title="Adicionar nova compra?"
+          fn={fetchPostCreateSale}
+        />
+        <Loader obj={loader} />
       </>
     </Layout>
   )
