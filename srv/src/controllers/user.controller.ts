@@ -38,8 +38,7 @@ export const user = {
             email: user.email,
             role: user.role,
             token: parse.data.token,
-          },
-          decoded: data,
+          }
         })
       }
     } catch (e) {
