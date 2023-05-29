@@ -28,10 +28,10 @@ export const Loader = ({ obj }: Props) => {
         size="sm"
         isCentered
       >
-        <ModalOverlay bg="blackAlpha.800" />
-        <ModalContent bg="transparent">
+        <ModalOverlay bg="blackAlpha.700" />
+        <ModalContent bg="transparent" shadow="none">
           <Center>
-            <Spinner thickness="4px" speed="0.65s" color="gray.500" size="xl" />
+            <Spinner thickness="4px" speed="0.65s" color="gray.800" size="xl" />
           </Center>
         </ModalContent>
       </Modal>
