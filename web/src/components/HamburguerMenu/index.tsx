@@ -28,24 +28,16 @@ export const HamburguerMenu = () => {
       />
       <MenuList color="red.500">
         <Link href={'/vendas'}>
-          <MenuItem as="a" icon={<FaShoppingBasket size={20} />}>
-            Vendas
-          </MenuItem>
+          <MenuItem icon={<FaShoppingBasket size={20} />}>Vendas</MenuItem>
         </Link>
         <Link href={'/compras'}>
-          <MenuItem as="a" icon={<FaCartPlus size={20} />}>
-            Compras
-          </MenuItem>
+          <MenuItem icon={<FaCartPlus size={20} />}>Compras</MenuItem>
         </Link>
         <Link href={'/relatorios'}>
-          <MenuItem as="a" icon={<FaClipboardCheck size={20} />}>
-            Relatórios
-          </MenuItem>
+          <MenuItem icon={<FaClipboardCheck size={20} />}>Relatórios</MenuItem>
         </Link>
         <Link href={'/dashboard'}>
-          <MenuItem as="a" icon={<FaCogs size={20} />}>
-            Configurações
-          </MenuItem>
+          <MenuItem icon={<FaCogs size={20} />}>Configurações</MenuItem>
         </Link>
       </MenuList>
     </Menu>
