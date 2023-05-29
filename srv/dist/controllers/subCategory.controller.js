@@ -16,10 +16,10 @@ exports.subCategory = {
         const data = subCategorySchema.parse(req.body);
         const addSubCat = await prisma_1.prisma.subCategory.createMany({ data });
         if (!addSubCat) {
-            res.json({ sucess: false });
+            res.json({ success: false });
             return;
         }
-        res.json({ sucess: true, data: addSubCat });
+        res.json({ success: true, data: addSubCat });
     },
     getAllSubCategories: async (req, res) => {
         const { cat } = req.query;
@@ -49,7 +49,7 @@ exports.subCategory = {
                     cat: (0, capitalizeFirstLetter_1.Capitalize)(response[i].cat.name),
                 });
             }
-            res.json({ sucess: true, data });
+            res.json({ success: true, data });
             return;
         }
         const data = await prisma_1.prisma.subCategory.findMany({
@@ -67,6 +67,6 @@ exports.subCategory = {
             res.json({ error: true });
             return;
         }
-        res.json({ sucess: true, data });
+        res.json({ success: true, data });
     },
 };

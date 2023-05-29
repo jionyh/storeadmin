@@ -48,7 +48,7 @@ model Purchase {
   id          Int         @id @default(autoincrement())
   quantity    Float
   value       Float
-  createAt    DateTime    @default(now())
+  createAt    DateTime    @default(now()) @db.Date()
   itemId      Int
   userId      Int
   unitId      Int

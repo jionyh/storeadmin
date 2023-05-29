@@ -22,11 +22,11 @@ export const subCategory = {
     const addSubCat = await prisma.subCategory.createMany({ data })
 
     if (!addSubCat) {
-      res.json({ sucess: false })
+      res.json({ success: false })
       return
     }
 
-    res.json({ sucess: true, data: addSubCat })
+    res.json({ success: true, data: addSubCat })
   },
 
   getAllSubCategories: async (req: Request, res: Response) => {
@@ -61,7 +61,7 @@ export const subCategory = {
         })
       }
 
-      res.json({ sucess: true, data })
+      res.json({ success: true, data })
       return
     }
 
@@ -81,6 +81,6 @@ export const subCategory = {
       res.json({ error: true })
       return
     }
-    res.json({ sucess: true, data })
+    res.json({ success: true, data })
   },
 }

@@ -1,41 +1,74 @@
 import { Doughnut } from 'react-chartjs-2'
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  Colors,
+  ChartOptions,
+  TooltipItem,
+  Title,
+} from 'chart.js'
 
-ChartJS.register(ArcElement, Tooltip, Legend)
+ChartJS.register(ArcElement, Tooltip, Legend, Colors, Title)
 
-export const data = {
-  labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-  datasets: [
-    {
-      label: '# of Votes',
-      data: [12, 19, 3, 5, 2, 3],
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(255, 206, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(153, 102, 255, 0.2)',
-        'rgba(255, 159, 64, 0.2)',
-      ],
-      borderColor: [
-        'rgba(255, 99, 132, 1)',
-        'rgba(54, 162, 235, 1)',
-        'rgba(255, 206, 86, 1)',
-        'rgba(75, 192, 192, 1)',
-        'rgba(153, 102, 255, 1)',
-        'rgba(255, 159, 64, 1)',
-      ],
-      borderWidth: 1,
-    },
-  ],
+type Props = {
+  data: {
+    category: string
+    labels: string[]
+    data: any
+  }
 }
 
-export const DoughnutChart = () => {
+export const DoughnutChart = ({ data }: Props) => {
+  const optionChart: ChartOptions<'doughnut'> = {
+    plugins: {
+      title: {
+        display: true,
+        text: data.category,
+        position: 'top',
+        align: 'center',
+        font: {
+          size: 20,
+        },
+      },
+      colors: {
+        enabled: true,
+        forceOverride: true,
+      },
+      tooltip: {
+        displayColors: false,
+        callbacks: {
+          label: function (tooltipItem: TooltipItem<'doughnut'>): string {
+            const value = tooltipItem.dataset.data[tooltipItem.dataIndex]
+            // const label = tooltipItem.dataset.label
+            return `€ ${value.toFixed(2)}`
+          },
+        },
+      },
+    },
+  }
+
+  const dataChart = {
+    labels: data.labels,
+    datasets: [
+      {
+        data: data.data,
+        borderWidth: 1,
+      },
+    ],
+  }
+
   return (
-    <Doughnut
-      // options={...}
-      data={data}
-      // {...props}
-    />
+    <>
+      {data.data.length === 0 && <h1>Não há dados para exibir!</h1>}
+      {data.data.length > 0 && (
+        <Doughnut
+          options={optionChart}
+          data={dataChart}
+          // {...props}
+        />
+      )}
+    </>
   )
 }

@@ -10,7 +10,6 @@ const prisma_1 = require("../lib/prisma");
 exports.sale = {
     getAllSales: async (req, res) => {
         const { date } = req.query;
-        console.log('iniciou o get');
         try {
             const sales = await prisma_1.prisma.sale.findMany({
                 orderBy: { id: 'asc' },
@@ -95,7 +94,8 @@ exports.sale = {
             res.status(200).json({ success: true, data: addSale });
         }
         catch (e) {
-            res.status(400).json({ success: false, message: e });
+            console.log(e);
+            res.status(400).json({ success: false, e });
         }
     },
     deleteSale: async (req, res) => {

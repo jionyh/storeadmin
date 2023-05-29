@@ -9,7 +9,6 @@ import { SalesReturn } from '../types/Sales'
 export const sale = {
   getAllSales: async (req: Request, res: Response) => {
     const { date } = req.query
-    console.log('iniciou o get')
 
     try {
       const sales = await prisma.sale.findMany({
@@ -101,7 +100,8 @@ export const sale = {
       const addSale = await prisma.sale.createMany({ data: parse.data })
       res.status(200).json({ success: true, data: addSale })
     } catch (e) {
-      res.status(400).json({ success: false, message: e })
+      console.log(e)
+      res.status(400).json({ success: false, e })
     }
   },
   deleteSale: async (req: Request, res: Response) => {

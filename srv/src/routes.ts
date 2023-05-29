@@ -7,6 +7,7 @@ import { sale } from './controllers/sale.controller'
 import { Auth } from './middlewares/auth'
 import { auth } from './controllers/auth.controller'
 import { user } from './controllers/user.controller'
+import { reports } from './controllers/reports.controller'
 const router = express.Router()
 
 router.post('/signin', auth.signin)
@@ -30,6 +31,10 @@ router.delete('/vendas/:id', sale.deleteSale)
 router.patch('/vendas/:id', sale.editSale)
 
 router.post('/user', user.getUser)
+
+router.get('/reports/sales', Auth.private, reports.getSalesValues)
+router.get('/reports/purchases', Auth.private, reports.getPurchasesValues)
+router.get('/reports', Auth.private, reports.getReport)
 
 router.get('/payments', sale.getPayments)
 
