@@ -83,4 +83,6 @@ export const subCategory = {
     }
     res.json({ success: true, data })
   },
+
+  editSubCategory: async (req: Request, res: Response) => {},
 }
