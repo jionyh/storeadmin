@@ -30,6 +30,12 @@ const Config = () => {
   const fetchData = async () => {
     setLoading(true)
     loader.onOpen()
+    if (activeTab === 'user') {
+      loader.onClose()
+      setLoading(false)
+      return
+    }
+
     const res = await api.get(`/${activeTab}`)
     if (res.data.success) {
       setData(res.data.data)
@@ -116,7 +122,7 @@ const Config = () => {
                     />
                   </TabPanel>
                   <TabPanel>
-                    <p>3</p>
+                    <p>Em Construção...</p>
                   </TabPanel>
                 </TabPanels>
               )}

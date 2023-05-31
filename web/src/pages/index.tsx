@@ -165,13 +165,16 @@ export default function Home() {
                 </CardHeader>
                 <CardBody p="5px">
                   <Text>
-                    Dia - <strong>€ {sales.totalDay}</strong>
+                    Dia -{' '}
+                    <strong>€ {parseFloat(sales.totalDay).toFixed(2)}</strong>
                   </Text>
                   <Text>
-                    7 Dias - <strong>€ {sales.totalWeek}</strong>
+                    7 Dias -{' '}
+                    <strong>€ {parseFloat(sales.totalWeek).toFixed(2)}</strong>
                   </Text>
                   <Text>
-                    30 Dias - <strong>€ {sales.totalMonth}</strong>
+                    30 Dias -{' '}
+                    <strong>€ {parseFloat(sales.totalMonth).toFixed(2)}</strong>
                   </Text>
                 </CardBody>
               </Card>
@@ -199,13 +202,22 @@ export default function Home() {
                 </CardHeader>
                 <CardBody p="5px">
                   <Text>
-                    Dia - <strong>€ {purchases.totalDay}</strong>
+                    Dia -{' '}
+                    <strong>
+                      € {parseFloat(purchases.totalDay).toFixed(2)}
+                    </strong>
                   </Text>
                   <Text>
-                    7 Dias - <strong>€ {purchases.totalWeek}</strong>
+                    7 Dias -{' '}
+                    <strong>
+                      € {parseFloat(purchases.totalWeek).toFixed(2)}
+                    </strong>
                   </Text>
                   <Text>
-                    30 Dias - <strong>€ {purchases.totalMonth}</strong>
+                    30 Dias -{' '}
+                    <strong>
+                      € {parseFloat(purchases.totalMonth).toFixed(2)}
+                    </strong>
                   </Text>
                 </CardBody>
               </Card>

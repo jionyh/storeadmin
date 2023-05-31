@@ -20,6 +20,7 @@ import {
   InputRightAddon,
   InputLeftElement,
   useToast,
+  UseDisclosureProps,
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { Alert } from '../Alert'
@@ -27,15 +28,7 @@ import { Loader } from '../Loader'
 import api from '@/libs/axios'
 
 type Props = {
-  obj: {
-    isOpen: boolean
-    onOpen: () => void
-    onClose: () => void
-    onToggle: () => void
-    isControlled: boolean
-    getButtonProps: (props?: any) => any
-    getDisclosureProps: (props?: any) => any
-  }
+  obj: UseDisclosureProps
   info: Purchase
   callback: () => void
 }
