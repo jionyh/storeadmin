@@ -81,7 +81,7 @@ export default function Home() {
     try {
       const resSales = await api.get(`/reports/sales?date=${day}`)
       const resPurchases = await api.get(`/reports/purchases?date=${day}`)
-      const resCategories = await api.get('/categories')
+      const resCategories = await api.get('/category')
 
       if (resSales && resPurchases && resCategories) {
         setSales(resSales.data.data)

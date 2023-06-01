@@ -68,10 +68,10 @@ const AdicionarVendas = () => {
         return
       }
 
-      throw Error('Verifique os campos')
-    } catch (e) {
+      // throw Error('Verifique os campos')
+    } catch (e: any) {
       toast({
-        title: 'Erro ao adicionar a venda. Verifique os campos!',
+        title: e.response.data.message,
         status: 'error',
         isClosable: true,
       })

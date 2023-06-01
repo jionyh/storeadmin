@@ -28,7 +28,8 @@ import { useEffect, useState } from 'react'
 type Props = {
   obj: UseDisclosureProps
   info: InfoModal
-  callback?: () => void
+  fn?: () => Promise<void>
+  create?: boolean
 }
 
 const activeLabelStyles = {
@@ -68,64 +69,76 @@ export const theme = extendTheme({
   },
 })
 
-export const DashboardModal = ({ obj, info, callback }: Props) => {
+export const DashboardModal = ({ obj, info, fn, create = false }: Props) => {
   const loader = useDisclosure()
   const toast = useToast()
   const router = useRouter()
   const { isOpen, onClose } = useDisclosure(obj)
-  const [abbreviation, setAbbreviation] = useState('kg')
-  const [name, setName] = useState('name')
+  const [abbreviation, setAbbreviation] = useState('')
+  const [name, setName] = useState('')
   const [categoryId, setCategoryId] = useState(1)
   const [categories, setCategories] = useState<CategoryType[]>([])
 
   const getCategories = async () => {
-    const res = await api.get('/categories')
+    const res = await api.get('/category')
     setCategories(res.data.data)
   }
 
-  const editFetch = async (endpoint: string, data: any) => {
+  const handleFetch = async (endpoint: string, data: any) => {
     loader.onOpen()
+    console.log()
     try {
-      await api.patch(endpoint, data)
+      create
+        ? await api.post(endpoint.slice(0, endpoint.indexOf('/')), data)
+        : await api.patch(endpoint, data)
       loader.onClose()
       onClose()
+      setTimeout(() => {
+        if (create && fn) {
+          fn()
+        } else {
+          router.reload()
+        }
+      }, 3000)
       toast({
-        title: `${info.title} editado!`,
+        title: `${info.title} ${create ? 'criado!' : 'editado!'}`,
         status: 'success',
         isClosable: true,
       })
-      router.replace()
+
       return
     } catch (e) {
       loader.onClose()
       onClose()
       toast({
-        title: `Erro ao editar ${info.title}. Verifique os campos!`,
+        title: `Erro ao ${create ? 'adicionar' : 'editar'} ${
+          info.title
+        }. Verifique os campos!`,
         status: 'error',
         isClosable: true,
       })
     }
   }
 
-  const editSwitch = (endpoint: string) => {
+  const endpointSwitch = (endpoint: string) => {
     switch (endpoint) {
       case 'Categorias':
-        editFetch(`/category/${info.id}`, { name })
+        handleFetch(`category/${info.id}`, { name })
         break
 
       case 'Produtos':
-        editFetch(`/product/${info.id}`, { name, categoryId })
+        handleFetch(`product/${info.id}`, { name, categoryId })
         break
 
       case 'Unidades':
-        editFetch(`/unit/${info.id}`, { name, abbreviation })
+        handleFetch(`unit/${info.id}`, { name, abbreviation })
         break
     }
   }
 
   useEffect(() => {
-    setName(info.name ? info.name : 'name')
-    setAbbreviation(info.abb ? info.abb : 'kg')
+    setName(info.name ? info.name : '')
+    setAbbreviation(info.abb ? info.abb : '')
     setCategoryId(info.cat ? info.cat : 1)
     getCategories()
   }, [info])
@@ -140,7 +153,9 @@ export const DashboardModal = ({ obj, info, callback }: Props) => {
         >
           <ModalOverlay />
           <ModalContent>
-            <ModalHeader>Editar {info.title}</ModalHeader>
+            <ModalHeader>
+              {create ? 'Adicionar' : 'Editar'} {info.title}
+            </ModalHeader>
             <ModalBody pb={6}>
               <Stack spacing="15px">
                 <FormControl variant="floating" id="first-name">
@@ -194,9 +209,9 @@ export const DashboardModal = ({ obj, info, callback }: Props) => {
               <Button
                 colorScheme="blue"
                 mr={3}
-                onClick={() => editSwitch(info.title)}
+                onClick={() => endpointSwitch(info.title)}
               >
-                Editar
+                {create ? 'Adicionar' : 'Editar'}
               </Button>
               <Button colorScheme="red" onClick={() => onClose()}>
                 Cancelar

@@ -63,7 +63,7 @@ const AdicionarCompras = () => {
     setLoadingPage(true)
 
     try {
-      const res = await api.get(`/categories/`)
+      const res = await api.get(`/category/`)
       setCategoryList(res.data.data)
       setLoadingPage(false)
     } catch (e) {
@@ -76,7 +76,7 @@ const AdicionarCompras = () => {
     setLoadingProducts(true)
     setList([listInitialState])
     try {
-      const res = await api.get(`/categories/sub?cat=${activeCategory}`)
+      const res = await api.get(`/product?cat=${activeCategory}`)
       setProductList(res.data.data)
       setLoadingProducts(false)
 

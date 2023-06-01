@@ -31,9 +31,10 @@ type Props = {
   title: string
   link: string
   data: CategoryType[]
+  fn: () => void
 }
 
-export const TableDashboard = ({ title, data, link }: Props) => {
+export const TableDashboard = ({ title, data, link, fn }: Props) => {
   const alertEdit = useDisclosure()
   const alertDelete = useDisclosure()
   const modal = useDisclosure()
@@ -42,7 +43,7 @@ export const TableDashboard = ({ title, data, link }: Props) => {
   const router = useRouter()
 
   const [activeId, setActiveId] = useState<any>()
-  const [info, setInfo] = useState<InfoModal>({ title: '', id: '', name: '' })
+  const [info, setInfo] = useState<InfoModal>({ title: '', id: 0, name: '' })
 
   const handleEdit = async (data: any) => {
     const modalData: any = {
@@ -126,7 +127,7 @@ export const TableDashboard = ({ title, data, link }: Props) => {
       {data.length > 0 && (
         <>
           <Flex alignItems="center" justifyContent="end" p="5px">
-            <Button size="sm" colorScheme="red">
+            <Button onClick={() => fn()} size="sm" colorScheme="red">
               Adicionar {title}
             </Button>
           </Flex>

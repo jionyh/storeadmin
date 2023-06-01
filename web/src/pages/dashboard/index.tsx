@@ -1,8 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { DashboardModal } from '@/components/DashboardModal'
 import { Loader } from '@/components/Loader'
 import { TableDashboard } from '@/components/TableDashboard'
 import { Layout } from '@/layout/Layout'
 import api from '@/libs/axios'
+import { InfoModal } from '@/types/Dashboard'
 import { CategoryType } from '@/types/UnitType'
 import { Search2Icon } from '@chakra-ui/icons'
 import {
@@ -21,22 +23,27 @@ import React, { useEffect, useState } from 'react'
 
 const Config = () => {
   const loader = useDisclosure()
-  const [activeTab, setActiveTab] = useState('categories')
+  const modal = useDisclosure()
+  const [activeTab, setActiveTab] = useState({
+    endpoint: 'category',
+    title: 'Categorias',
+  })
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState<CategoryType[]>([])
   const [filtredData, setFiltredData] = useState<CategoryType[]>([])
+  const [info, setInfo] = useState<InfoModal>({ title: '', id: 0, name: '' })
   const [search, setSearch] = useState('')
 
   const fetchData = async () => {
     setLoading(true)
     loader.onOpen()
-    if (activeTab === 'user') {
+    if (activeTab.endpoint === 'user') {
       loader.onClose()
       setLoading(false)
       return
     }
 
-    const res = await api.get(`/${activeTab}`)
+    const res = await api.get(`/${activeTab.endpoint}`)
     if (res.data.success) {
       setData(res.data.data)
       setFiltredData(res.data.data)
@@ -53,10 +60,25 @@ const Config = () => {
     setFiltredData(d)
   }
 
-  const handleTabClick = (name: string) => {
+  const handleTabClick = (endpoint: string, title: string) => {
     setLoading(true)
     loader.onOpen()
-    setActiveTab(name)
+    setActiveTab({
+      endpoint,
+      title,
+    })
+  }
+
+  const handleAdd = async () => {
+    const modalData: any = {
+      title: activeTab.title,
+      id: '',
+      name: '',
+      cat: '',
+      abb: '',
+    }
+    setInfo(modalData)
+    modal.onOpen()
   }
 
   useEffect(() => {
@@ -77,14 +99,18 @@ const Config = () => {
           <Box mt="10px">
             <Tabs isFitted variant="line">
               <TabList mb="1em">
-                <Tab onClick={() => handleTabClick('categories')}>
+                <Tab onClick={() => handleTabClick('category', 'Categorias')}>
                   Categorias
                 </Tab>
-                <Tab onClick={() => handleTabClick('categories/sub')}>
+                <Tab onClick={() => handleTabClick('product', 'Produtos')}>
                   Produtos
                 </Tab>
-                <Tab onClick={() => handleTabClick('unit')}>Unidades</Tab>
-                <Tab onClick={() => handleTabClick('user')}>Usuários</Tab>
+                <Tab onClick={() => handleTabClick('unit', 'Unidades')}>
+                  Unidades
+                </Tab>
+                <Tab onClick={() => handleTabClick('user', 'Usuarios')}>
+                  Usuários
+                </Tab>
               </TabList>
               <InputGroup>
                 <InputLeftElement pointerEvents="none">
@@ -103,22 +129,25 @@ const Config = () => {
                   <TabPanel>
                     <TableDashboard
                       title="Categorias"
-                      link={activeTab}
+                      link={activeTab.endpoint}
                       data={filtredData}
+                      fn={handleAdd}
                     />
                   </TabPanel>
                   <TabPanel>
                     <TableDashboard
                       title="Produtos"
-                      link={activeTab}
+                      link={activeTab.endpoint}
                       data={filtredData}
+                      fn={handleAdd}
                     />
                   </TabPanel>
                   <TabPanel>
                     <TableDashboard
                       title="Unidades"
-                      link={activeTab}
+                      link={activeTab.endpoint}
                       data={filtredData}
+                      fn={handleAdd}
                     />
                   </TabPanel>
                   <TabPanel>
@@ -130,6 +159,7 @@ const Config = () => {
           </Box>
         </>
       </Layout>
+      <DashboardModal obj={modal} info={info} create={true} fn={fetchData} />
       <Loader obj={loader} />
     </>
   )
