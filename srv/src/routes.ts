@@ -14,18 +14,18 @@ router.post('/signin', auth.signin)
 router.post('/signup', auth.signup)
 router.post('/logout', auth.logout)
 
-router.post('/categories', category.createCategory)
-router.get('/categories', category.getAllCategories)
+router.get('/category', category.getAllCategories)
+router.post('/category', category.createCategory)
 router.patch('/category/:id', category.editCategory)
 router.delete('/category/:id', category.delCategory)
 
-router.post('/categories/sub', subCategory.addSubCategory)
-router.get('/categories/sub', subCategory.getAllSubCategories)
+router.get('/product/', subCategory.getAllSubCategories)
+router.post('/product/', subCategory.addSubCategory)
 router.patch('/product/:id', subCategory.editSubCategory)
 router.delete('/product/:id', subCategory.delSubCategory)
 
-router.post('/compras', purchase.createPurchase)
 router.get('/compras', purchase.getPurchases)
+router.post('/compras', purchase.createPurchase)
 router.delete('/compras/:id', purchase.deletePurchase)
 router.patch('/compras/:id', purchase.editPurchase)
 
@@ -43,6 +43,7 @@ router.get('/reports', Auth.private, reports.getReport)
 router.get('/payments', sale.getPayments)
 
 router.get('/unit', Auth.private, unit.getAllUnit)
+router.post('/unit', Auth.private, unit.getAllUnit)
 router.patch('/unit/:id', Auth.private, unit.editUnit)
 router.delete('/unit/:id', Auth.private, unit.deleteUnit)
 

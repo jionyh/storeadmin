@@ -53,9 +53,13 @@ exports.subCategory = {
             return;
         }
         const data = await prisma_1.prisma.subCategory.findMany({
+            orderBy: {
+                name: 'asc',
+            },
             select: {
                 id: true,
                 name: true,
+                categoryId: true,
                 cat: {
                     select: {
                         name: true,
@@ -68,5 +72,51 @@ exports.subCategory = {
             return;
         }
         res.json({ success: true, data });
+    },
+    editSubCategory: async (req, res) => {
+        const { id } = req.params;
+        if (!id) {
+            res.status(400).json({ success: false, error: 'id não enviado!' });
+            return;
+        }
+        const parse = zod_1.z
+            .object({
+            id: zod_1.z.number().optional(),
+            categoryId: zod_1.z.coerce.number().nonnegative(),
+            name: zod_1.z.string().toLowerCase(),
+        })
+            .safeParse(req.body);
+        if (!parse.success) {
+            res
+                .status(400)
+                .json({ success: false, erro: parse.error.issues[0].message });
+            return;
+        }
+        try {
+            const updateProduct = await prisma_1.prisma.subCategory.update({
+                where: { id: parseInt(id) },
+                data: parse.data,
+            });
+            res.status(200).json({ success: true, data: updateProduct });
+        }
+        catch (e) {
+            res.status(400).json({ success: false, error: e });
+        }
+    },
+    delSubCategory: async (req, res) => {
+        const { id } = req.params;
+        if (!id) {
+            res.json({ success: false, message: 'ID não informado!' });
+            return;
+        }
+        try {
+            const deleteSubCategory = await prisma_1.prisma.subCategory.delete({
+                where: { id: parseInt(id) },
+            });
+            res.status(200).json({ success: true, data: deleteSubCategory });
+        }
+        catch (e) {
+            res.json({ success: false, message: e });
+        }
     },
 };

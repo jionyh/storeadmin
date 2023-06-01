@@ -9,18 +9,22 @@ export const reports = {
     const { date } = req.query
     const month = {
       start: dayjs(date as string)
-        .startOf('month')
+        .subtract(15, 'day')
+        .startOf('day')
         .toDate(),
       end: dayjs(date as string)
-        .endOf('month')
+        .add(14, 'day')
+        .endOf('day')
         .toDate(),
     }
     const week = {
       start: dayjs(date as string)
-        .startOf('week')
+        .subtract(3, 'day')
+        .startOf('day')
         .toDate(),
       end: dayjs(date as string)
-        .endOf('week')
+        .add(3, 'day')
+        .endOf('day')
         .toDate(),
     }
     const day = {
@@ -69,18 +73,22 @@ export const reports = {
     const { date } = req.query
     const month = {
       start: dayjs(date as string)
-        .startOf('month')
+        .subtract(15, 'day')
+        .startOf('day')
         .toDate(),
       end: dayjs(date as string)
-        .endOf('month')
+        .add(14, 'day')
+        .endOf('day')
         .toDate(),
     }
     const week = {
       start: dayjs(date as string)
-        .startOf('week')
+        .subtract(3, 'day')
+        .startOf('day')
         .toDate(),
       end: dayjs(date as string)
-        .endOf('week')
+        .add(3, 'day')
+        .endOf('day')
         .toDate(),
     }
     const day = {
@@ -143,18 +151,22 @@ export const reports = {
         break
       case 'week':
         startDate = dayjs(date as string)
-          .startOf('week')
+          .subtract(3, 'day')
+          .startOf('day')
           .toDate()
         endDate = dayjs(date as string)
-          .endOf('week')
+          .add(3, 'day')
+          .endOf('day')
           .toDate()
         break
       case 'month':
         startDate = dayjs(date as string)
-          .startOf('month')
+          .subtract(15, 'day')
+          .startOf('day')
           .toDate()
         endDate = dayjs(date as string)
-          .endOf('month')
+          .add(14, 'day')
+          .endOf('day')
           .toDate()
         break
     }
