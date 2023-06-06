@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Context } from '@/contexts/UserContext'
 import api from '@/libs/axios'
 import { CheckAuthUser } from '@/utils/CheckAuth'

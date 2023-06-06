@@ -3,6 +3,8 @@ export const RoutesPaths = {
     compras: '/compras',
     vendas: '/vendas',
     relatorios: '/relatorios',
+    perfil: '/perfil',
+    home: '/',
   },
   public: {
     login: '/login/',

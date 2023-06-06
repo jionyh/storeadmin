@@ -1,13 +1,11 @@
 /* eslint-disable jsx-a11y/alt-text */
-import { Context } from '@/contexts/UserContext'
-import { Avatar, Box, Image, Text } from '@chakra-ui/react'
+
+import { Box, Image, Text } from '@chakra-ui/react'
 import Link from 'next/link'
-import { useContext } from 'react'
 import { HamburguerMenu } from '../HamburguerMenu'
+import { ProfileMenu } from '../ProfileMenu'
 
 const Header = () => {
-  const { state } = useContext(Context)
-
   return (
     <>
       <Box
@@ -18,12 +16,6 @@ const Header = () => {
         color="white"
       >
         <HamburguerMenu />
-        {/* <HamburgerIcon
-          onClick={() => setMenuOpen(!menuOpen)}
-          w={12}
-          h={12}
-          color="white"
-        /> */}
 
         <Link href="/">
           <Box className="flex flex-col items-center justify-center">
@@ -32,13 +24,7 @@ const Header = () => {
           </Box>
         </Link>
 
-        <Avatar
-          size={'md'}
-          bg={'whiteAlpha.900'}
-          color={'gray.900'}
-          name={state.user.name}
-          src="https://bit.ly/broken-link"
-        />
+        <ProfileMenu />
       </Box>
     </>
   )
