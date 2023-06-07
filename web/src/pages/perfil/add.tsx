@@ -1,6 +1,4 @@
 import { Layout } from '@/layout/Layout'
-import { useContext, useState } from 'react'
-import { Context } from '@/contexts/UserContext'
 import { theme } from '@/utils/ChakraInput'
 import {
   ChakraProvider,
@@ -8,7 +6,6 @@ import {
   Stack,
   FormControl,
   FormLabel,
-  Switch,
   InputGroup,
   Button,
   ButtonGroup,
@@ -17,30 +14,30 @@ import {
   Flex,
   FormErrorMessage,
   useDisclosure,
+  Center,
+  Box,
 } from '@chakra-ui/react'
 import api from '@/libs/axios'
 import { Error, User } from '@/types/PerfilTypes'
 import { useRouter } from 'next/router'
 import { Loader } from '@/components/Loader'
-import Link from 'next/link'
+import { useState } from 'react'
 
-const Perfil = () => {
-  const [changePassword, setChangePassword] = useState(false)
+const Add = () => {
   const loader = useDisclosure()
   const toast = useToast()
   const router = useRouter()
-  const { state } = useContext(Context)
   const [user, setUser] = useState<User>({
-    id: state.user.id,
-    name: state.user.name,
-    cpf: state.user.cpf,
-    email: state.user.email,
-    role: state.user.role,
+    id: '',
+    name: '',
+    cpf: '',
+    email: '',
+    role: '',
     password: '',
     confirmPassword: '',
   })
   const [error, setError] = useState<Error>({})
-  const [disabled, setDisabled] = useState(true)
+  const [disabled, setDisabled] = useState(false)
 
   const handleChange = (e: any) => {
     const { name, value } = e.target
@@ -48,27 +45,38 @@ const Perfil = () => {
   }
 
   const submit = async () => {
+    setError({})
     loader.onOpen()
+    setDisabled(true)
     if (user.password !== user.confirmPassword) {
       setError({ password: ['Senha não são iguais! Verifique'] })
       return
     }
 
     try {
-      const res = await api.patch(`/user/${user.id}`, {
+      const res = await api.post('/user/add', {
         name: user.name,
         email: user.email,
         cpf: user.cpf,
-        password: user.password ? user.password : null,
+        password: user.password,
       })
       if (!res.data.success) {
+        console.log(res.data)
         throw res.data.message
       }
-      setDisabled(true)
-      router.reload()
       loader.onClose()
+      toast({
+        title: 'Usuário criado com sucesso! Redirecionando',
+        status: 'success',
+        isClosable: true,
+      })
+      setTimeout(() => {
+        setDisabled(false)
+        router.push('/perfil')
+      }, 3000)
     } catch (e: any) {
-      setError(e)
+      setDisabled(false)
+      setError({ error: [e] })
       loader.onClose()
       toast({
         title: 'Erro! Verifique os campos.',
@@ -79,8 +87,23 @@ const Perfil = () => {
   }
 
   return (
-    <Layout title="Perfil">
+    <Layout title="Cadastrar usuário">
       <>
+        {error.error && (
+          <Center>
+            <Box
+              border="1px"
+              borderColor="red.100"
+              bgColor="red.100"
+              w="full"
+              textAlign="center"
+              p="5px"
+              textColor="red.600"
+            >
+              <span>{error.error}</span>
+            </Box>
+          </Center>
+        )}
         <ChakraProvider theme={theme}>
           <Stack spacing="20px" border="1px" borderColor="gray.300" p="15px">
             <Stack spacing="20px">
@@ -94,7 +117,6 @@ const Perfil = () => {
                   border="1px"
                   borderColor="gray.300"
                   isDisabled={disabled}
-                  placeholder="Nome"
                   name="name"
                   value={user.name}
                   onChange={(e) => handleChange(e)}
@@ -116,7 +138,6 @@ const Perfil = () => {
                       border="1px"
                       borderColor="gray.300"
                       isDisabled={disabled}
-                      placeholder="email"
                       name="email"
                       isInvalid={!!error.email}
                       value={user.email}
@@ -138,7 +159,6 @@ const Perfil = () => {
                       border="1px"
                       borderColor="gray.300"
                       isDisabled={disabled}
-                      placeholder="cpf"
                       name="cpf"
                       isInvalid={!!error.cpf}
                       value={user.cpf}
@@ -153,81 +173,56 @@ const Perfil = () => {
               </Flex>
             </Stack>
 
-            <FormControl display="flex" gap="5px" alignItems="center">
-              <Switch
-                id="editPassword"
-                isDisabled={disabled}
-                checked={changePassword}
-                onChange={() => setChangePassword(!changePassword)}
-              />
-              <FormLabel htmlFor="editPassword" mb="0" color="gray.500">
-                Alterar senha?
-              </FormLabel>
-            </FormControl>
-
-            {changePassword && (
-              <Stack spacing="20px">
-                <FormControl
-                  variant="floating"
-                  id="password"
-                  isInvalid={!!error.password}
-                >
-                  <InputGroup>
-                    <Input
-                      border="1px"
-                      borderColor="gray.300"
-                      isDisabled={disabled}
-                      name="password"
-                      type="password"
-                      value={user.password}
-                      onChange={(e) => handleChange(e)}
-                    />
-                    <FormLabel>Nova senha</FormLabel>
-                  </InputGroup>
-                </FormControl>
-                <FormControl
-                  variant="floating"
-                  id="confirmPassword"
-                  isInvalid={!!error.password}
-                >
-                  <InputGroup>
-                    <Input
-                      border="1px"
-                      borderColor="gray.300"
-                      isDisabled={disabled}
-                      name="confirmPassword"
-                      type="password"
-                      value={user.confirmPassword}
-                      onChange={(e) => handleChange(e)}
-                    />
-                    <FormLabel>Confirmar senha</FormLabel>
-                  </InputGroup>
-                  {error.password ? (
-                    <FormErrorMessage>{error.password[0]}</FormErrorMessage>
-                  ) : (
-                    <FormHelperText>
-                      Senha deve conter ao menos 6 caratecteres.
-                    </FormHelperText>
-                  )}
-                </FormControl>
-              </Stack>
-            )}
+            <Stack spacing="20px">
+              <FormControl
+                variant="floating"
+                id="password"
+                isInvalid={!!error.password}
+              >
+                <InputGroup>
+                  <Input
+                    border="1px"
+                    borderColor="gray.300"
+                    isDisabled={disabled}
+                    name="password"
+                    type="password"
+                    value={user.password}
+                    onChange={(e) => handleChange(e)}
+                  />
+                  <FormLabel>Nova senha</FormLabel>
+                </InputGroup>
+              </FormControl>
+              <FormControl
+                variant="floating"
+                id="confirmPassword"
+                isInvalid={!!error.password}
+              >
+                <InputGroup>
+                  <Input
+                    border="1px"
+                    borderColor="gray.300"
+                    isDisabled={disabled}
+                    name="confirmPassword"
+                    type="password"
+                    value={user.confirmPassword}
+                    onChange={(e) => handleChange(e)}
+                  />
+                  <FormLabel>Confirmar senha</FormLabel>
+                </InputGroup>
+                {error.password ? (
+                  <FormErrorMessage>{error.password[0]}</FormErrorMessage>
+                ) : (
+                  <FormHelperText>
+                    Senha deve conter ao menos 6 caratecteres.
+                  </FormHelperText>
+                )}
+              </FormControl>
+            </Stack>
           </Stack>
           <ButtonGroup display="flex" justifyContent="end" m="15px">
-            {disabled ? (
-              <Button colorScheme="blue" onClick={() => setDisabled(!disabled)}>
-                Editar
-              </Button>
-            ) : (
-              <Button colorScheme="red" onClick={submit}>
-                Alterar
-              </Button>
-            )}
-            <Link href="/perfil/add">
-              <Button isDisabled={user.role !== 'Admin'} colorScheme="green">
-                Cadastrar novo usuário
-              </Button>
-            </Link>
+            <Button colorScheme="red" onClick={submit}>
+              Cadastrar
+            </Button>
           </ButtonGroup>
         </ChakraProvider>
         <Loader obj={loader} />
@@ -236,4 +231,4 @@ const Perfil = () => {
   )
 }
 
-export default Perfil
+export default Add

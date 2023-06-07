@@ -105,7 +105,6 @@ export default function Home() {
       setReportData(res.data)
       loader.onClose()
     } catch (e) {
-      console.log(e)
       loader.onClose()
     }
   }

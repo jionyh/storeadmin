@@ -4,6 +4,7 @@ import { reducerActionType } from '@/types/reducerActionType'
 export type UserType = {
   id: string
   name: string
+  cpf: string
   email: string
   role: string
   token: string
@@ -12,6 +13,7 @@ export type UserType = {
 export const userInitialState: UserType = {
   id: '',
   name: '',
+  cpf: '',
   email: '',
   role: '',
   token: '',
