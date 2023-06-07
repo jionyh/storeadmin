@@ -35,6 +35,8 @@ router.delete('/vendas/:id', sale.deleteSale)
 router.patch('/vendas/:id', sale.editSale)
 
 router.post('/user', user.getUser)
+router.post('/user/add', user.addUser)
+router.patch('/user/:id', user.editUser)
 
 router.get('/reports/sales', Auth.private, reports.getSalesValues)
 router.get('/reports/purchases', Auth.private, reports.getPurchasesValues)

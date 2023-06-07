@@ -34,6 +34,8 @@ router.post('/vendas', sale_controller_1.sale.createSale);
 router.delete('/vendas/:id', sale_controller_1.sale.deleteSale);
 router.patch('/vendas/:id', sale_controller_1.sale.editSale);
 router.post('/user', user_controller_1.user.getUser);
+router.post('/user/add', user_controller_1.user.addUser);
+router.patch('/user/:id', user_controller_1.user.editUser);
 router.get('/reports/sales', auth_1.Auth.private, reports_controller_1.reports.getSalesValues);
 router.get('/reports/purchases', auth_1.Auth.private, reports_controller_1.reports.getPurchasesValues);
 router.get('/reports', auth_1.Auth.private, reports_controller_1.reports.getReport);

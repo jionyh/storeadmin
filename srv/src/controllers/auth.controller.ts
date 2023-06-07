@@ -59,6 +59,7 @@ export const auth = {
     }
   },
   signin: async (req: Request, res: Response) => {
+    console.log('body', req.body)
     const parse = z
       .object({
         email: z.string().email({ message: 'Email inválido!' }),
@@ -81,6 +82,7 @@ export const auth = {
         .json({ success: false, error: 'Usuário ou Senha Inválidos!' })
       return
     }
+    console.log('user', user)
 
     const checkPassword = await bcrypt.compare(
       parse.data.password,

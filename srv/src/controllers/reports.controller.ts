@@ -57,7 +57,6 @@ export const reports = {
       const daySales = vendas.filter((item) => {
         return item.createAt > day.start && item.createAt < day.end
       })
-
       const returnData = {
         totalMonth: monthSales.reduce((acc, el) => acc + el.value, 0),
         totalWeek: weekSales.reduce((acc, el) => acc + el.value, 0),
@@ -285,7 +284,7 @@ export const reports = {
           groupByCategory[existingDayIndex].value += item.value
         } else {
           groupByCategory.push({
-            category: Capitalize(item.subcategory.cat.name),
+            category: item.subcategory.cat.name,
             value: item.value,
           })
         }
@@ -324,6 +323,6 @@ export const reports = {
         formatedReturn.data.push(item.value)
       })
     }
-    res.json({ success: true, data: formatedReturn })
+    res.json({ success: true, data: formatedReturn, query: purchases })
   },
 }
