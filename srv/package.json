@@ -26,6 +26,7 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
+    "@mermaid-js/mermaid-cli": "^10.2.4",
     "@rocketseat/eslint-config": "^1.2.0",
     "@types/bcrypt": "^5.0.0",
     "@types/cors": "^2.8.13",
@@ -36,6 +37,7 @@
     "@types/morgan": "^1.9.4",
     "eslint": "^8.40.0",
     "prisma": "^4.14.0",
+    "prisma-erd-generator": "^1.8.0",
     "ts-node": "^10.9.1",
     "tsx": "^3.12.7",
     "typescript": "^5.0.4"
