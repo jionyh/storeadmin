@@ -11,22 +11,60 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Tenant {
+  id            Int             @id @default(autoincrement())
+  name          String
+  slug          String          @unique
+  active        Boolean
+  email         String          @unique
+  User          User[]
+  Cost          Cost[]
+  paymentMethod paymentMethod[]
+  sale          sale[]
+  Category      Category[]
+  Unit          Unit[]
+  Product       Product[]
+  Purchase      Purchase[]
+
+  @@map("tenants")
+}
+
 model User {
-  id           Int        @id @default(autoincrement())
+  id           Int    @id @default(autoincrement())
   name         String
-  cpf          String     @unique
-  email        String     @unique
+  email        String @unique
   passwordHash String
-  role         Role       @default(User)
-  Purchase     Purchase[]
+  role         Role   @default(User)
+  tenant_id    Int
+  tenant       Tenant @relation(fields: [tenant_id], references: [id])
 
   @@map("users")
 }
 
+enum Role {
+  User
+  Admin
+}
+
+model Cost {
+  id        Int      @id @default(autoincrement())
+  name      String
+  value     Float
+  createAt  DateTime @default(now())
+  tenant_id Int
+  tenant    Tenant   @relation(fields: [tenant_id], references: [id])
+
+  @@map("costs")
+}
+
+// Purchases Models
+
 model Category {
-  id          Int           @id @default(autoincrement())
-  name        String
-  SubCategory SubCategory[]
+  id        Int       @id @default(autoincrement())
+  name      String
+  tenant_id Int
+  tenant    Tenant    @relation(fields: [tenant_id], references: [id])
+  Product   Product[]
 
   @@map("categories")
 }
@@ -35,52 +73,65 @@ model Unit {
   id           Int        @id @default(autoincrement())
   name         String
   abbreviation String     @db.VarChar(3)
+  tenant_id    Int
+  tenant       Tenant     @relation(fields: [tenant_id], references: [id])
   Purchase     Purchase[]
+
+  @@map("units")
 }
 
-model SubCategory {
-  id         Int        @id @default(autoincrement())
-  name       String
-  categoryId Int
-  Purchase   Purchase[]
-  cat        Category   @relation(fields: [categoryId], references: [id])
+model Product {
+  id          Int        @id @default(autoincrement())
+  name        String
+  category_id Int
+  tenant_id   Int
+  Purchase    Purchase[]
+  tenant      Tenant     @relation(fields: [tenant_id], references: [id])
+  cat         Category   @relation(fields: [category_id], references: [id])
 
-  @@map("subcategories")
+  @@map("products")
 }
 
 model Purchase {
-  id          Int         @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   quantity    Float
   value       Float
-  createAt    DateTime    @default(now())
-  itemId      Int
-  userId      Int
-  unitId      Int
+  createAt    DateTime @default(now())
+  item_id     Int
+  unit_id     Int
+  tenant_id   Int
   supplier    String?
-  subcategory SubCategory @relation(fields: [itemId], references: [id])
-  unit        Unit        @relation(fields: [unitId], references: [id])
-  user        User        @relation(fields: [userId], references: [id])
+  tenant      Tenant   @relation(fields: [tenant_id], references: [id])
+  subcategory Product  @relation(fields: [item_id], references: [id])
+  unit        Unit     @relation(fields: [unit_id], references: [id])
 
   @@map("purchases")
 }
 
-model paymentsMethods {
-  id    Int    @id @default(autoincrement())
-  name  String
-  sales sale[]
+// End Purchase Models
+
+// Sales models
+
+model paymentMethod {
+  id        Int    @id @default(autoincrement())
+  name      String
+  tenant_id Int
+  tenant    Tenant @relation(fields: [tenant_id], references: [id])
+  sales     sale[]
+
+  @@map("paymentsMethods")
 }
 
 model sale {
-  id              Int             @id @default(autoincrement())
-  value           Float
-  createAt        DateTime        @default(now())
-  paymentId       Int
-  paymentsMethods paymentsMethods @relation(fields: [paymentId], references: [id])
+  id            Int           @id @default(autoincrement())
+  value         Float
+  createAt      DateTime      @default(now())
+  payment_id    Int
+  tenant_id     Int
+  tenant        Tenant        @relation(fields: [tenant_id], references: [id])
+  paymentMethod paymentMethod @relation(fields: [payment_id], references: [id])
 
   @@map("sales")
 }
 
-enum Role {
-  User
-  Admin
-}
+//End  Sales models

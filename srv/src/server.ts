@@ -14,9 +14,14 @@ const credentials = {
 
 const PORT = parseInt(`${process.env.PORT || 4001}`)
 
-// cria-se o app pelo node
-// eslint-disable-next-line no-unused-vars
-const server = https.createServer(credentials, app).listen(PORT, () => {
+/* Iniciar o servidor sem https */
+app.listen(PORT, () => {
   console.clear()
   console.log(`Server running at ${PORT}.`)
 })
+
+/* Iniciando o servidor com https */
+/* const server = https.createServer(credentials, app).listen(PORT, () => {
+  console.clear()
+  console.log(`Server running at ${PORT}.`)
+}) */
