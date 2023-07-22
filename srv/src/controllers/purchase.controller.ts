@@ -65,6 +65,7 @@ export const purchase = {
   },
 
   getPurchases: async (req: Request, res: Response) => {
+    console.log('oi ju')
     const { date } = req.query
 
     const purchaseList: PurchaseListType[] = []

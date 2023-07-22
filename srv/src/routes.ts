@@ -8,15 +8,17 @@ import { Auth } from './middlewares/auth'
 import { auth } from './controllers/auth.controller'
 import { user } from './controllers/user.controller'
 import { reports } from './controllers/reports.controller'
-import { cost } from './controllers/costs.controller'
+import { cost } from './controllers/cost.controller'
 const router = express.Router()
 
 router.post('/signin', auth.signin)
 router.post('/signup', auth.signup)
 router.post('/logout', auth.logout)
 
+router.get('/costs', cost.getAllCosts)
+router.get('/cost/:id', cost.getCost)
 router.post('/cost', cost.createCost)
-router.get('/cost', cost.getCost)
+router.delete('/cost/:id', cost.deleteCost)
 
 router.get('/category', category.getAllCategories)
 router.post('/category', category.createCategory)

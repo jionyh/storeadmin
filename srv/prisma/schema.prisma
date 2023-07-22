@@ -2,10 +2,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-generator erd {
-  provider = "prisma-erd-generator"
-}
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -60,11 +56,12 @@ model Cost {
 // Purchases Models
 
 model Category {
-  id        Int       @id @default(autoincrement())
-  name      String
-  tenant_id Int
-  tenant    Tenant    @relation(fields: [tenant_id], references: [id])
-  Product   Product[]
+  id         Int       @id @default(autoincrement())
+  name       String
+  tenant_id  Int
+  is_deleted Boolean   @default(false)
+  tenant     Tenant    @relation(fields: [tenant_id], references: [id])
+  Product    Product[]
 
   @@map("categories")
 }
@@ -74,6 +71,7 @@ model Unit {
   name         String
   abbreviation String     @db.VarChar(3)
   tenant_id    Int
+  is_deleted   Boolean    @default(false)
   tenant       Tenant     @relation(fields: [tenant_id], references: [id])
   Purchase     Purchase[]
 
@@ -85,6 +83,7 @@ model Product {
   name        String
   category_id Int
   tenant_id   Int
+  is_deleted  Boolean    @default(false)
   Purchase    Purchase[]
   tenant      Tenant     @relation(fields: [tenant_id], references: [id])
   cat         Category   @relation(fields: [category_id], references: [id])
@@ -113,11 +112,12 @@ model Purchase {
 // Sales models
 
 model paymentMethod {
-  id        Int    @id @default(autoincrement())
-  name      String
-  tenant_id Int
-  tenant    Tenant @relation(fields: [tenant_id], references: [id])
-  sales     sale[]
+  id         Int     @id @default(autoincrement())
+  name       String
+  tenant_id  Int
+  is_deleted Boolean @default(false)
+  tenant     Tenant  @relation(fields: [tenant_id], references: [id])
+  sales      sale[]
 
   @@map("paymentsMethods")
 }
