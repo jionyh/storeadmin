@@ -1,24 +1,26 @@
 import express from 'express'
-import { category } from './controllers/category.controller'
-import { subCategory } from './controllers/subCategory.controller'
-import { unit } from './controllers/unit.controller'
-import { purchase } from './controllers/purchase.controller'
-import { sale } from './controllers/sale.controller'
-import { Auth } from './middlewares/auth'
-import { auth } from './controllers/auth.controller'
-import { user } from './controllers/user.controller'
-import { reports } from './controllers/reports.controller'
 import { cost } from './controllers/cost.controller'
+import { sale } from './controllers/sale.controller'
 const router = express.Router()
 
-router.post('/signin', auth.signin)
-router.post('/signup', auth.signup)
-router.post('/logout', auth.logout)
-
+// Rotas de despesas //
 router.get('/costs', cost.getAllCosts)
 router.get('/cost/:id', cost.getCost)
 router.post('/cost', cost.createCost)
 router.delete('/cost/:id', cost.deleteCost)
+
+// Rotas de Vendas //
+router.get('/sales', sale.getAllSales)
+router.get('/sale/:id', sale.getSale)
+router.post('/sale', sale.createSale)
+router.delete('/sale/:id', sale.deleteSale)
+
+/* 
+router.post('/signin', auth.signin)
+router.post('/signup', auth.signup)
+router.post('/logout', auth.logout)
+
+
 
 router.get('/category', category.getAllCategories)
 router.post('/category', category.createCategory)
@@ -53,6 +55,6 @@ router.get('/payments', sale.getPayments)
 router.get('/unit', Auth.private, unit.getAllUnit)
 router.post('/unit', Auth.private, unit.getAllUnit)
 router.patch('/unit/:id', Auth.private, unit.editUnit)
-router.delete('/unit/:id', Auth.private, unit.deleteUnit)
+router.delete('/unit/:id', Auth.private, unit.deleteUnit) */
 
 export default router

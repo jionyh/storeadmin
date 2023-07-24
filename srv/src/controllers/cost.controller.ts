@@ -8,7 +8,9 @@ import {
 
 export const cost = {
   getAllCosts: async (req: Request, res: Response) => {
-    const response = await costService.getAllCosts()
+    const { date } = req.query
+
+    const response = await costService.getAllCosts(date as string)
     sendSuccessResponse(res, 200, 'costs', response)
   },
 

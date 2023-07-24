@@ -5,7 +5,7 @@ import { ZodIssue } from 'zod'
 
 export const sendErrorResponse = (
   res: Response,
-  statusCode: number,
+  statusCode: number = 404,
   errorMessage: string | ZodIssue[],
 ) => {
   /* Verifica se o erro chegou como string ou erro de parse do zod */
@@ -24,7 +24,7 @@ export const sendErrorResponse = (
 
 export const sendSuccessResponse = (
   res: Response,
-  statusCode: number,
+  statusCode: number = 404,
   endpoint?: string,
   data?: any,
 ) => {

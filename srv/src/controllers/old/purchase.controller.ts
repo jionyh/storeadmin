@@ -65,7 +65,6 @@ export const purchase = {
   },
 
   getPurchases: async (req: Request, res: Response) => {
-    console.log('oi ju')
     const { date } = req.query
 
     const purchaseList: PurchaseListType[] = []
@@ -75,12 +74,12 @@ export const purchase = {
         createAt: {
           gte: date
             ? dayjs(date as string)
-                .startOf('day')
+                .startOf('week')
                 .toDate()
             : undefined,
           lte: date
             ? dayjs(date as string)
-                .endOf('day')
+                .endOf('week')
                 .toDate()
             : undefined,
         },
