@@ -4,6 +4,7 @@ import cors from 'cors'
 import morgan from 'morgan'
 import helmet from 'helmet'
 import router from './routes'
+import swaggerRouter from './swagger';
 
 const app = express()
 
@@ -16,11 +17,9 @@ app.use(helmet())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-app.use(router)
+app.use('/api-docs', swaggerRouter); // Add this line to serve the Swagger documentation
 
-/* app.use((req:Request, res:Response, next:NextFunction)=>{
-    res.json({hello: 'world'})
-}) */
+app.use(router)
 
 app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
   res.status(500).send(error.message)

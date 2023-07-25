@@ -4,7 +4,7 @@ import * as saleService from '../services/sale.service'
 import {
   sendErrorResponse,
   sendSuccessResponse,
-} from '../utils/sendErrorResponse'
+} from '../utils/sendResponse'
 
 export const sale = {
   getAllSales: async (req: Request, res: Response) => {

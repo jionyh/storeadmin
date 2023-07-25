@@ -1,19 +1,9 @@
 import express from 'express'
-import { cost } from './controllers/cost.controller'
-import { sale } from './controllers/sale.controller'
 const router = express.Router()
 
-// Rotas de despesas //
-router.get('/costs', cost.getAllCosts)
-router.get('/cost/:id', cost.getCost)
-router.post('/cost', cost.createCost)
-router.delete('/cost/:id', cost.deleteCost)
 
-// Rotas de Vendas //
-router.get('/sales', sale.getAllSales)
-router.get('/sale/:id', sale.getSale)
-router.post('/sale', sale.createSale)
-router.delete('/sale/:id', sale.deleteSale)
+
+
 
 /* 
 router.post('/signin', auth.signin)

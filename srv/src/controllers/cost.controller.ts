@@ -4,11 +4,12 @@ import * as costService from '../services/cost.service'
 import {
   sendErrorResponse,
   sendSuccessResponse,
-} from '../utils/sendErrorResponse'
+} from '../utils/sendResponse'
 
 export const cost = {
   getAllCosts: async (req: Request, res: Response) => {
     const { date } = req.query
+    const {tenantid} = req.headers
 
     const response = await costService.getAllCosts(date as string)
     sendSuccessResponse(res, 200, 'costs', response)

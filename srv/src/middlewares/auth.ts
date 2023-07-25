@@ -26,6 +26,7 @@ export const Auth = {
     }
 
     if (success) {
+      //Adiciona o req.tenant_id aqui com o decode do JWT
       next()
     } else {
       res.status(400).json({ success: false, error: 'Não autorizado!' })
