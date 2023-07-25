@@ -19,7 +19,6 @@ export const Auth = {
 
     if(!req.headers.authorization) return sendErrorResponse(res, 401, 'Cabeçalho de autorização inválido')
 
-    if (req.headers.authorization) {
       const [authType, token] = req.headers.authorization.split(' ')
 
       if(authType !== 'Bearer' || !token) return sendErrorResponse(res,401,'Token inválido')
@@ -40,8 +39,5 @@ export const Auth = {
           sendErrorResponse(res,401,'Token Inválido')
         }
       
-    }else{
-      res.status(400).json({ success: false, error: 'Não autorizado!' })
-    }
   },
 }

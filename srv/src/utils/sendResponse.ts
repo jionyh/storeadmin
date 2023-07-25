@@ -3,6 +3,15 @@
 import { Response } from 'express'
 import { ZodIssue } from 'zod'
 
+/**
+ * Function to send a standardized error response.
+ * 
+ * @param {Response} res The response object.
+ * @param {number} statusCode The status code for the response (default: 404).
+ * @param {string | ZodIssue[]} errorMessage The error message or an array of ZodIssue objects.
+ * @returns {Response} The response with error details.
+ */
+
 export const sendErrorResponse = (
   res: Response,
   statusCode: number = 404,
@@ -22,6 +31,16 @@ export const sendErrorResponse = (
   return res.status(statusCode).json({ success: false, error: message })
 }
 
+
+/**
+ * Function to send a standardized success response.
+ * 
+ * @param {Response} res The response object.
+ * @param {number} statusCode The status code for the response (default: 404).
+ * @param {string} endpoint The endpoint name (optional).
+ * @param {any} data The data to be sent in the response (optional).
+ * @returns {Response} The response with success details.
+ */
 export const sendSuccessResponse = (
   res: Response,
   statusCode: number = 404,
