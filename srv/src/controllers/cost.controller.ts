@@ -9,9 +9,10 @@ import {
 export const cost = {
   getAllCosts: async (req: Request, res: Response) => {
     const { date } = req.query
-    const {tenantid} = req.headers
+    
+    if(!req.tenant_id) return sendErrorResponse(res,404,'Tenant not found')
 
-    const response = await costService.getAllCosts(date as string)
+    const response = await costService.getAllCosts(req.tenant_id, date as string)
     sendSuccessResponse(res, 200, 'costs', response)
   },
 

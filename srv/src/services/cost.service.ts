@@ -2,9 +2,10 @@ import dayjs from 'dayjs'
 import { prisma } from '../lib/prisma'
 import { CostType } from '../types/CostsType'
 
-export const getAllCosts = async (date: string) => {
+export const getAllCosts = async (tenant_id: number, date: string) => {
   return prisma.cost.findMany({
     where: {
+      tenant_id,
       createAt: {
         gte: date
           ? dayjs(date as string)

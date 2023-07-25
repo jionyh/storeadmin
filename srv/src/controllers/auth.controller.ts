@@ -49,6 +49,6 @@ export const auth = {
       process.env.JWT_SECRET_KEY as string,
       {expiresIn: '24h'})
 
-      sendSuccessResponse(res,200,'signin',token)
+      sendSuccessResponse(res,200,'token',token)
   }
 }
