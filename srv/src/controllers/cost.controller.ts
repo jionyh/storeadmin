@@ -5,32 +5,36 @@ import {
   sendErrorResponse,
   sendSuccessResponse,
 } from '../utils/sendResponse'
+import {errorMessages,successMessages} from '../utils/ResponseMessages'
+import { createCostSchema } from '../utils/validationSchema'
 
 export const cost = {
   getAllCosts: async (req: Request, res: Response) => {
-    const { date } = req.query
+    const { date, page, perPage } = req.query
     
-    if(!req.tenant_id) return sendErrorResponse(res,404,'Tenant not found')
+    if(!req.tenant_id) return sendErrorResponse(res,404,errorMessages.tenantNotFound)
 
-    const response = await costService.getAllCosts(req.tenant_id, date as string)
+    const options = {
+      date:date as string,
+      pageNumber: parseInt(page as string) || 1,
+      resultsPerPage : parseInt(perPage as string) || 10
+
+    }
+
+    const response = await costService.getAllCosts(req.tenant_id, options)
     sendSuccessResponse(res, 200, 'costs', response)
   },
 
   getCost: async (req: Request, res: Response) => {
     const { id } = req.params
 
-    if (!id) {
-      sendErrorResponse(res, 400, 'id não enviado')
-      return
-    }
+    if (!id) return sendErrorResponse(res, 400, 'id não enviado')
+    if(!req.tenant_id) return sendErrorResponse(res,404,'Tenant não localizado')
 
     try {
-      const cost = await costService.getCostById(parseInt(id as string))
+      const cost = await costService.getCostById(req.tenant_id, parseInt(id as string))
 
-      if (!cost) {
-        sendErrorResponse(res, 404, 'Despesa não localizada!')
-        return
-      }
+      if (!cost) return sendErrorResponse(res, 404, 'Despesa não localizada!')
 
       sendSuccessResponse(res, 200, 'cost', cost)
     } catch (e) {
@@ -40,48 +44,32 @@ export const cost = {
   },
 
   createCost: async (req: Request, res: Response) => {
-    const parse = z
-      .object({
-        name: z
-          .string({ required_error: 'o campo nome é obrigatório' })
-          .nonempty('preencha o nome da despesa')
-          .toLowerCase(),
-        value: z
-          .string({ required_error: 'o campo nome é obrigatório' })
-          .nonempty('preencha o valor da despesa')
-          .transform((number) => parseFloat(number.replace(',', '.'))),
-        tenant_id: z.coerce.number(),
-      })
+    const parse = createCostSchema
       .array()
       .safeParse(req.body)
 
-    if (!parse.success) {
-      sendErrorResponse(res, 400, parse.error.issues)
-      return
-    }
+    if (!parse.success) return sendErrorResponse(res, 400, parse.error.issues)
+      
 
     try {
       await costService.createCost(parse.data)
-      sendSuccessResponse(res, 200, 'Despesas criadas!')
+      sendSuccessResponse(res, 200, successMessages.createCost)
     } catch (e) {
       console.log(e)
-      sendErrorResponse(res, 400, 'erro ao criar despesas')
+      sendErrorResponse(res, 400, errorMessages.createCostError)
     }
   },
 
   deleteCost: async (req: Request, res: Response) => {
     const { id } = req.params
 
-    if (!id) {
-      sendErrorResponse(res, 400, 'id não enviado')
-      return
-    }
+    if (!id)return sendErrorResponse(res, 400, errorMessages.idNotSent)
 
     try {
       await costService.deleteCostById(parseInt(id as string))
       sendSuccessResponse(res, 200)
     } catch (e) {
-      sendErrorResponse(res, 400, 'Despesa não localizada!')
+      sendErrorResponse(res, 400, errorMessages.costNotFound)
     }
   },
 }

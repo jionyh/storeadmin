@@ -30,7 +30,7 @@ export const Auth = {
           ) as JwtTokenType
 
           if(!decodedToken) return sendErrorResponse(res,401,'Não autorizado')
-
+            /* Adiciona o tenant_id na requisição, assim é possível pegar ele nas rotas que passam pelo middleware de autenticação */
             req.tenant_id = decodedToken.tenant_id
             next()
           

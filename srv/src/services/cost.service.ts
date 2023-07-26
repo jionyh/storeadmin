@@ -1,8 +1,13 @@
 import dayjs from 'dayjs'
 import { prisma } from '../lib/prisma'
 import { CostType } from '../types/CostsType'
+import { Options } from '../types/ServiceOptionsType'
 
-export const getAllCosts = async (tenant_id: number, date: string) => {
+export const getAllCosts = async (tenant_id: number, Options:Options) => {
+  const {date,pageNumber,resultsPerPage } = Options
+
+  const skip = (pageNumber - 1) * resultsPerPage;
+  
   return prisma.cost.findMany({
     where: {
       tenant_id,
@@ -20,11 +25,16 @@ export const getAllCosts = async (tenant_id: number, date: string) => {
       },
     },
     orderBy: { createAt: 'desc' },
+    skip,
+    take: resultsPerPage,
   })
 }
 
-export const getCostById = async (id: number) => {
-  return prisma.cost.findUnique({ where: { id } })
+export const getCostById = async (tenant_id: number,id: number) => {
+  return prisma.cost.findFirst({ where: { 
+    id,
+    tenant_id
+   } })
 }
 
 export const createCost = async (data: CostType[]) => {
