@@ -1,26 +1,44 @@
 import { Request, Response } from 'express'
-import { z } from 'zod'
 import * as costService from '../services/cost.service'
 import {
   sendErrorResponse,
   sendSuccessResponse,
 } from '../utils/sendResponse'
 import { createCostSchema } from '../utils/validationSchema'
+import { Options } from '../types/ServiceOptionsType'
 
 export const cost = {
   getAllCosts: async (req: Request, res: Response) => {
-    const { date, page, perPage } = req.query
+    const { date, page, perpage,period = 'month' } = req.query
     
     if(!req.tenant_id) return sendErrorResponse(res,404,'tenantNotFound')
 
     const options = {
       date:date as string,
+      period:period as Options['period'], 
       pageNumber: parseInt(page as string) || 1,
-      resultsPerPage : parseInt(perPage as string) || 10
+      resultsPerPage : parseInt(perpage as string) || 10
 
     }
 
-    const response = await costService.getAllCosts(req.tenant_id, options)
+    const {totalRecords,costs} = await costService.getAllCosts(req.tenant_id, options)
+    
+    if(costs.length < 1 && totalRecords < 1) return sendErrorResponse(res,404,'costNotFound')
+
+    const totalPages = Math.ceil(totalRecords / options.resultsPerPage)
+
+    const pagination = {
+      totalRecords,
+      totalPages,
+      currentPage: options.pageNumber,
+      recordsPerPage: options.resultsPerPage
+    }
+
+    const response = {
+      pagination,
+      costs
+    }
+
     sendSuccessResponse(res, 200, 'costs', response)
   },
 
