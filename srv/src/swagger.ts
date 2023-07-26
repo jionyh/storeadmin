@@ -22,6 +22,7 @@ const options = {
   apis: [
     path.join(__dirname, './routes/costs.routes.ts'),
     path.join(__dirname, './routes/sales.routes.ts'),
+    path.join(__dirname, './routes/auth.routes.ts'),
     // Add more route files if needed
   ],
 };

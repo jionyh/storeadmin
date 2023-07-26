@@ -5,14 +5,13 @@ import {
   sendErrorResponse,
   sendSuccessResponse,
 } from '../utils/sendResponse'
-import {errorMessages,successMessages} from '../utils/ResponseMessages'
 import { createCostSchema } from '../utils/validationSchema'
 
 export const cost = {
   getAllCosts: async (req: Request, res: Response) => {
     const { date, page, perPage } = req.query
     
-    if(!req.tenant_id) return sendErrorResponse(res,404,errorMessages.tenantNotFound)
+    if(!req.tenant_id) return sendErrorResponse(res,404,'tenantNotFound')
 
     const options = {
       date:date as string,
@@ -28,48 +27,44 @@ export const cost = {
   getCost: async (req: Request, res: Response) => {
     const { id } = req.params
 
-    if (!id) return sendErrorResponse(res, 400, 'id não enviado')
-    if(!req.tenant_id) return sendErrorResponse(res,404,'Tenant não localizado')
+    if (!id) return sendErrorResponse(res, 400, 'idNotSent' )
+    if(!req.tenant_id) return sendErrorResponse(res,404,'tenantNotFound')
 
     try {
       const cost = await costService.getCostById(req.tenant_id, parseInt(id as string))
 
-      if (!cost) return sendErrorResponse(res, 404, 'Despesa não localizada!')
+      if (!cost) return sendErrorResponse(res, 404, 'costNotFound')
 
       sendSuccessResponse(res, 200, 'cost', cost)
     } catch (e) {
-      console.log(e)
-      sendErrorResponse(res, 500, 'Despesa não localizada!')
+      sendErrorResponse(res, 500, 'costNotFound')
     }
   },
 
   createCost: async (req: Request, res: Response) => {
-    const parse = createCostSchema
-      .array()
-      .safeParse(req.body)
+    const parse = createCostSchema.array().safeParse(req.body)
 
-    if (!parse.success) return sendErrorResponse(res, 400, parse.error.issues)
-      
+    if (!parse.success) return sendErrorResponse(res, 400, parse.error.issues)      
 
     try {
       await costService.createCost(parse.data)
-      sendSuccessResponse(res, 200, successMessages.createCost)
+      sendSuccessResponse(res, 200)
     } catch (e) {
       console.log(e)
-      sendErrorResponse(res, 400, errorMessages.createCostError)
+      sendErrorResponse(res, 400, 'createCostError')
     }
   },
 
   deleteCost: async (req: Request, res: Response) => {
     const { id } = req.params
 
-    if (!id)return sendErrorResponse(res, 400, errorMessages.idNotSent)
+    if (!id)return sendErrorResponse(res, 400,'idNotSent')
 
     try {
       await costService.deleteCostById(parseInt(id as string))
       sendSuccessResponse(res, 200)
     } catch (e) {
-      sendErrorResponse(res, 400, errorMessages.costNotFound)
+      sendErrorResponse(res, 400, 'costNotFound')
     }
   },
 }

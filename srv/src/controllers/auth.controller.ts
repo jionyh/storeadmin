@@ -1,11 +1,11 @@
 import { Request, Response } from 'express'
-import { prisma } from '../lib/prisma'
 import bcrypt from 'bcrypt'
 import { z } from 'zod'
 import JWT from 'jsonwebtoken'
 import dotenv from 'dotenv'
 import * as authService from '../services/auth.service'
 import { sendErrorResponse, sendSuccessResponse } from '../utils/sendResponse'
+import { signInSchema } from '../utils/validationSchema'
 
 dotenv.config()
 
@@ -15,30 +15,25 @@ export const auth = {
   sendSuccessResponse(res,200,'auth',"endpoint não implementado")
   },
   signin: async(req:Request, res:Response)=>{
-    const parse = z
-      .object({
-        email: z.string().email({ message: 'Email inválido!' }),
-        password: z.string(),
-        tenant_slug: z.string()
-      }).safeParse(req.body)
+    const parse = signInSchema.safeParse(req.body)
       
       /* Verifica se os dados enviados conferem conforme o schema */
-      if(!parse.success) return sendErrorResponse(res,400, 'Usuário ou senha incorretos')
- 
+      if(!parse.success) return sendErrorResponse(res,400, 'userNotFound')
+
       /* Verifica se existe o tenant pela slug passada */
       const tenantId = await authService.getTenantIdBySlug(parse.data.tenant_slug)
-      if(!tenantId) return sendErrorResponse(res,404,'Usuário ou senha incorreto')
+      if(!tenantId) return sendErrorResponse(res,404, 'userNotFound')
       
-      /* Caso exista o Tenant busca o usuario pelo ID do Tenant e o email */
+      /* Caso exista o Tenant busca o usuário pelo ID do Tenant e o email */
       const user = await authService.getUserByTenant(tenantId,parse.data.email)
-      if(!user) return sendErrorResponse(res,401,'Usuário ou senha incorretos')
+      if(!user) return sendErrorResponse(res,401,'userNotFound')
 
       /* Verifica o password */
       const checkPassword = await bcrypt.compare(
         parse.data.password,
         user.passwordHash
       )
-      if(!checkPassword) return sendErrorResponse(res,401,'Usuário ou senha incorretos')
+      if(!checkPassword) return sendErrorResponse(res,401,'userNotFound')
 
       /* Criação do jwt com as informações */
       const token = JWT.sign({
