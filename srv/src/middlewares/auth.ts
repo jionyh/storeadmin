@@ -5,7 +5,7 @@ import { sendErrorResponse } from '../utils/sendResponse'
 
 dotenv.config()
 
-interface JwtTokenType {
+type JwtTokenType = {
   id: number
   email: string
   tenant_id: number
@@ -28,15 +28,14 @@ export const Auth = {
             token,
             process.env.JWT_SECRET_KEY as string,
           ) as JwtTokenType
-
-          if(!decodedToken) return sendErrorResponse(res,401,'notAllowed')
-            /* Adiciona o tenant_id na requisição, assim é possível pegar ele nas rotas que passam pelo middleware de autenticação */
+          // Adiciona o tenant_id na requisição, assim é possível
+          // pegar ele nas rotas que passam pelo middleware de autenticação
             req.tenant_id = decodedToken.tenant_id
             next()
           
         } catch (e) {
           console.log('JWT verification error:', e);
-          sendErrorResponse(res,401,'invalidToken')
+          sendErrorResponse(res,401,'notAllowed')
         }
       
   },

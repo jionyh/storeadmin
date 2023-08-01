@@ -8,7 +8,7 @@ type SaleRecord = {
   sales:SaleResponse[]
 }
 
-export const getAllSales = async (tenant_id: number, Options:Options):Promise<SaleRecord> => {
+export const getAllPurchase = async (tenant_id: number, Options:Options):Promise<SaleRecord> => {
   const {date = dayjs(),pageNumber,resultsPerPage,period = 'month' } = Options
 
   const skip = (pageNumber - 1) * resultsPerPage;
@@ -51,19 +51,19 @@ export const getAllSales = async (tenant_id: number, Options:Options):Promise<Sa
 
 }
 
-export const getSaleById = async (tenant_id: number,id: number) => {
+export const getPurchaseById = async (tenant_id: number,id: number) => {
   return prisma.sale.findFirst({ where: { 
     id,
     tenant_id
    } })
 }
 
-export const createSale = async (data: SaleType[]) => {
+export const createPurchase = async (data: SaleType[]) => {
   return prisma.sale.createMany({
     data,
   })
 }
 
-export const deleteSaleById = async (id: number) => {
+export const deletePurchaseById = async (id: number) => {
   return prisma.sale.delete({ where: { id } })
 }

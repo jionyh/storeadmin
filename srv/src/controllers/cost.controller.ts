@@ -6,6 +6,9 @@ import {
 } from '../utils/sendResponse'
 import { createCostSchema } from '../utils/validationSchema'
 import { Options } from '../types/ServiceOptionsType'
+import { sumValues } from '../utils/sumValuesFromArray'
+import { CostResponse } from '../types/CostsType'
+import { formatCostResponse } from '../utils/formatCostResponse'
 
 export const cost = {
   getAllCosts: async (req: Request, res: Response) => {
@@ -21,7 +24,7 @@ export const cost = {
 
     }
 
-    const {totalRecords,costs} = await costService.getAllCosts(req.tenant_id, options)
+    const {totalRecords,costs}= await costService.getAllCosts(req.tenant_id, options)
     
     if(costs.length < 1 && totalRecords < 1) return sendErrorResponse(res,404,'costNotFound')
 
@@ -34,9 +37,14 @@ export const cost = {
       recordsPerPage: options.resultsPerPage
     }
 
+    const {total,periodName} = sumValues(costs,period as string)
+
+    
+
     const response = {
       pagination,
-      costs
+      [periodName]: total,
+      costs: formatCostResponse(costs)
     }
 
     sendSuccessResponse(res, 200, 'costs', response)
@@ -53,19 +61,30 @@ export const cost = {
 
       if (!cost) return sendErrorResponse(res, 404, 'costNotFound')
 
-      sendSuccessResponse(res, 200, 'cost', cost)
+      sendSuccessResponse(res, 200, 'cost', formatCostResponse(cost))
     } catch (e) {
       sendErrorResponse(res, 500, 'costNotFound')
     }
   },
 
   createCost: async (req: Request, res: Response) => {
+
     const parse = createCostSchema.array().safeParse(req.body)
 
-    if (!parse.success) return sendErrorResponse(res, 400, parse.error.issues)      
+    if (!parse.success) return sendErrorResponse(res, 400, parse.error.issues)  
 
+    let costData:{name:string,value:number,tenant_id:number}[] = []
+
+    parse.data.map(i=>{
+     costData.push({
+      name: i.name,
+      value: i.value,
+      tenant_id: req.tenant_id
+     })
+    })    
+  
     try {
-      await costService.createCost(parse.data)
+      await costService.createCost(costData)
       sendSuccessResponse(res, 200)
     } catch (e) {
       console.log(e)

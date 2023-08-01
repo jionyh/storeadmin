@@ -4,15 +4,15 @@ import {
   sendErrorResponse,
   sendSuccessResponse,
 } from '../utils/sendResponse'
-import { createSaleSchema } from '../utils/validationSchema'
+import { CreateSaleSchema } from '../utils/validationSchema'
 import { Options } from '../types/ServiceOptionsType'
 import { SaleResponse } from '../types/SalesType'
 import { formatSaleReturnWithoutTotal, formatSalesReturnWithTotal } from '../utils/formatSaleResponse'
 import { sumValues } from '../utils/sumValuesFromArray'
 
 
-export const sale = {
-  getAllSales: async (req: Request, res: Response) => {
+export const purchase = {
+  getAllPurchases: async (req: Request, res: Response) => {
     const { date, page, perpage,period = 'month' } = req.query
     
     const options = {
@@ -50,7 +50,7 @@ export const sale = {
     sendSuccessResponse(res, 200, 'sales', response)
   },
 
-  getSale: async (req: Request, res: Response) => {
+  getPurchase: async (req: Request, res: Response) => {
     const { id } = req.params
 
     if (!id) return sendErrorResponse(res, 400, 'idNotSent' )
@@ -70,8 +70,8 @@ export const sale = {
     }
   },
 
-  createSale: async (req: Request, res: Response) => {
-    const parse = createSaleSchema.array().safeParse(req.body)
+  createPurchase: async (req: Request, res: Response) => {
+    const parse = CreateSaleSchema.array().safeParse(req.body)
 
     if (!parse.success) return sendErrorResponse(res, 400, parse.error.issues)  
 
@@ -94,7 +94,7 @@ export const sale = {
     }
   },
 
-  deleteSale: async (req: Request, res: Response) => {
+  deletePurchase: async (req: Request, res: Response) => {
     const { id } = req.params
 
     if (!id)return sendErrorResponse(res, 400,'idNotSent')

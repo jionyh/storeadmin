@@ -1,16 +1,14 @@
 import dayjs from 'dayjs'
 import { prisma } from '../lib/prisma'
-import {Prisma} from "@prisma/client"
-
-import { CostType } from '../types/CostsType'
+import { CostResponse, CostType } from '../types/CostsType'
 import { Options } from '../types/ServiceOptionsType'
 
 interface CostRecord {
   totalRecords: number
-  costs:CostType[]
+  costs:CostResponse[]
 }
 
-export const getAllCosts = async (tenant_id: number, Options:Options):Promise<CostRecord | any> => {
+export const getAllCosts = async (tenant_id: number, Options:Options):Promise<CostRecord> => {
   const {date = dayjs(),pageNumber,resultsPerPage,period = 'month' } = Options
 
   const skip = (pageNumber - 1) * resultsPerPage;
@@ -48,7 +46,8 @@ export const getAllCosts = async (tenant_id: number, Options:Options):Promise<Co
     return {totalRecords,costs}
 
   }catch(e){
-    return e
+    console.log(e)
+    throw new Error('An error occurred while fetching costs data.');
   }
 
 }

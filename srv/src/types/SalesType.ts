@@ -1,14 +1,14 @@
-export type CostType = {
-  name: string
+export type SaleType = {
   value: number
+  payment_id: number
   tenant_id: number
 }
 
-export type CostResponse = {
+export type SaleResponse = {
   id: number
-  name: string
   value: number
   createAt: Date
+  payment_id: number
   tenant_id: number
 }
 
@@ -19,18 +19,18 @@ type Pagination = {
   recordsPerPage: number
 }
 
-export type CostDay = {
+export type SaleDay = {
   date: string
   total: string
-  dailyCosts:{
+  dailySales:{
     id: number
-    value: string
+    value: number
     payment_id: number
   }[]
 }
 
-export type CostReturn = {
+export type SaleReturn = {
   pagination: Pagination
-  date: CostDay[]
+  date: SaleDay[]
 
 }
