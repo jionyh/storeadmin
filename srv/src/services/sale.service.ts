@@ -28,6 +28,7 @@ export const getAllSales = async (tenant_id: number, Options:Options):Promise<Sa
         : undefined,
     },
   }
+
   try{
 
     const totalRecords = await prisma.sale.count({where:searchOptions})
@@ -39,8 +40,6 @@ export const getAllSales = async (tenant_id: number, Options:Options):Promise<Sa
       take: resultsPerPage,
     })
     //if(totalRecords === 0 ) return false
-
-    
 
     return {totalRecords,sales}
 

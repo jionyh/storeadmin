@@ -7,8 +7,7 @@ import {
 import { createCostSchema } from '../utils/validationSchema'
 import { Options } from '../types/ServiceOptionsType'
 import { sumValues } from '../utils/sumValuesFromArray'
-import { CostResponse } from '../types/CostsType'
-import { formatCostResponse } from '../utils/formatCostResponse'
+import { formatCostResponse } from '../utils/formatResponse/formatCost'
 
 export const cost = {
   getAllCosts: async (req: Request, res: Response) => {

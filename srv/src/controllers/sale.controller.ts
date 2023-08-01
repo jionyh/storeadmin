@@ -7,7 +7,7 @@ import {
 import { createSaleSchema } from '../utils/validationSchema'
 import { Options } from '../types/ServiceOptionsType'
 import { SaleResponse } from '../types/SalesType'
-import { formatSaleReturnWithoutTotal, formatSalesReturnWithTotal } from '../utils/formatSaleResponse'
+import { formatSaleReturnWithoutTotal, formatSalesReturnWithTotal } from '../utils/formatResponse/formatSale'
 import { sumValues } from '../utils/sumValuesFromArray'
 
 

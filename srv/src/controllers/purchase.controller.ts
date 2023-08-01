@@ -4,10 +4,10 @@ import {
   sendErrorResponse,
   sendSuccessResponse,
 } from '../utils/sendResponse'
-import { CreateSaleSchema } from '../utils/validationSchema'
+import { createSaleSchema } from '../utils/validationSchema'
 import { Options } from '../types/ServiceOptionsType'
 import { SaleResponse } from '../types/SalesType'
-import { formatSaleReturnWithoutTotal, formatSalesReturnWithTotal } from '../utils/formatSaleResponse'
+import { formatSaleReturnWithoutTotal, formatSalesReturnWithTotal } from '../utils/formatResponse/formatSale'
 import { sumValues } from '../utils/sumValuesFromArray'
 
 
@@ -71,7 +71,7 @@ export const purchase = {
   },
 
   createPurchase: async (req: Request, res: Response) => {
-    const parse = CreateSaleSchema.array().safeParse(req.body)
+    const parse = createSaleSchema.array().safeParse(req.body)
 
     if (!parse.success) return sendErrorResponse(res, 400, parse.error.issues)  
 

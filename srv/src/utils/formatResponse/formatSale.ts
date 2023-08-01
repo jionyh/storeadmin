@@ -1,5 +1,5 @@
 import dayjs from "dayjs"
-import { SaleDay, SaleResponse } from "../types/SalesType"
+import { SaleDay, SaleResponse } from "../../types/SalesType"
 
 export const formatSalesReturnWithTotal = (sales:SaleResponse[])=>{
 

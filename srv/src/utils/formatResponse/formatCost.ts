@@ -1,5 +1,6 @@
 import dayjs from "dayjs"
-import { CostResponse } from "../types/CostsType"
+import { CostResponse } from "../../types/CostsType"
+import { Capitalize } from "../capitalizeFirstLetter"
 
 /* Função para normalizar o retorno de custos */
 
@@ -11,7 +12,7 @@ export const formatCostResponse = (costs:CostResponse[] | CostResponse)=>{
     costs.map(cost=>{
       costsResponse.push({
         id: cost.id,
-        name:cost.name,
+        name:Capitalize(cost.name),
         value: cost.value,
         createAt: dayjs(cost.createAt).format('YYYY-MM-DD')
       })
@@ -19,7 +20,7 @@ export const formatCostResponse = (costs:CostResponse[] | CostResponse)=>{
   }else{
     return {
       id: costs.id,
-      name:costs.name,
+      name:Capitalize(costs.name),
       value: costs.value,
       createAt: dayjs(costs.createAt).format('YYYY-MM-DD')
     }

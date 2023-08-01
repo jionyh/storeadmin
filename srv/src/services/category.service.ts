@@ -1,12 +1,6 @@
 import dayjs from 'dayjs'
 import { prisma } from '../lib/prisma'
-import { CostResponse, CostType } from '../types/CostsType'
 import { CategoryType } from '../types/CategoryType'
-
-interface CostRecord {
-  totalRecords: number
-  costs:CostResponse[]
-}
 
 export const getAllCategories = async (tenant_id: number):Promise<any> => {
   
@@ -24,17 +18,33 @@ export const getAllCategories = async (tenant_id: number):Promise<any> => {
 
 }
 
-export const getCategoryById = async (tenant_id: number,id: number) => {
-  return prisma.category.findFirst({ where: { 
-    id,
-    tenant_id
-   } })
+export const createCategory = async (data: CategoryType[]) => {
+  try{
+    const cat = await prisma.category.createMany({
+      data,
+    })
+    return cat
+  }catch(e){
+    console.error(e)
+    throw new Error('An error occurred while creating category.');
+  }
 }
 
-export const createCategory = async (data: CategoryType[]) => {
-  return prisma.category.createMany({
-    data,
-  })
+export const editCategory = async(id:number, data:{name?:string}) =>{
+
+  try{
+    const editCategory = await prisma.category.update({
+      where: {id},
+      data
+    })
+    return editCategory
+
+    console.log(editCategory)
+  }catch(e){
+    console.error(e)
+    throw new Error('An error occurred while editing category data.');
+  }
+
 }
 
 export const deleteCategoryById = async (id: number) => {
