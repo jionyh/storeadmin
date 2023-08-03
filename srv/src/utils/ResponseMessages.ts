@@ -10,7 +10,8 @@ export enum ErrorMessages {
   saleNotfound = 'Venda não localizada!' ,
   createSaleError = 'Erro ao criar vendas' ,
   categoryNotFound = "Categoria não localizada" ,
-  createCategoryError = "Erro ao criar categoria" 
+  createCategoryError = "Erro ao criar categoria",
+  categoryAlreadyExist = "Categoria já existente"
 }
 
 export interface SuccessMessages {

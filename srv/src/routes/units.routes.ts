@@ -1,11 +1,11 @@
 import express from 'express';
-import { purchase } from '../controllers/purchase.controller'
+import { unit } from '../controllers/unit.controller'
 const router = express.Router();
 
 // Rotas de compras //
-router.get('/', purchase.getAllPurchases)
-router.get('/:id', purchase.getPurchase)
-router.post('/', purchase.createPurchase)
-router.delete('/:id', purchase.deletePurchase)
+router.get('/', unit.getAllUnits)
+router.post('/', unit.createUnit)
+router.patch('/:id', unit.editUnit)
+router.delete('/:id', unit.deleteUnit)
 
 export default router

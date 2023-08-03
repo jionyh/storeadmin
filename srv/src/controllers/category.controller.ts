@@ -20,26 +20,25 @@ export const category = {
 
   createCategory: async (req: Request, res: Response) => {
 
-    const parse = createCategorySchema.array().safeParse(req.body)
+    const parse = createCategorySchema.safeParse(req.body)
 
-    if (!parse.success) return sendErrorResponse(res, 400, parse.error.issues)  
+    if (!parse.success) return sendErrorResponse(res, 400, parse.error.issues)
 
-    let categoryData:{name:string,tenant_id:number}[] = []
+    const checkIfExistCategory = await categoryService.getCategory({name: parse.data.name, tenant_id: req.tenant_id})
+    
+    /* Verifica se já existe alguma categoria ativa para o tenant com o mesmo nome */
+    if (checkIfExistCategory && !checkIfExistCategory.is_deleted) return sendErrorResponse(res, 400, 'categoryAlreadyExist')
 
-    parse.data.map(i=>{
-      categoryData.push({
-      name: i.name,
-      tenant_id: req.tenant_id
-     })
-    })    
-  
-    try {
-      await categoryService.createCategory(categoryData)
-      sendSuccessResponse(res, 200)
-    } catch (e) {
-      console.log(e)
-      sendErrorResponse(res, 400, 'createCategoryError')
+    /* Verifica se existe a categoria e ela está desativada(deletada), se verdadeiro, faz o toggle na categoria */
+    if(checkIfExistCategory && checkIfExistCategory.is_deleted){
+      const {id, is_deleted} = checkIfExistCategory
+      await categoryService.toggleCategory(id, is_deleted)
+      return sendSuccessResponse(res,200)
     }
+  
+    await categoryService.createCategory({name: parse.data.name,tenant_id: req.tenant_id})
+    sendSuccessResponse(res, 200)
+
   },
 
   editCategory: async (req: Request, res: Response) => {
