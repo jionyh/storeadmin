@@ -10,7 +10,7 @@ export const getAllCategories = async (tenant_id: number):Promise<CategoryRespon
         tenant_id,
         is_deleted: false
       },
-      orderBy: { id: 'asc' }
+      orderBy: { name: 'asc' }
     })
     return categories
 

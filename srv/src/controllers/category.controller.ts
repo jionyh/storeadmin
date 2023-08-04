@@ -6,6 +6,7 @@ import {
 } from '../utils/sendResponse'
 import { createCategorySchema } from '../utils/validationSchema'
 import { formatCategoryResponse } from '../utils/formatResponse/formatCategory'
+import { CategoryResponse } from '../types/CategoryType'
 
 export const category = {
   getAllCategories: async (req: Request, res: Response) => {   
@@ -24,7 +25,7 @@ export const category = {
 
     if (!parse.success) return sendErrorResponse(res, 400, parse.error.issues)
 
-    const checkIfExistCategory = await categoryService.getCategory({name: parse.data.name, tenant_id: req.tenant_id})
+    const checkIfExistCategory:CategoryResponse = await categoryService.getCategory({name: parse.data.name, tenant_id: req.tenant_id})
     
     /* Verifica se já existe alguma categoria ativa para o tenant com o mesmo nome */
     if (checkIfExistCategory && !checkIfExistCategory.is_deleted) return sendErrorResponse(res, 400, 'categoryAlreadyExist')

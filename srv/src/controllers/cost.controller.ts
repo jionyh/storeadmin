@@ -8,13 +8,12 @@ import { createCostSchema } from '../utils/validationSchema'
 import { Options } from '../types/ServiceOptionsType'
 import { sumValues } from '../utils/sumValuesFromArray'
 import { formatCostResponse } from '../utils/formatResponse/formatCost'
+import { paginationFn } from '../utils/pagination'
 
 export const cost = {
   getAllCosts: async (req: Request, res: Response) => {
     const { date, page, perpage,period = 'month' } = req.query
     
-    if(!req.tenant_id) return sendErrorResponse(res,404,'tenantNotFound')
-
     const options = {
       date:date as string,
       period:period as Options['period'], 
@@ -27,21 +26,10 @@ export const cost = {
     
     if(costs.length < 1 && totalRecords < 1) return sendErrorResponse(res,404,'costNotFound')
 
-    const totalPages = Math.ceil(totalRecords / options.resultsPerPage)
-
-    const pagination = {
-      totalRecords,
-      totalPages,
-      currentPage: options.pageNumber,
-      recordsPerPage: options.resultsPerPage
-    }
-
-    const {total,periodName} = sumValues(costs,period as string)
-
-    
+    const {total,periodName} = sumValues(costs,period as string)  
 
     const response = {
-      pagination,
+      pagination: paginationFn(totalRecords,options),
       [periodName]: total,
       costs: formatCostResponse(costs)
     }

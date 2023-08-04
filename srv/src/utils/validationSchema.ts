@@ -34,3 +34,23 @@ export const createCategorySchema = z.object({
     .nonempty('preencha o nome da categoria')
     .toLowerCase(),
 })
+export const createUnitSchema = z.object({
+  name: z
+    .string({ required_error: 'o campo nome é obrigatório' })
+    .nonempty('preencha o nome da unidade')
+    .toLowerCase(),
+  abbreviation: z
+    .string({ required_error: 'o campo nome é obrigatório' })
+    .nonempty('preencha o nome da unidade')
+    .toLowerCase(),
+})
+
+export const createProductSchema = z.object({
+  name: z
+    .string({ required_error: 'o campo nome é obrigatório' })
+    .nonempty('preencha o nome do produto')
+    .toLowerCase(),
+  category_id: z
+    .number({ required_error: 'o campo categoria é obrigatório' })
+    .nonnegative(),
+})

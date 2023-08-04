@@ -6,21 +6,19 @@ import { Capitalize } from "../capitalizeFirstLetter"
 
 export const formatCategoryResponse = (category:CategoryResponse[] | CategoryResponse)=>{
 
-  let categoryResponse:{id:number,name:string,is_deleted: boolean}[] = []
+  let categoryResponse:{id:number,name:string}[] = []
 
   if(Array.isArray(category)){
       category.map(cat=>{
         categoryResponse.push({
         id: cat.id,
         name:Capitalize(cat.name),
-        is_deleted: cat.is_deleted
       })
     }) 
   }else{
     return {
       id: category.id,
       name:Capitalize(category.name),
-      is_deleted: category.is_deleted
     }
   }
   

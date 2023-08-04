@@ -4,42 +4,44 @@ import {
   sendErrorResponse,
   sendSuccessResponse,
 } from '../utils/sendResponse'
-import { createCategorySchema } from '../utils/validationSchema'
+import { createUnitSchema } from '../utils/validationSchema'
 import { formatUnitResponse } from '../utils/formatResponse/formatUnit'
+import { UnitResponse } from '../types/UnitType'
 
 export const unit = {
   getAllUnits: async (req: Request, res: Response) => {   
 
 
-    const categories = await categoryService.getAllCategories(req.tenant_id)
+    const units = await unitService.getAllUnits(req.tenant_id)
     
-    if(categories.length < 1) return sendErrorResponse(res,404,'categoryNotFound')  
+    if(units.length < 1) return sendErrorResponse(res,404,'unitNotFound')  
 
-     sendSuccessResponse(res, 200, 'categories', formatCategoryResponse(categories))
+     sendSuccessResponse(res, 200, 'units', formatUnitResponse(units))
   },
 
   createUnit: async (req: Request, res: Response) => {
 
-    const parse = createCategorySchema.array().safeParse(req.body)
+    const parse = createUnitSchema.safeParse(req.body)
 
-    if (!parse.success) return sendErrorResponse(res, 400, parse.error.issues)  
+    if (!parse.success) return sendErrorResponse(res, 400, parse.error.issues)
 
-    let categoryData:{name:string,tenant_id:number}[] = []
+    const checkIfExistUnit:UnitResponse = await unitService.getUnit({name: parse.data.name, tenant_id: req.tenant_id})
+    
+    /* Verifica se já existe alguma unidade ativa para o tenant com o mesmo nome */
+    if (checkIfExistUnit && !checkIfExistUnit.is_deleted) return sendErrorResponse(res, 400, 'unitAlreadyExist')
 
-    parse.data.map(i=>{
-      categoryData.push({
-      name: i.name,
-      tenant_id: req.tenant_id
-     })
-    })    
-  
-    try {
-      await categoryService.createCategory(categoryData)
-      sendSuccessResponse(res, 200)
-    } catch (e) {
-      console.log(e)
-      sendErrorResponse(res, 400, 'createCategoryError')
+    /* Verifica se existe a unidade e ela está desativada(deletada), se verdadeiro, faz o toggle na unidade */
+    if(checkIfExistUnit && checkIfExistUnit.is_deleted){
+      const {id, is_deleted} = checkIfExistUnit
+      await unitService.toggleUnit(id, is_deleted)
+      return sendSuccessResponse(res,200)
     }
+  
+    const createUnit =  unitService.createUnit({name: parse.data.name,abbreviation: parse.data.abbreviation,tenant_id: req.tenant_id})
+
+    if(!createUnit) return sendErrorResponse(res, 404, createUnit)
+    sendSuccessResponse(res, 200)
+
   },
 
   editUnit: async (req: Request, res: Response) => {
@@ -47,15 +49,15 @@ export const unit = {
 
     if (!id)return sendErrorResponse(res, 400,'idNotSent')
     
-    const parse = createCategorySchema.safeParse(req.body)
+    const parse = createUnitSchema.safeParse(req.body)
     if (!parse.success) return sendErrorResponse(res, 400, parse.error.issues)  
 
-    const editCategory = await categoryService.editCategory(parseInt(id), parse.data)
+    const editUnit = await unitService.editUnit(parseInt(id), parse.data)
 
 
-    if(!editCategory) return sendErrorResponse(res,400,'categoryNotFound')
+    if(!editUnit) return sendErrorResponse(res,400,'unitNotFound')
 
-    sendSuccessResponse(res,200,'category',formatCategoryResponse(editCategory))
+    sendSuccessResponse(res,200,'unit',formatUnitResponse(editUnit))
 
 
   },
@@ -66,10 +68,10 @@ export const unit = {
     if (!id)return sendErrorResponse(res, 400,'idNotSent')
 
     try {
-      await categoryService.deleteCategoryById(parseInt(id as string))
+      await unitService.deleteUnitById(parseInt(id as string))
       sendSuccessResponse(res, 200)
     } catch (e) {
-      sendErrorResponse(res, 400, 'categoryNotFound')
+      sendErrorResponse(res, 400, 'unitNotFound')
     }
   },
 }
