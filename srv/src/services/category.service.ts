@@ -47,7 +47,7 @@ export const createCategory = async (data: CategoryType) => {
   }
 }
 
-export const editCategory = async(id:number, data:{name?:string}) =>{
+export const editCategory = async(id:number, data:{name?:string,is_deleted?:boolean}) =>{
 
   try{
     const editCategory = await prisma.category.update({
@@ -62,8 +62,7 @@ export const editCategory = async(id:number, data:{name?:string}) =>{
 
 }
 export const toggleCategory = async(id:number, toggle:boolean) => {
-  console.log(id, toggle)
-
+  
   try{
     const toggleCategory = await prisma.category.update({
       where: {id},

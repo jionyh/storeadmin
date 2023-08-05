@@ -94,17 +94,17 @@ export const createProducts = async (data: ProductType[]) => {
   }
 }
 
-export const editCategory = async(id:number, data:{name?:string}) =>{
+export const editProduct = async(id:number, data:{name?:string,category_id?: number}) =>{
 
   try{
-    const editCategory = await prisma.category.update({
+    const editCategory = await prisma.product.update({
       where: {id},
       data
     })
     return editCategory
   }catch(e){
     console.error(e)
-    throw new Error('An error occurred while editing category data.');
+    throw new Error('An error occurred while editing product data.');
   }
 
 }
@@ -116,7 +116,7 @@ export const toggleProduct = async(id:number, toggle:boolean) => {
         is_deleted : toggle === false ? true : false
       }
     })
-    return editCategory
+    return toggleCategory
   }catch(e){
     console.error(e)
     throw new Error('An error occurred while creating category data.');

@@ -1,15 +1,27 @@
-import dayjs from 'dayjs'
-import { prisma } from '../lib/prisma'
-import { Options } from '../types/ServiceOptionsType'
-import { SaleResponse, SaleType } from '../types/SalesType'
+import dayjs from "dayjs";
+import { prisma } from "../lib/prisma";
+import { Options } from "../types/ServiceOptionsType";
+import {
+  PurchaseResponse,
+  PurchaseResponseComplete,
+  PurchaseType,
+} from "../types/PurchaseType";
 
-type SaleRecord = {
-  totalRecords: number
-  sales:SaleResponse[]
-}
+type PurchaseRecord = {
+  totalRecords: number;
+  purchase: PurchaseResponseComplete[];
+};
 
-export const getAllPurchase = async (tenant_id: number, Options:Options):Promise<SaleRecord> => {
-  const {date = dayjs(),pageNumber,resultsPerPage,period = 'month' } = Options
+export const getAllPurchase = async (
+  tenant_id: number,
+  Options: Options
+): Promise<PurchaseRecord> => {
+  const {
+    date = dayjs(),
+    pageNumber,
+    resultsPerPage,
+    period = "month",
+  } = Options;
 
   const skip = (pageNumber - 1) * resultsPerPage;
 
@@ -27,43 +39,57 @@ export const getAllPurchase = async (tenant_id: number, Options:Options):Promise
             .toDate()
         : undefined,
     },
-  }
-  try{
+  };
+  try {
+    const totalRecords = await prisma.purchase.count({ where: searchOptions });
 
-    const totalRecords = await prisma.sale.count({where:searchOptions})
-
-    const sales = await prisma.sale.findMany({
+    const purchase = await prisma.purchase.findMany({
       where: searchOptions,
-      orderBy: { createAt: 'asc' },
+      include: { product: { include: { cat: true } }, unit: true },
+      orderBy: { createAt: "asc" },
       skip,
       take: resultsPerPage,
-    })
-    //if(totalRecords === 0 ) return false
-
-    
-
-    return {totalRecords,sales}
-
-  }catch(e){
-    console.log(e)
-    throw new Error('An error occurred while fetching sales data.');
+    });
+    return { totalRecords, purchase };
+  } catch (e) {
+    console.log(e);
+    throw new Error("An error occurred while fetching purchase data.");
   }
+};
 
-}
+export const getPurchaseById = async (
+  tenant_id: number,
+  id: number
+): Promise<PurchaseResponse | null> => {
+  try {
+    return await prisma.purchase.findFirst({
+      where: {
+        id,
+        tenant_id,
+      },
+    });
+  } catch (e) {
+    console.error(e);
+    throw new Error("An error occurred while fetching purchase.");
+  }
+};
 
-export const getPurchaseById = async (tenant_id: number,id: number) => {
-  return prisma.sale.findFirst({ where: { 
-    id,
-    tenant_id
-   } })
-}
-
-export const createPurchase = async (data: SaleType[]) => {
-  return prisma.sale.createMany({
-    data,
-  })
-}
+export const createPurchase = async (data: PurchaseType[]) => {
+  try {
+    return prisma.purchase.createMany({
+      data,
+    });
+  } catch (e) {
+    console.error(e);
+    throw new Error("An error occurred while creating purchase.");
+  }
+};
 
 export const deletePurchaseById = async (id: number) => {
-  return prisma.sale.delete({ where: { id } })
-}
+  try {
+    return prisma.purchase.delete({ where: { id } });
+  } catch (e) {
+    console.error(e);
+    throw new Error("An error occurred while deleting purchase.");
+  }
+};

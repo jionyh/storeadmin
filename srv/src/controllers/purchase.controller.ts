@@ -1,111 +1,139 @@
-import { Request, Response } from 'express'
-import * as saleService from '../services/sale.service'
+import { Request, Response } from "express";
+import * as purchaseService from "../services/purchase.service";
+import { sendErrorResponse, sendSuccessResponse } from "../utils/sendResponse";
+import { createPurchaseSchema } from "../utils/validationSchema";
+import { Options } from "../types/ServiceOptionsType";
 import {
-  sendErrorResponse,
-  sendSuccessResponse,
-} from '../utils/sendResponse'
-import { createSaleSchema } from '../utils/validationSchema'
-import { Options } from '../types/ServiceOptionsType'
-import { SaleResponse } from '../types/SalesType'
-import { formatSaleReturnWithoutTotal, formatSalesReturnWithTotal } from '../utils/formatResponse/formatSale'
-import { sumValues } from '../utils/sumValuesFromArray'
-
+  formatPurchaseReturnWithoutTotal,
+  formatPurchasesReturnWithTotal,
+} from "../utils/formatResponse/formatPurchase";
+import { sumValues } from "../utils/sumValuesFromArray";
+import { PurchaseType } from "../types/PurchaseType";
+import { getAllCategories } from "../services/category.service";
 
 export const purchase = {
   getAllPurchases: async (req: Request, res: Response) => {
-    const { date, page, perpage,period = 'month' } = req.query
-    
+    const { date, page, perpage, period = "month" } = req.query;
+
     const options = {
-      date:date as string,
-      period:period as Options['period'], 
+      date: date as string,
+      period: period as Options["period"],
       pageNumber: parseInt(page as string) || 1,
-      resultsPerPage : parseInt(perpage as string) || 10
+      resultsPerPage: parseInt(perpage as string) || 10,
+    };
 
-    }
+    const { totalRecords, purchase } = await purchaseService.getAllPurchase(
+      req.tenant_id,
+      options
+    );
 
-    const {totalRecords,sales} = await saleService.getAllSales(req.tenant_id, options)
-    
+    if (purchase.length < 1 && totalRecords < 1)
+      return sendErrorResponse(res, 404, "purchaseNotfound");
 
-    if(sales.length < 1 && totalRecords < 1) return sendErrorResponse(res,404,'saleNotfound')
-
-    const totalPages = Math.ceil(totalRecords / options.resultsPerPage)
+    const totalPages = Math.ceil(totalRecords / options.resultsPerPage);
 
     const pagination = {
       totalRecords,
       totalPages,
       currentPage: options.pageNumber,
-      recordsPerPage: options.resultsPerPage
-    }
+      recordsPerPage: options.resultsPerPage,
+    };
 
-    const {total,periodName} = sumValues(sales,period as string)    
+    const { total, periodName } = sumValues(purchase, period as string);
 
     const response = {
       pagination,
       [periodName]: total,
-      allSales: formatSalesReturnWithTotal(sales)
-    }
+      allPurchases: formatPurchasesReturnWithTotal(purchase),
+    };
 
-    
+    /*  */
 
-    sendSuccessResponse(res, 200, 'sales', response)
+    /* let purchaseList = formatPurchasesReturnWithTotal(purchase);
+
+    const category = await getAllCategories(req.tenant_id);
+
+    const result = category
+      .map((el) => {
+        const haveCat = purchase.some(
+          (item) => item.product.cat.name === el.name
+        );
+        if (haveCat) {
+          return {
+            ...el,
+            produto: purchase.filter(({ product }) => el.name === product),
+          };
+        }
+      })
+      .filter((item) => item !== undefined); */
+
+    /*  */
+
+    sendSuccessResponse(res, 200, "purchases", purchase);
   },
 
   getPurchase: async (req: Request, res: Response) => {
-    const { id } = req.params
+    const { id } = req.params;
 
-    if (!id) return sendErrorResponse(res, 400, 'idNotSent' )
+    if (!id) return sendErrorResponse(res, 400, "idNotSent");
 
-    try {
-      const sale = await saleService.getSaleById(req.tenant_id, parseInt(id as string))
+    const purchase = await purchaseService.getPurchaseById(
+      req.tenant_id,
+      parseInt(id as string)
+    );
 
-      if (!sale) return sendErrorResponse(res, 404, 'saleNotfound')
+    if (!purchase) return sendErrorResponse(res, 404, "purchaseNotfound");
 
-      const saleData = {
-
-      }
-
-      sendSuccessResponse(res, 200, 'sale', formatSaleReturnWithoutTotal(sale))
-    } catch (e) {
-      sendErrorResponse(res, 500, 'saleNotfound')
-    }
+    sendSuccessResponse(
+      res,
+      200,
+      "purchase",
+      formatPurchaseReturnWithoutTotal(purchase)
+    );
   },
 
   createPurchase: async (req: Request, res: Response) => {
-    const parse = createSaleSchema.array().safeParse(req.body)
+    const parse = createPurchaseSchema
+      .array()
+      .nonempty("Dados não enviados")
+      .safeParse(req.body);
 
-    if (!parse.success) return sendErrorResponse(res, 400, parse.error.issues)  
+    if (!parse.success) return sendErrorResponse(res, 400, parse.error.issues);
 
-    let saleData:{value: number,payment_id:number,tenant_id:number}[] = []
+    type PurchaseDataType = Array<PurchaseType & { tenant_id: number }>;
 
-    parse.data.map(i=>{
-     saleData.push({
-      value: i.value,
-      payment_id: i.payment_id,
-      tenant_id: req.tenant_id
-     })
-    })    
-  
-    try {
-      await saleService.createSale(saleData)
-      sendSuccessResponse(res, 200)
-    } catch (e) {
-      console.log(e)
-      sendErrorResponse(res, 400, 'createSaleError')
-    }
+    let purchaseData: PurchaseDataType = [];
+
+    parse.data.map((i) => {
+      purchaseData.push({
+        quantity: i.quantity,
+        value: i.value,
+        product_id: i.product_id,
+        supplier: i.supplier ? i.supplier : "---",
+        unit_id: i.unit_id,
+        tenant_id: req.tenant_id,
+      });
+    });
+
+    const purchaseCreated = await purchaseService.createPurchase(purchaseData);
+
+    if (!purchaseCreated)
+      return sendErrorResponse(res, 400, "createPurchaseError");
+
+    sendSuccessResponse(res, 200);
   },
 
   deletePurchase: async (req: Request, res: Response) => {
-    const { id } = req.params
+    const { id } = req.params;
 
-    if (!id)return sendErrorResponse(res, 400,'idNotSent')
+    if (!id) return sendErrorResponse(res, 400, "idNotSent");
 
-    try {
-      await saleService.deleteSaleById(parseInt(id as string))
-      sendSuccessResponse(res, 200)
-    } catch (e) {
-      sendErrorResponse(res, 400, 'saleNotfound')
-    }
+    const deletePurchase = await purchaseService.deletePurchaseById(
+      parseInt(id as string)
+    );
+
+    if (!deletePurchase) return sendErrorResponse(res, 400, "purchaseNotfound");
+
+    sendSuccessResponse(res, 200);
   },
-}
-
-
+};

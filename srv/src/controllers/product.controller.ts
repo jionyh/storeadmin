@@ -64,22 +64,21 @@ export const products = {
 
     await productService.createProducts(productsData)
 
-    existingProductsError.length > 0 ? sendSuccessResponse(res, 200,'products', `Produtos ${existingProductsError.join(', ')}, já existem.`) : sendSuccessResponse(res,200)
+  sendSuccessResponse(res, 200 )
 
   },
 
-  editCategory: async (req: Request, res: Response) => {
+  editProduct: async (req: Request, res: Response) => {
     const { id } = req.params
 
     if (!id)return sendErrorResponse(res, 400,'idNotSent')
     
-    const parse = createCategorySchema.safeParse(req.body)
+    const parse = createProductSchema.safeParse(req.body)
     if (!parse.success) return sendErrorResponse(res, 400, parse.error.issues)  
 
-    const editCategory = await categoryService.editCategory(parseInt(id), parse.data)
+    const editCategory = await productService.editProduct(parseInt(id), parse.data)
 
-
-    if(!editCategory) return sendErrorResponse(res,400,'categoryNotFound')
+    if(!editCategory) return sendErrorResponse(res,400,'productNotFound')
 
     sendSuccessResponse(res,200,'category',formatCategoryResponse(editCategory))
 

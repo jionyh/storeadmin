@@ -92,17 +92,17 @@ model Product {
 }
 
 model Purchase {
-  id          Int      @id @default(autoincrement())
-  quantity    Float
-  value       Float
-  createAt    DateTime @default(now())
-  item_id     Int
-  unit_id     Int
-  tenant_id   Int
-  supplier    String?
-  tenant      Tenant   @relation(fields: [tenant_id], references: [id])
-  subcategory Product  @relation(fields: [item_id], references: [id])
-  unit        Unit     @relation(fields: [unit_id], references: [id])
+  id         Int      @id @default(autoincrement())
+  quantity   Float
+  value      Float
+  createAt   DateTime @default(now())
+  product_id Int
+  unit_id    Int
+  tenant_id  Int
+  supplier   String
+  tenant     Tenant   @relation(fields: [tenant_id], references: [id])
+  product    Product  @relation(fields: [product_id], references: [id])
+  unit       Unit     @relation(fields: [unit_id], references: [id])
 
   @@map("purchases")
 }
