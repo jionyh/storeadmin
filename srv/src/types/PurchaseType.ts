@@ -63,13 +63,18 @@ export type PurchaseDay = {
   date: string;
   total: string;
   dailyPurchases: {
-    id: number;
-    quantity: number;
-    value: number;
-    product: string;
-    unidade: string;
-    supplier: string;
+    category: string;
+    purchases: DailyPurchases[];
   }[];
+};
+
+type DailyPurchases = {
+  id: number;
+  quantity: number;
+  value: string;
+  product: string;
+  unit: string;
+  supplier: string;
 };
 
 export type PurchaseReturn = {

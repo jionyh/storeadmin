@@ -9,7 +9,6 @@ import {
 } from "../utils/formatResponse/formatPurchase";
 import { sumValues } from "../utils/sumValuesFromArray";
 import { PurchaseType } from "../types/PurchaseType";
-import { getAllCategories } from "../services/category.service";
 
 export const purchase = {
   getAllPurchases: async (req: Request, res: Response) => {
@@ -43,33 +42,11 @@ export const purchase = {
 
     const response = {
       pagination,
-      [periodName]: total,
+      [periodName]: parseFloat(total.toFixed(2)),
       allPurchases: formatPurchasesReturnWithTotal(purchase),
     };
 
-    /*  */
-
-    /* let purchaseList = formatPurchasesReturnWithTotal(purchase);
-
-    const category = await getAllCategories(req.tenant_id);
-
-    const result = category
-      .map((el) => {
-        const haveCat = purchase.some(
-          (item) => item.product.cat.name === el.name
-        );
-        if (haveCat) {
-          return {
-            ...el,
-            produto: purchase.filter(({ product }) => el.name === product),
-          };
-        }
-      })
-      .filter((item) => item !== undefined); */
-
-    /*  */
-
-    sendSuccessResponse(res, 200, "purchases", purchase);
+    sendSuccessResponse(res, 200, "purchases", response);
   },
 
   getPurchase: async (req: Request, res: Response) => {

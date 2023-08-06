@@ -60,13 +60,14 @@ export const getAllPurchase = async (
 export const getPurchaseById = async (
   tenant_id: number,
   id: number
-): Promise<PurchaseResponse | null> => {
+): Promise<PurchaseResponseComplete | null> => {
   try {
     return await prisma.purchase.findFirst({
       where: {
         id,
         tenant_id,
       },
+      include: { product: { include: { cat: true } }, unit: true },
     });
   } catch (e) {
     console.error(e);
