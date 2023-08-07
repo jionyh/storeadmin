@@ -9,9 +9,9 @@ const options = {
   swaggerDefinition: {
     openapi: '3.0.0',
     info: {
-      title: 'Your API Documentation',
+      title: 'Documentação API Storeadmin',
       version: '1.0.0',
-      description: 'Your API description',
+      description: 'Descrição',
     },
     servers: [
       {
@@ -20,9 +20,13 @@ const options = {
     ],
   },
   apis: [
+    path.join(__dirname, './routes/auth.routes.ts'),
     path.join(__dirname, './routes/costs.routes.ts'),
     path.join(__dirname, './routes/sales.routes.ts'),
-    path.join(__dirname, './routes/auth.routes.ts'),
+    path.join(__dirname, './routes/purchases.routes.ts'),
+    path.join(__dirname, './routes/categories.routes.ts'),
+    path.join(__dirname, './routes/products.routes.ts'),
+    path.join(__dirname, './routes/units.routes.ts'),
     // Add more route files if needed
   ],
 };
