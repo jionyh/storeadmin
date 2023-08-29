@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 import { prisma } from '../lib/prisma'
-import { CostResponse, CostType } from '../types/CostsType'
+import { CostRecurrentResponse, CostRecurrentType, CostResponse, CostType } from '../types/CostsType'
 import { Options } from '../types/ServiceOptionsType'
 
 interface CostRecord {
@@ -52,6 +52,14 @@ export const getAllCosts = async (tenant_id: number, Options:Options):Promise<Co
 
 }
 
+export const getAllActiveRecurrentCost = async():Promise<CostRecurrentResponse[]>=>{
+  return await prisma.costRecurrent.findMany({
+    where:{
+      recurrent: true
+    }
+  })
+}
+
 export const getCostById = async (tenant_id: number,id: number) => {
   return prisma.cost.findFirst({ where: { 
     id,
@@ -59,9 +67,26 @@ export const getCostById = async (tenant_id: number,id: number) => {
    } })
 }
 
-export const createCost = async (data: CostType[]) => {
-  return prisma.cost.createMany({
-    data,
+export const createCost = async (data: CostType) => {
+  return prisma.cost.create({
+    data:{
+      name: data.name,
+      value: data.value,
+      createAt: data.createAt,
+      tenant_id: data.tenant_id
+    }
+  })
+}
+
+export const createCostRecurrent = async(data:CostRecurrentType)=>{
+  return prisma.costRecurrent.create({
+    data:{
+      name: data.name,
+      value: data.value,
+      createAt: data.createAt,
+      recurrent: data.recurrent,
+      tenant_id: data.tenant_id
+    }
   })
 }
 

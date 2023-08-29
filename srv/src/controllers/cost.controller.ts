@@ -6,6 +6,8 @@ import { Options } from "../types/ServiceOptionsType";
 import { sumValues } from "../utils/sumValuesFromArray";
 import { formatCostResponse } from "../utils/formatResponse/formatCost";
 import { paginationFn } from "../utils/pagination";
+import dayjs from "dayjs";
+import { createRecurrentCostForTenants } from "../cron/scheduleCost";
 
 export const cost = {
   getAllCosts: async (req: Request, res: Response) => {
@@ -65,19 +67,29 @@ export const cost = {
 
     if (!parse.success) return sendErrorResponse(res, 400, parse.error.issues);
 
-    let costData: { name: string; value: number; tenant_id: number }[] = [];
-
+    let costData: { name: string; value: number; tenant_id: number, createAt: Date, recurrent: boolean}[] = [];
+    
     parse.data.map((i) => {
       costData.push({
         name: i.name,
         value: i.value,
-        tenant_id: req.tenant_id,
+        createAt: i.date,
+        recurrent: i.recurrent,
+        tenant_id: req.tenant_id
       });
     });
 
     try {
-      await costService.createCost(costData);
+      for(const cost of costData) {
+        if(cost.recurrent){
+          await costService.createCost(cost);
+          await costService.createCostRecurrent(cost)
+        }else{
+          await costService.createCost(cost);
+        }
+      }
       sendSuccessResponse(res, 200);
+
     } catch (e) {
       console.log(e);
       sendErrorResponse(res, 400, "createCostError");

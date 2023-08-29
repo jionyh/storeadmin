@@ -21,6 +21,7 @@ model Tenant {
   Unit          Unit[]
   Product       Product[]
   Purchase      Purchase[]
+  CostRecurrent CostRecurrent[]
 
   @@map("tenants")
 }
@@ -51,6 +52,18 @@ model Cost {
   tenant    Tenant   @relation(fields: [tenant_id], references: [id])
 
   @@map("costs")
+}
+
+model CostRecurrent {
+  id        Int      @id @default(autoincrement())
+  name      String
+  value     Float
+  createAt  DateTime
+  recurrent Boolean
+  tenant_id Int
+  tenant    Tenant   @relation(fields: [tenant_id], references: [id])
+
+  @@map("costsRecurrents")
 }
 
 // Purchases Models

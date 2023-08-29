@@ -1,4 +1,6 @@
+import dayjs from "dayjs";
 import { z } from "zod";
+import { defaultDate } from "./dateUtils";
 
 export const createCostSchema = z.object({
   name: z
@@ -9,6 +11,8 @@ export const createCostSchema = z.object({
     .string({ required_error: "o campo valor é obrigatório" })
     .nonempty("preencha o valor da despesa")
     .transform((number) => parseFloat(number.replace(",", "."))),
+  date: z.string().default(defaultDate).transform((date)=>dayjs(date).toDate()),
+  recurrent: z.boolean().default(false)
 });
 
 export const signInSchema = z.object({

@@ -2,6 +2,15 @@ export type CostType = {
   name: string
   value: number
   tenant_id: number
+  createAt: Date
+}
+
+export type CostRecurrentType = {
+  name: string
+  value: number
+  tenant_id: number
+  createAt: Date
+  recurrent: boolean
 }
 
 export type CostResponse = {
@@ -9,6 +18,15 @@ export type CostResponse = {
   name: string
   value: number
   createAt: Date
+  tenant_id: number
+}
+
+export type CostRecurrentResponse = {
+  id: number
+  name: string
+  value: number
+  createAt: Date
+  recurrent: boolean
   tenant_id: number
 }
 

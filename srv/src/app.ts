@@ -5,6 +5,7 @@ import morgan from 'morgan'
 import helmet from 'helmet'
 import router from './routes'
 import swaggerRouter from './swagger';
+import './cron/scheduleCost';
 
 const app = express()
 
