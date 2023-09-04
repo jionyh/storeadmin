@@ -1,11 +1,42 @@
-import Header from '@/components/header/Header'
+import { DatePicker } from '@/components/DatePicker'
+import axios from 'axios'
+import dayjs from 'dayjs'
+import { revalidatePath } from 'next/cache'
 import { RiArrowLeftDoubleLine } from 'react-icons/ri'
 
-export default function Home({ params }: { params: { tenant: string } }) {
-  return (
-    <div className="m-auto flex min-h-screen w-full min-w-[350px] flex-col bg-white">
-      <Header />
+export default async function Home({ params }: { params: { tenant: string } }) {
+  const data = {
+    day: dayjs().format(),
+    actualDay: null,
+  }
 
+  const fetc = async (date = data.day) => {
+    'use server'
+    const res = await axios.get(
+      `https://api.jiony.dev/compras?date=${dayjs(date).format('YYYY-MM-DD')}`,
+    )
+    if (res) {
+      console.log(res.data.data)
+      data.purchase = res.data.data
+      revalidatePath(`/${params.tenant}`)
+    }
+    console.log('não há compras')
+  }
+
+  const logFn = async () => {
+    'use server'
+    console.log('a nova day é' + data.actualDay)
+  }
+
+  const clickFn = async (dayReturn: any) => {
+    'use server'
+    console.log({ newData: dayReturn })
+    data.actualDay = dayReturn
+    fetc(dayReturn)
+  }
+
+  return (
+    <>
       <main className="flex-1">
         {/* Main Header - Title bar */}
         <div>
@@ -22,10 +53,12 @@ export default function Home({ params }: { params: { tenant: string } }) {
           <hr className=" divide-slate-400" />
         </div>
 
-        <button className="rounded bg-red-500  px-3 py-1.5 text-sm font-semibold text-white hover:bg-red-600">
+        <button className="my-4 rounded bg-red-500  px-3 py-1.5 text-sm font-semibold text-white hover:bg-red-600">
           Nova Venda
         </button>
+
+        <DatePicker day={data.day} clickFn={clickFn} data={data.purchase} />
       </main>
-    </div>
+    </>
   )
 }

@@ -40,10 +40,12 @@ export default function Header() {
         <span className="text-sm leading-relaxed">STOREADMIN</span>
       </Link>
       <Menu>
-        <MenuList>
-          <FaUserEdit size={20} />
-          <span>Perfil</span>
-        </MenuList>
+        <Link href={'https://www.google.com.br'}>
+          <MenuList>
+            <FaUserEdit size={20} />
+            <span>Perfil</span>
+          </MenuList>
+        </Link>
         <MenuList>
           <FaSignOutAlt size={20} />
           <span>Sair</span>
