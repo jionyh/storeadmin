@@ -16,7 +16,7 @@ function useClickOutside<T extends HTMLElement>(
       }
     }
 
-    console.log(ref)
+    console.log({ ref, isOpen, close: callback })
     if (isOpen) {
       window.addEventListener('click', handleClickOutside)
     }
@@ -24,7 +24,7 @@ function useClickOutside<T extends HTMLElement>(
     return () => {
       window.removeEventListener('click', handleClickOutside)
     }
-  }, [ref, isOpen, callback])
+  })
 }
 
 export default useClickOutside

@@ -1,10 +1,9 @@
-import Header from '@/components/header/header'
-import { GiHamburgerMenu } from 'react-icons/gi'
+import Header from '@/components/header/Header'
 import { RiArrowLeftDoubleLine } from 'react-icons/ri'
 
-export default async function Home({ params }: { params: { tenant: string } }) {
+export default function Home({ params }: { params: { tenant: string } }) {
   return (
-    <div className="m-auto flex min-h-screen w-[425px] min-w-[375px] flex-col bg-white">
+    <div className="m-auto flex min-h-screen w-full min-w-[350px] flex-col bg-white">
       <Header />
 
       <main className="flex-1">
