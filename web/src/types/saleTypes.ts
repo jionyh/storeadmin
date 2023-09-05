@@ -1,4 +1,4 @@
-import { Pagination, Totals } from './commonsTypes'
+import { Pagination } from './commonsTypes'
 import { ErrorResponse } from './errorTypes'
 
 export interface Sale {

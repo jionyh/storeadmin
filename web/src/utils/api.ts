@@ -1,18 +1,12 @@
 import { ErrorResponse } from '@/types/errorTypes'
-import {
-  AllSalesResponse,
-  SaleResponse,
-  SingleSaleResponse,
-} from '@/types/saleTypes'
+import { AllSalesResponse } from '@/types/saleTypes'
 import axios from 'axios'
 
 const api = axios.create({
   baseURL: 'http://localhost:4001',
 })
 
-export const getSale = async (
-  id: number,
-): Promise<AllSalesResponse | ErrorResponse> => {
+export const getSale = async (): Promise<AllSalesResponse | ErrorResponse> => {
   try {
     const result = await api.get(`/sales?date=2023-07-17`)
     return result.data

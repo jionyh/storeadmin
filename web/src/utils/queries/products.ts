@@ -5,7 +5,7 @@ import { getSale } from '../api'
 export const useSale = () =>
   useQuery({
     queryKey: ['sales'],
-    queryFn: () => getSale(2),
+    queryFn: () => getSale(),
   })
 
 /* export const usePost = (id: number) =>

@@ -1,9 +1,9 @@
 export interface ErrorResponse {
-  success: false;
+  success: false
   error:
     | {
-        field: string;
-        message: string;
+        field: string
+        message: string
       }[]
-    | string;
+    | string
 }
