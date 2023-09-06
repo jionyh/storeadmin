@@ -2,7 +2,6 @@ import { DatePicker } from '@/components/datePicker'
 import { RiArrowLeftDoubleLine } from 'react-icons/ri'
 
 export default async function Home({ params }: { params: { tenant: string } }) {
-  console.log(params.tenant)
   return (
     <>
       <main className="flex-1">

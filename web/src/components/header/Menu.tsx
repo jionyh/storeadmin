@@ -12,7 +12,7 @@ export default function Menu({ children, icon, position = 'right' }: Params) {
   const menuRef = useRef<HTMLDivElement | null>(null)
 
   const handleToggle = () => {
-    setIsOpen(!isOpen)
+    setIsOpen((prev) => !prev)
   }
 
   useEffect(() => {

@@ -7,8 +7,14 @@ import useDate from '@/app/hooks/useDate'
 import { useSwipeable, SwipeEventData } from 'react-swipeable'
 
 export const DatePicker = () => {
-  const { handleLeftArrow, handleRightArrow, selectedDate, weekDates } =
-    useDate()
+  const {
+    handleLeftArrow,
+    handleRightArrow,
+    getDayAndMonth,
+    getWeekDay,
+    selectedDate,
+    weekDates,
+  } = useDate()
   const [activeDay, setActiveDay] = useState(dayjs(selectedDate))
 
   const handlers = useSwipeable({
@@ -19,17 +25,6 @@ export const DatePicker = () => {
   const handleButton = (item: Dayjs) => {
     setActiveDay(item)
     // clickFn(dayjs(`${dia.format('YYYY')}-${mes}-${item}`).format())
-  }
-
-  const getWeekDay = (day: Dayjs) => {
-    dayjs.locale('pt-br')
-    return dayjs(day).format('ddd')
-  }
-
-  const getDayAndMonth = (item: Dayjs) => {
-    dayjs.locale('pt-br')
-    const formatedDay = dayjs(item).format('DD/MM')
-    return formatedDay
   }
 
   const handleSwipe = (eventData: SwipeEventData) => {

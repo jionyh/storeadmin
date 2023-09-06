@@ -29,12 +29,30 @@ const useDate = () => {
     setSelectedDate(newDate)
   }
 
+  const getWeekDay = (day: Dayjs) => {
+    dayjs.locale('pt-br')
+    return dayjs(day).format('ddd')
+  }
+
+  const getDayAndMonth = (item: Dayjs) => {
+    dayjs.locale('pt-br')
+    const formatedDay = dayjs(item).format('DD/MM')
+    return formatedDay
+  }
+
   useEffect(() => {
     const generatedWeek = generateWeekDates(selectedDate)
     setWeekDates(generatedWeek)
   }, [selectedDate])
 
-  return { selectedDate, weekDates, handleLeftArrow, handleRightArrow }
+  return {
+    selectedDate,
+    weekDates,
+    handleLeftArrow,
+    handleRightArrow,
+    getWeekDay,
+    getDayAndMonth,
+  }
 }
 
 export default useDate

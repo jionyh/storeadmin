@@ -1,3 +1,4 @@
+'use client'
 import { RiShoppingBasketFill } from 'react-icons/ri'
 import { BsClipboard2DataFill, BsFillCartPlusFill } from 'react-icons/bs'
 import Menu from './Menu'
@@ -6,16 +7,19 @@ import { FaUserEdit, FaSignOutAlt, FaCogs } from 'react-icons/fa'
 import { GiWallet } from 'react-icons/gi'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useParams } from 'next/navigation'
 
 export default function Header() {
+  const params = useParams()
+
   return (
     <header className="flex h-20 items-center justify-between bg-red-400 px-2">
       <Menu position="left" icon>
-        <MenuList>
+        <MenuList href={`/compras`}>
           <RiShoppingBasketFill size={20} />
           <span>Compras</span>
         </MenuList>
-        <MenuList>
+        <MenuList href={`/vendas`}>
           <BsFillCartPlusFill size={20} />
           <span>Vendas</span>
         </MenuList>
