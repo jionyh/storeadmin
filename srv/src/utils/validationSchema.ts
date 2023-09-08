@@ -11,14 +11,16 @@ export const createCostSchema = z.object({
     .string({ required_error: "o campo valor é obrigatório" })
     .nonempty("preencha o valor da despesa")
     .transform((number) => parseFloat(number.replace(",", "."))),
-  date: z.string().default(defaultDate).transform((date)=>dayjs(date).toDate()),
-  recurrent: z.boolean().default(false)
+  date: z
+    .string()
+    .default(defaultDate)
+    .transform((date) => dayjs(date).toDate()),
+  recurrent: z.boolean().default(false),
 });
 
 export const signInSchema = z.object({
   email: z.string().email({ message: "Email inválido!" }),
   password: z.string(),
-  tenant_slug: z.string(),
 });
 
 export const createSaleSchema = z.object({

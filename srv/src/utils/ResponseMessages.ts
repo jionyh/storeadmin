@@ -13,6 +13,7 @@ export enum ErrorMessages {
   createCategoryError = "Erro ao criar categoria",
   categoryAlreadyExist = "Categoria já existente",
   unitNotFound = "Unidade não localizada",
+  paymentNotFound = "Método de pagamento não localizado",
   createUnitError = "Erro ao criar unidade",
   unitAlreadyExist = "Unidade já existente",
   productNotFound = "Produto não localizado",
