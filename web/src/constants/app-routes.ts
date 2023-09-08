@@ -1,14 +1,17 @@
 export const APP_ROUTES = {
   private: {
+    home: {
+      name: "/",
+    },
     vendas: {
-      name: '/juju/vendas',
+      name: "/vendas",
     },
     compras: {
-      name: '/juju/compras',
+      name: "/compras",
     },
   },
   public: {
-    login: '/juju/login',
-    forget_password: '/juju/login',
+    login: "/login",
+    forget_password: "/forget",
   },
-}
+};

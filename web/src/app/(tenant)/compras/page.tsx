@@ -1,7 +1,13 @@
-import { DatePicker } from '@/components/datePicker'
-import { RiArrowLeftDoubleLine } from 'react-icons/ri'
+import { DatePicker } from "@/components/DatePicker";
+import { RiArrowLeftDoubleLine } from "react-icons/ri";
 
-export default async function Home({ params }: { params: { tenant: string } }) {
+type Props = {
+  params: {
+    tenant: string;
+  };
+};
+
+export default async function Purchases() {
   return (
     <>
       <main className="flex-1">
@@ -14,17 +20,17 @@ export default async function Home({ params }: { params: { tenant: string } }) {
               </button>
             </span>
             <h2 className="-ml-4 w-full text-center text-xl font-bold text-slate-600">
-              VENDAS
+              Compras
             </h2>
           </div>
           <hr className=" divide-slate-400" />
         </div>
 
         <button className="my-4 rounded bg-red-500  px-3 py-1.5 text-sm font-semibold text-white hover:bg-red-600">
-          Nova Venda
+          Nova Compra
         </button>
         <DatePicker />
       </main>
     </>
-  )
+  );
 }

@@ -1,10 +1,10 @@
-'use client'
-import { AiOutlineCaretLeft, AiOutlineCaretRight } from 'react-icons/ai'
-import dayjs, { Dayjs } from 'dayjs'
-import 'dayjs/locale/pt-br'
-import React, { useState } from 'react'
-import useDate from '@/app/hooks/useDate'
-import { useSwipeable, SwipeEventData } from 'react-swipeable'
+"use client";
+import { AiOutlineCaretLeft, AiOutlineCaretRight } from "react-icons/ai";
+import dayjs, { Dayjs } from "dayjs";
+import "dayjs/locale/pt-br";
+import React, { useState } from "react";
+import useDate from "@/hooks/useDate";
+import { useSwipeable, SwipeEventData } from "react-swipeable";
 
 export const DatePicker = () => {
   const {
@@ -14,26 +14,26 @@ export const DatePicker = () => {
     getWeekDay,
     selectedDate,
     weekDates,
-  } = useDate()
-  const [activeDay, setActiveDay] = useState(dayjs(selectedDate))
+  } = useDate();
+  const [activeDay, setActiveDay] = useState(dayjs(selectedDate));
 
   const handlers = useSwipeable({
     onSwiped: (eventData) => handleSwipe(eventData),
     trackMouse: true,
-  })
+  });
 
   const handleButton = (item: Dayjs) => {
-    setActiveDay(item)
+    setActiveDay(item);
     // clickFn(dayjs(`${dia.format('YYYY')}-${mes}-${item}`).format())
-  }
+  };
 
   const handleSwipe = (eventData: SwipeEventData) => {
-    if (eventData.dir === 'Right') {
-      handleLeftArrow()
-      return
+    if (eventData.dir === "Right") {
+      handleLeftArrow();
+      return;
     }
-    handleRightArrow()
-  }
+    handleRightArrow();
+  };
   return (
     <>
       <div className="flex w-full items-center justify-center px-1">
@@ -48,7 +48,7 @@ export const DatePicker = () => {
             <div
               key={i}
               className={`${
-                activeDay.isSame(item, 'day') ? 'bg-red-500 text-white' : ''
+                activeDay.isSame(item, "day") ? "bg-red-500 text-white" : ""
               }  flex h-full w-full cursor-pointer flex-col items-center justify-center border p-0.5 text-xs leading-tight text-black transition-opacity`}
               onClick={() => handleButton(item)}
             >
@@ -63,5 +63,5 @@ export const DatePicker = () => {
         </button>
       </div>
     </>
-  )
-}
+  );
+};
