@@ -48,7 +48,9 @@ export const DatePicker = () => {
             <div
               key={i}
               className={`${
-                activeDay.isSame(item, "day") ? "bg-red-500 text-white" : ""
+                activeDay.isSame(item, "day")
+                  ? "bg-red-500 text-white"
+                  : "hover:bg-red-50"
               }  flex h-full w-full cursor-pointer flex-col items-center justify-center border p-0.5 text-xs leading-tight text-black transition-opacity`}
               onClick={() => handleButton(item)}
             >
