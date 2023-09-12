@@ -2,34 +2,20 @@
 import React, { useRef, useState } from "react";
 import Logo from "@/assets/logo.svg";
 import Image from "next/image";
-import Cookies from "js-cookie";
-import { getLogin } from "@/utils/api";
 import { Input } from "@/components/Input";
 import { Button } from "@/components/Button";
-import { useRouter } from "next/navigation";
+import useLogin from "@/hooks/useLogin";
 
 export default function Login() {
   const emailRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
-  const [hasError, setHasError] = useState<string | null>(null);
-  const router = useRouter();
+  const { login, hasError } = useLogin();
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    setHasError(null);
     e.preventDefault();
     const email = emailRef.current?.value || "";
     const password = passwordRef.current?.value || "";
-    const userData = { email, password };
-
-    const login = await getLogin(userData);
-
-    if (login.success) {
-      Cookies.set("token", login.token, { expires: 0.5 });
-      router.push("/");
-      return;
-    } else {
-      setHasError(login.error);
-    }
+    await login(email, password);
   };
 
   return (

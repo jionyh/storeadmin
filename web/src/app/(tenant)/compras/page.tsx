@@ -1,4 +1,5 @@
 import { DatePicker } from "@/components/DatePicker";
+import { getPaymentMethods } from "@/utils/api";
 import { RiArrowLeftDoubleLine } from "react-icons/ri";
 
 type Props = {
@@ -8,6 +9,8 @@ type Props = {
 };
 
 export default async function Purchases() {
+  const payments = await getPaymentMethods();
+  console.log(payments);
   return (
     <>
       <main className="flex-1">

@@ -52,7 +52,7 @@ type ResponseError = {
   error: string;
 };
 
-type LoginResponse = LoginResponseSuccess | ResponseError;
+export type LoginResponse = LoginResponseSuccess | ResponseError;
 
 export const getLogin = async (data: {
   email: string;
