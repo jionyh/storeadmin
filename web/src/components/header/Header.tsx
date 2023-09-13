@@ -1,10 +1,10 @@
-import { RiShoppingBasketFill } from "react-icons/ri";
-import { BsClipboard2DataFill, BsFillCartPlusFill } from "react-icons/bs";
-import Menu from "./Menu";
-import { MenuList } from "./MenuList";
-import { FaUserEdit, FaSignOutAlt, FaCogs } from "react-icons/fa";
-import { GiWallet } from "react-icons/gi";
-import { Logo } from "./Logo";
+import { RiShoppingBasketFill } from 'react-icons/ri'
+import { BsClipboard2DataFill, BsFillCartPlusFill } from 'react-icons/bs'
+import Menu from './Menu'
+import { MenuList } from './MenuList'
+import { FaUserEdit, FaSignOutAlt, FaCogs } from 'react-icons/fa'
+import { GiWallet } from 'react-icons/gi'
+import { Logo } from './Logo'
 
 export default function Header() {
   return (
@@ -43,5 +43,5 @@ export default function Header() {
         </MenuList>
       </Menu>
     </header>
-  );
+  )
 }

@@ -1,17 +1,17 @@
 export const APP_ROUTES = {
   private: {
     home: {
-      name: "/",
+      name: '/',
     },
     vendas: {
-      name: "/vendas",
+      name: '/vendas',
     },
     compras: {
-      name: "/compras",
+      name: '/compras',
     },
   },
   public: {
-    login: "/login",
-    forget_password: "/forget",
+    login: '/login',
+    forget_password: '/forget',
   },
-};
+}

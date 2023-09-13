@@ -1,4 +1,4 @@
 export interface AuthLogin {
-  success: boolean;
-  token: string;
+  success: boolean
+  token: string
 }

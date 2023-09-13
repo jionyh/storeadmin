@@ -1,10 +1,9 @@
-import { DatePicker } from "@/components/DatePicker";
-import { PageHeader } from "@/components/PageHeader";
-import Link from "next/link";
-import React from "react";
-import { RiArrowLeftDoubleLine } from "react-icons/ri";
+import { DatePicker } from '@/components/DatePicker'
+import { PageHeader } from '@/components/PageHeader'
+import Link from 'next/link'
+import React from 'react'
 
-export default function Vendas({ params }: { params: { tenant: string } }) {
+export default function Vendas() {
   return (
     <>
       <main className="flex-1">
@@ -19,5 +18,5 @@ export default function Vendas({ params }: { params: { tenant: string } }) {
         <DatePicker />
       </main>
     </>
-  );
+  )
 }

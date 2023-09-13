@@ -1,29 +1,28 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-"use client";
-import { APP_ROUTES } from "@/constants/app-routes";
-import { checkUserAuthenticated } from "@/utils/auth/checkUserAuthenticated";
-import { useParams, useRouter } from "next/navigation";
-import { ReactNode, useEffect } from "react";
+'use client'
+import { APP_ROUTES } from '@/constants/app-routes'
+import { checkUserAuthenticated } from '@/utils/auth/checkUserAuthenticated'
+import { useRouter } from 'next/navigation'
+import { ReactNode, useEffect } from 'react'
 
 type Props = {
-  children: ReactNode;
-};
+  children: ReactNode
+}
 export const PrivateRoute = ({ children }: Props) => {
-  const { push } = useRouter();
-  const params = useParams();
+  const { push } = useRouter()
 
-  const isUserAuthenticated = checkUserAuthenticated();
+  const isUserAuthenticated = checkUserAuthenticated()
 
   useEffect(() => {
     if (!isUserAuthenticated) {
-      push(APP_ROUTES.public.login);
+      push(APP_ROUTES.public.login)
     }
-  }, [isUserAuthenticated]);
+  }, [isUserAuthenticated])
 
   return (
     <>
       {!isUserAuthenticated && <></>}
       {isUserAuthenticated && children}
     </>
-  );
-};
+  )
+}

@@ -1,4 +1,4 @@
-import { PageHeader } from "@/components/PageHeader";
+import { PageHeader } from '@/components/PageHeader'
 
 export default function AddSales() {
   return (
@@ -24,5 +24,5 @@ export default function AddSales() {
         </div>
       </form>
     </div>
-  );
+  )
 }

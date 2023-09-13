@@ -1,38 +1,37 @@
-import { AuthLogin } from "./../types/AuthLoginTypes";
-import { getLogin } from "@/utils/api";
-import type { NextAuthOptions } from "next-auth";
-import { NextApiRequest } from "next";
-import CredentialsProvider from "next-auth/providers/credentials";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { getLogin } from '@/utils/api'
+import type { NextAuthOptions } from 'next-auth'
+import CredentialsProvider from 'next-auth/providers/credentials'
 
 export const authOptions: NextAuthOptions = {
   session: {
-    strategy: "jwt",
+    strategy: 'jwt',
   },
   pages: {
-    signIn: "/login",
+    signIn: '/login',
   },
   providers: [
     CredentialsProvider({
-      name: "Sign in",
+      name: 'Sign in',
       credentials: {
-        email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" },
+        email: { label: 'Email', type: 'text' },
+        password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials): Promise<any> {
         if (!credentials?.email && !credentials?.password) {
-          return null;
+          return null
         }
 
-        const { email, password } = credentials;
+        const { email, password } = credentials
 
-        console.log({ email, password });
+        console.log({ email, password })
 
-        const login = await getLogin({ email, password });
+        const login = await getLogin({ email, password })
 
         if (login.success) {
-          return login;
+          return login
         } else {
-          throw new Error(login.error);
+          throw new Error(login.error)
         }
       },
     }),
@@ -40,17 +39,17 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.login = user;
+        token.login = user
       }
-      return token;
+      return token
     },
 
     async session({ session, token }) {
       if (token) {
-        session.user.login = token.login;
+        session.user.login = token.login
       }
 
-      return session;
+      return session
     },
   },
-};
+}

@@ -1,16 +1,16 @@
-"use client";
-import { useRouter } from "next/navigation";
-import { AiOutlineCaretLeft } from "react-icons/ai";
+'use client'
+import { useRouter } from 'next/navigation'
+import { AiOutlineCaretLeft } from 'react-icons/ai'
 
 type PageHeaderProps = {
-  name: string;
-};
+  name: string
+}
 export const PageHeader = ({ name }: PageHeaderProps) => {
-  const router = useRouter();
+  const router = useRouter()
 
   const handleBackButton = () => {
-    router.back();
-  };
+    router.back()
+  }
   return (
     <>
       <div className="relative mt-3 flex h-11 items-center justify-center p-4">
@@ -26,5 +26,5 @@ export const PageHeader = ({ name }: PageHeaderProps) => {
       </div>
       <hr className=" divide-slate-400" />
     </>
-  );
-};
+  )
+}

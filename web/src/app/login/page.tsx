@@ -1,22 +1,22 @@
-"use client";
-import React, { useRef, useState } from "react";
-import Logo from "@/assets/logo.svg";
-import Image from "next/image";
-import { Input } from "@/components/Input";
-import { Button } from "@/components/Button";
-import useLogin from "@/hooks/useLogin";
+'use client'
+import React, { useRef } from 'react'
+import Logo from '@/assets/logo.svg'
+import Image from 'next/image'
+import { Input } from '@/components/Input'
+import { Button } from '@/components/Button'
+import useLogin from '@/hooks/useLogin'
 
 export default function Login() {
-  const emailRef = useRef<HTMLInputElement | null>(null);
-  const passwordRef = useRef<HTMLInputElement | null>(null);
-  const { login, hasError } = useLogin();
+  const emailRef = useRef<HTMLInputElement | null>(null)
+  const passwordRef = useRef<HTMLInputElement | null>(null)
+  const { login, hasError } = useLogin()
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const email = emailRef.current?.value || "";
-    const password = passwordRef.current?.value || "";
-    await login(email, password);
-  };
+    e.preventDefault()
+    const email = emailRef.current?.value || ''
+    const password = passwordRef.current?.value || ''
+    await login(email, password)
+  }
 
   return (
     <div className="mx-10 my-36 rounded-lg  bg-white font-light text-slate-600 shadow-xl placeholder:text-slate-300">
@@ -41,5 +41,5 @@ export default function Login() {
         </div>
       </div>
     </div>
-  );
+  )
 }
