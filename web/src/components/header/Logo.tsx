@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client'
 
 import Image from 'next/image'
@@ -8,10 +9,10 @@ export const Logo = () => {
   const params = useParams()
   return (
     <Link
-      href={`/${params.tenant}`}
+      href="/"
       className="flex flex-col items-center justify-center text-white"
     >
-      <Image alt="" width={25} height={25} src="/assets/logo_branco.png" />
+      <img alt="" className="h-8 w-8" src="/assets/logo_branco.png" />
       <span className="text-sm leading-relaxed">STOREADMIN</span>
     </Link>
   )

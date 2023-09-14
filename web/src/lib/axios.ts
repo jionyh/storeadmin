@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { getCookie } from 'cookies-next'
 
 const baseURL = 'https://api.jiony.dev'
 const isServer = typeof window === 'undefined'
@@ -19,10 +20,7 @@ api.interceptors.request.use(async (config) => {
       config.headers.Authorization = `Bearer ${token}`
     }
   } else {
-    const token = document.cookie.replace(
-      /(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/,
-      '$1',
-    )
+    const token = getCookie('token')
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`

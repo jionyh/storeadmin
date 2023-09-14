@@ -37,7 +37,7 @@ export default function Header() {
           <FaUserEdit size={20} />
           <span>Perfil</span>
         </MenuList>
-        <MenuList href="/logout">
+        <MenuList out>
           <FaSignOutAlt size={20} />
           <span>Sair</span>
         </MenuList>
