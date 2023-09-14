@@ -17,9 +17,16 @@ const useLogin = () => {
         password,
         callbackUrl: `/`,
       })
-      if (!loginResponse?.error) {
-        Cookies.set('token', token.data!.user.login.token, { expires: 0.5 })
-        router.push('/')
+      if (!loginResponse?.error && token.status === 'authenticated') {
+        const hasCookie = Cookies.get('token')
+        console.log(hasCookie)
+
+        if (!hasCookie) {
+          Cookies.set('token', token.data.user.login.token, { expires: 0.5 })
+          router.push('/')
+        }
+
+        // router.push('/')
       }
       setHasError(loginResponse!.error)
     } catch (error) {

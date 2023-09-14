@@ -3,11 +3,12 @@ import { useState } from 'react'
 import { Button } from '../ui/button'
 
 type Props = {
-  srvFn: (e:string)=>void
+  srvFn: (e: string) => void
 }
 
-export const ButtonsHeader = ({srvFn}: Props) => {
-  const ActiveButtonStyle = 'border-red-500 font-bold text-red-500 hover:text-red-400'
+export const ButtonsHeader = ({ srvFn }: Props) => {
+  const ActiveButtonStyle =
+    'border-red-500 font-bold text-red-500 hover:text-red-400'
   const InactiveButtonStyle = ''
   const [activeButton, setActiveButton] = useState('week')
   const buttonsNames = [
@@ -16,7 +17,7 @@ export const ButtonsHeader = ({srvFn}: Props) => {
     { id: 'month', name: 'Mensal' },
   ]
 
-  const handleButton = (id:string)=>{
+  const handleButton = (id: string) => {
     setActiveButton(id)
     srvFn(id)
   }
@@ -25,7 +26,7 @@ export const ButtonsHeader = ({srvFn}: Props) => {
       {buttonsNames.map((buttonName) => (
         <Button
           key={buttonName.id}
-          onClick={() =>handleButton(buttonName.id) }
+          onClick={() => handleButton(buttonName.id)}
           className={`${
             activeButton === buttonName.id
               ? ActiveButtonStyle

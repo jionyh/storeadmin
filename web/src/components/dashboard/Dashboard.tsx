@@ -9,35 +9,31 @@ import { Purchases } from '@/types/purchaseTypes'
 type Props = {
   initialData: any
 }
-export const Dashboard = ({initialData}:Props) => {
-
+export const Dashboard = ({ initialData }: Props) => {
   const [cardData, setCardData] = useState<Purchases>(initialData)
   const [selectedPeriod, setSelectedPeriod] = useState<string>('week')
 
-  const dataFetchFunction = useCallback(async(id:string)=>{
-
+  const dataFetchFunction = useCallback(async (id: string) => {
     setSelectedPeriod(id)
-  const request = await getPurchases({ period: id })
+    const request = await getPurchases({ period: id })
 
-  if(request.success){
-    setCardData(request.purchases)
-  }
-  
+    if (request.success) {
+      setCardData(request.purchases)
+    }
+  }, [])
 
-},[cardData])
-
-const valuePeriod =
-  cardData && selectedPeriod
-    ? selectedPeriod === 'day'
-      ? cardData['day totals']?.toFixed(2) ?? ''
-      : selectedPeriod === 'week'
-      ? cardData['week totals']?.toFixed(2) ?? ''
-      : selectedPeriod === 'month'
-      ? cardData['month totals']?.toFixed(2) ?? ''
+  const valuePeriod =
+    cardData && selectedPeriod
+      ? selectedPeriod === 'day'
+        ? cardData['day totals']?.toFixed(2) ?? ''
+        : selectedPeriod === 'week'
+        ? cardData['week totals']?.toFixed(2) ?? ''
+        : selectedPeriod === 'month'
+        ? cardData['month totals']?.toFixed(2) ?? ''
+        : ''
       : ''
-    : '';
 
-    return (
+  return (
     <div className="p-5">
       <div className="flex flex-col items-center justify-center gap-2 text-sm">
         <Card className="flex-1">
@@ -52,8 +48,18 @@ const valuePeriod =
           <ButtonsHeader srvFn={dataFetchFunction} />
         </div>
         <div className="flex w-full flex-1 items-center justify-center gap-1">
-          <DashboardCard type='purchase' title='Compras' period={selectedPeriod} value={valuePeriod} />
-          <DashboardCard type='sell' title='Vendas' period={selectedPeriod} value={valuePeriod} />
+          <DashboardCard
+            type="purchase"
+            title="Compras"
+            period={selectedPeriod}
+            value={valuePeriod}
+          />
+          <DashboardCard
+            type="sell"
+            title="Vendas"
+            period={selectedPeriod}
+            value={valuePeriod}
+          />
         </div>
       </div>
     </div>
