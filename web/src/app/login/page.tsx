@@ -1,9 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { Input } from '@/components/Input'
 import { Button } from '@/components/Button'
 import useLogin from '@/hooks/useLogin'
+import { Loader } from '@/components/Loader'
+import { useRouter } from 'next/navigation'
 
 const Logo = (
   props: React.JSX.IntrinsicAttributes & React.SVGProps<SVGSVGElement>,
@@ -47,12 +49,19 @@ export default function Login() {
   const emailRef = useRef<HTMLInputElement | null>(null)
   const passwordRef = useRef<HTMLInputElement | null>(null)
   const { login, hasError } = useLogin()
+  const [loading, setLoading] = useState(false)
+  const router = useRouter()
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    setLoading(true)
     e.preventDefault()
     const email = emailRef.current?.value || ''
     const password = passwordRef.current?.value || ''
-    await login(email, password)
+    const loggedUser = await login(email, password)
+    if (loggedUser) {
+      router.push('/')
+      setLoading(false)
+    }
   }
 
   return (
@@ -77,6 +86,7 @@ export default function Login() {
           <Button color="red">Recuperar</Button>
         </div>
       </div>
+      {loading && <Loader visible={loading} />}
     </div>
   )
 }

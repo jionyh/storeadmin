@@ -7,6 +7,7 @@ import Cookies from 'js-cookie'
 export const authOptions: NextAuthOptions = {
   session: {
     strategy: 'jwt',
+    maxAge: 60 * 60 * 8, // 8 horas
   },
   pages: {
     signIn: '/login',
