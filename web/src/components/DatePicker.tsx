@@ -2,11 +2,15 @@
 import { AiOutlineCaretLeft, AiOutlineCaretRight } from 'react-icons/ai'
 import dayjs, { Dayjs } from 'dayjs'
 import 'dayjs/locale/pt-br'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import useDate from '@/hooks/useDate'
 import { useSwipeable, SwipeEventData } from 'react-swipeable'
 
-export const DatePicker = () => {
+type ParamTypes = {
+  setDate: (date:string)=>void
+}
+
+export const DatePicker = ({setDate}:ParamTypes) => {
   const {
     handleLeftArrow,
     handleRightArrow,
@@ -22,9 +26,8 @@ export const DatePicker = () => {
     trackMouse: true,
   })
 
-  const handleButton = (item: Dayjs) => {
+  const handleButton = (item: Dayjs) => {    
     setActiveDay(item)
-    // clickFn(dayjs(`${dia.format('YYYY')}-${mes}-${item}`).format())
   }
 
   const handleSwipe = (eventData: SwipeEventData) => {
@@ -34,6 +37,11 @@ export const DatePicker = () => {
     }
     handleRightArrow()
   }
+
+  useEffect(()=>{
+    const day = dayjs(activeDay).format('YYYY-MM-DD')
+    setDate(day)
+  },[activeDay])
   return (
     <>
       <div className="flex w-full items-center justify-center px-1">

@@ -14,7 +14,9 @@ type LoaderProps = {
 }
 export const Loader = ({ visible = false }: LoaderProps) => {
   return (
-    <div className="fixed left-0 top-0 z-50 flex h-screen w-full items-center justify-center bg-black bg-opacity-50">
+<>
+{visible && (
+      <div className="fixed left-0 top-0 z-50 flex h-screen w-full items-center justify-center bg-black bg-opacity-50">
       <Blocks
         visible={visible}
         height="80"
@@ -24,5 +26,6 @@ export const Loader = ({ visible = false }: LoaderProps) => {
         wrapperClass="blocks-wrapper"
       />
     </div>
+    )}</>
   )
 }

@@ -3,8 +3,6 @@ import { getPaymentMethods } from '@/utils/api'
 import { RiArrowLeftDoubleLine } from 'react-icons/ri'
 
 export default async function Purchases() {
-  const payments = await getPaymentMethods()
-  console.log(payments)
   return (
     <>
       <main className="flex-1">

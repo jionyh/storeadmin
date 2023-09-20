@@ -1,27 +1,12 @@
 import { api } from "@/lib/axios";
-import { ErrorResponse } from "@/types/errorTypes";
-import { AllPurchaseResponse, PurchaseResponse } from "@/types/purchaseTypes";
+import { ResponseError } from "@/types/commonsTypes";
+import { LoginResponse } from "@/types/loginTypes";
+import { PaymentResponseSuccess } from "@/types/paymentTypes";
+import { AllPurchaseResponse } from "@/types/purchaseTypes";
 import axios from "axios";
 
-type LoginResponseSuccess = {
-  success: true;
-  token: string;
-};
 
-type PaymentResponseSuccess = {
-  success: true;
-  paymentMethods: {
-    id: number;
-    name: string;
-  };
-};
 
-type ResponseError = {
-  success: false;
-  error: string;
-};
-
-export type LoginResponse = LoginResponseSuccess | ResponseError;
 
 export const getLogin = async (data: {
   email: string;

@@ -10,7 +10,7 @@ type Params = {
 }
 export const MenuList = ({ children, href = '/', out }: Params) => {
   function handleClickButton() {
-    signOut({ callbackUrl: 'http://localhost:3000/login' })
+    signOut({ callbackUrl: '/login' })
   }
   return (
     <Link href={href} onClick={out ? handleClickButton : undefined}>
