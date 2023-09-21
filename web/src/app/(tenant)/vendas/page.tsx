@@ -3,9 +3,9 @@ import { DatePicker } from '@/components/DatePicker'
 import { Empty } from '@/components/Empty'
 import { Loader } from '@/components/Loader'
 import { PageHeader } from '@/components/PageHeader'
+import { Button } from '@/components/ui/button'
 import {
   Table,
-  TableCaption,
   TableHeader,
   TableRow,
   TableHead,
@@ -16,23 +16,15 @@ import {
 import { useSales } from '@/utils/queries/sales'
 import dayjs from 'dayjs'
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 export default function Vendas() {
   const [date, setDate] = useState(dayjs().format('YYYY-MM-DD'))
 
-  const { data, isLoading, isError, error, refetch } = useSales({
+  const { data, isLoading, isError } = useSales({
     date,
     period: 'day',
   })
-
-  const handleSetDate = (dateTime: string) => {
-    setDate(dateTime)
-  }
-
-  useEffect(() => {
-    refetch()
-  }, [date, refetch])
 
   return (
     <>
@@ -42,50 +34,51 @@ export default function Vendas() {
         {/* Main Header - Title bar */}
         <PageHeader name="vendas" />
 
-        <DatePicker setDate={handleSetDate} />
+        <DatePicker setDate={setDate} />
 
         <div className="px-5">
           <Link
             className="flex w-full items-center justify-end"
             href="/vendas/add"
           >
-            <button className="mb-3 rounded bg-red-500 px-3 py-1.5 text-sm font-semibold text-white hover:bg-red-600">
-              Nova Venda
-            </button>
+            <Button>Nova Venda</Button>
           </Link>
           {isError && <Empty title="vendas" />}
           {data && (
             <div className="">
-              <Table className="w-full rounded shadow-lg">
+              <Table className="pointer-events-none mt-2 w-full">
                 {data.sales.allSales.map((sales, i) => (
                   <React.Fragment key={i}>
-                    <TableHeader className="">
-                      <TableRow className="pointer-events-none rounded-lg bg-indigo-400 leading-snug text-white">
-                        <TableHead className="w-2/3 text-white">
-                          {dayjs(sales.date).format('D [de] MMMM')}
+                    <TableHeader>
+                      <TableRow className="">
+                        <TableHead className="">
+                          <h3 className="font-semibold leading-none tracking-tight">
+                            {dayjs(sales.date).format('D [de] MMMM')}
+                          </h3>
                         </TableHead>
-                        <TableHead className=""></TableHead>
+                        <TableHead></TableHead>
+                        <TableHead></TableHead>
                       </TableRow>
                     </TableHeader>
-                    <TableBody>
+                    <TableBody className="border">
                       {sales.dailySales.map((dailySales) => (
                         <TableRow
                           key={dailySales.id}
-                          className="odd:bg-indigo-50 even:bg-indigo-200"
+                          className="odd:bg-primary/5 even:bg-primary/10"
                         >
-                          <TableCell className="">
-                            {dailySales.payment_id}
-                          </TableCell>
-                          <TableCell className="text-center font-medium">
+                          <TableCell>{dailySales.payment_id}</TableCell>
+                          <TableCell></TableCell>
+                          <TableCell className="text-end">
                             € {dailySales.value.toFixed(2)}
                           </TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
-                    <TableFooter className="mt-1 bg-indigo-500 font-bold leading-snug text-white">
+                    <TableFooter>
                       <TableRow className="">
-                        <TableCell>Total</TableCell>
-                        <TableCell className="text-center font-medium">
+                        <TableCell></TableCell>
+                        <TableCell className="text-right">Total</TableCell>
+                        <TableCell className="text-end">
                           € {sales.total}
                         </TableCell>
                       </TableRow>

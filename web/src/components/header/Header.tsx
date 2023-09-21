@@ -8,7 +8,7 @@ import { Logo } from './Logo'
 
 export default function Header() {
   return (
-    <header className="flex h-20 items-center justify-between bg-red-400 px-2">
+    <header className="flex h-20 items-center justify-between bg-primary px-2">
       <Menu position="left" icon>
         <MenuList href="/compras">
           <RiShoppingBasketFill size={20} />

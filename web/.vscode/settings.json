@@ -215,5 +215,9 @@
 	"git.openRepositoryInParentFolders": "always",
 	"window.zoomLevel": 0,
 	"editor.formatOnSave": false,
-	"eslint.codeActionsOnSave.rules": null
+	"eslint.codeActionsOnSave.rules": null,
+	"cSpell.words": [
+		"swipeable",
+		"Swipeable"
+	]
 }

@@ -8,7 +8,7 @@ type Props = {
 
 export const ButtonsHeader = ({ srvFn }: Props) => {
   const ActiveButtonStyle =
-    'border-red-500 font-bold text-red-500 hover:text-red-400'
+    'bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground'
   const InactiveButtonStyle = ''
   const [activeButton, setActiveButton] = useState('week')
   const buttonsNames = [

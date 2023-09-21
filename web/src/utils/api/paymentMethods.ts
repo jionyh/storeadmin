@@ -1,26 +1,21 @@
 /* eslint-disable no-useless-catch */
 import { api } from '@/lib/axios'
 import { ErrorResponse } from '@/types/errorTypes'
-import {
-  AllSalesParams,
-  AllSalesResponse,
-  Sale,
-  SingleSaleResponse,
-} from '@/types/saleTypes'
+import { PaymentResponseSuccess } from '@/types/paymentTypes'
+import { Sale, SingleSaleResponse } from '@/types/saleTypes'
 import axios from 'axios'
 
-export const salesApi = {
-  getAllSales: async (
-    params?: AllSalesParams,
-  ): Promise<AllSalesResponse | ErrorConstructor> => {
+export const paymentMethodsApi = {
+  getAllPaymentsMethods: async (): Promise<
+    PaymentResponseSuccess | ErrorConstructor
+  > => {
     try {
-      const response = await api.get('/sales', {
-        params,
-      })
+      const response = await api.get('/paymentsmethods')
       return response.data
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         // If there's a response from the backend, return its data
+        console.log(error)
         throw new Error(error.response.data.error)
         // return error.response.data
       } else {
@@ -28,15 +23,10 @@ export const salesApi = {
       }
     }
   },
-  getSale: async (saleId: number): Promise<SingleSaleResponse> => {
-    try {
-      const response = await api.get(`/sales${saleId}`)
-      return response.data
-    } catch (error) {
-      throw error
-    }
-  },
-  createSales: async (saleData: Sale): Promise<SingleSaleResponse> => {
+
+  createPaymentsMethods: async (
+    saleData: Sale,
+  ): Promise<SingleSaleResponse> => {
     try {
       const response = await api.post('/sales', saleData)
       return response.data
@@ -44,7 +34,7 @@ export const salesApi = {
       throw error
     }
   },
-  deleteSales: async (saleId: number): Promise<ErrorResponse> => {
+  deletePaymentsMethod: async (saleId: number): Promise<ErrorResponse> => {
     try {
       const response = await api.delete(`/sales/${saleId}`)
       return response.data

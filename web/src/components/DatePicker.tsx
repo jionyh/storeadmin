@@ -7,10 +7,10 @@ import useDate from '@/hooks/useDate'
 import { useSwipeable, SwipeEventData } from 'react-swipeable'
 
 type ParamTypes = {
-  setDate: (date:string)=>void
+  setDate: (date: string) => void
 }
 
-export const DatePicker = ({setDate}:ParamTypes) => {
+export const DatePicker = ({ setDate }: ParamTypes) => {
   const {
     handleLeftArrow,
     handleRightArrow,
@@ -26,7 +26,7 @@ export const DatePicker = ({setDate}:ParamTypes) => {
     trackMouse: true,
   })
 
-  const handleButton = (item: Dayjs) => {    
+  const handleButton = (item: Dayjs) => {
     setActiveDay(item)
   }
 
@@ -38,10 +38,10 @@ export const DatePicker = ({setDate}:ParamTypes) => {
     handleRightArrow()
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     const day = dayjs(activeDay).format('YYYY-MM-DD')
     setDate(day)
-  },[activeDay])
+  }, [activeDay, setDate])
   return (
     <>
       <div className="flex w-full items-center justify-center px-1">
@@ -50,16 +50,16 @@ export const DatePicker = ({setDate}:ParamTypes) => {
         </button>
         <div
           {...handlers}
-          className="grid w-full select-none grid-cols-7 gap-0.5 transition-all ease-linear"
+          className="grid w-full select-none grid-cols-7 gap-0.5"
         >
           {weekDates.map((item, i) => (
             <div
               key={i}
               className={`${
                 activeDay.isSame(item, 'day')
-                  ? 'bg-red-500 text-white'
-                  : 'hover:bg-red-50'
-              }  flex h-full w-full cursor-pointer flex-col items-center justify-center border p-0.5 text-xs leading-tight text-black transition-opacity`}
+                  ? 'bg-primary text-primary-foreground'
+                  : 'hover:bg-primary/5'
+              }  flex h-full w-full cursor-pointer flex-col items-center justify-center rounded border p-0.5 text-xs leading-tight`}
               onClick={() => handleButton(item)}
             >
               <div className="">{getWeekDay(item).toUpperCase()}</div>

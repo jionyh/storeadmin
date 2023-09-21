@@ -11,7 +11,7 @@ export const MenuButton = ({ icon, handleToggle, initials = 'AA' }: Params) => {
       id="menu-button"
       onClick={handleToggle}
       className={`flex items-center justify-center ${
-        icon ? '' : 'z-20 h-10 w-10 rounded-full bg-white text-red-400'
+        icon ? '' : 'z-20 h-10 w-10 rounded-full bg-white text-primary'
       }`}
     >
       {icon ? (

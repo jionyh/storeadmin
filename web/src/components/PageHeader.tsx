@@ -18,13 +18,13 @@ export const PageHeader = ({ name }: PageHeaderProps) => {
           className="absolute left-0 cursor-pointer"
           onClick={handleBackButton}
         >
-          <AiOutlineCaretLeft size={30} className="fill-slate-600" />
+          <AiOutlineCaretLeft size={30} className="" />
         </div>
-        <h2 className="w-full text-center text-xl font-bold text-slate-600">
+        <h2 className="w-full text-center text-xl font-bold ">
           {name.toUpperCase()}
         </h2>
       </div>
-      <hr className=" divide-slate-400" />
+      <hr className=" " />
     </>
   )
 }

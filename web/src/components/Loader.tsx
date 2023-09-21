@@ -14,18 +14,19 @@ type LoaderProps = {
 }
 export const Loader = ({ visible = false }: LoaderProps) => {
   return (
-<>
-{visible && (
-      <div className="fixed left-0 top-0 z-50 flex h-screen w-full items-center justify-center bg-black bg-opacity-50">
-      <Blocks
-        visible={visible}
-        height="80"
-        width="80"
-        ariaLabel="blocks-loading"
-        wrapperStyle={{}}
-        wrapperClass="blocks-wrapper"
-      />
-    </div>
-    )}</>
+    <>
+      {visible && (
+        <div className="absolute left-0 top-0 z-50 flex h-screen w-full items-center justify-center bg-black bg-opacity-50">
+          <Blocks
+            visible={visible}
+            height="80"
+            width="80"
+            ariaLabel="blocks-loading"
+            wrapperStyle={{}}
+            wrapperClass="blocks-wrapper fill-red-500"
+          />
+        </div>
+      )}
+    </>
   )
 }
