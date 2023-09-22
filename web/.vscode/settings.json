@@ -217,6 +217,7 @@
 	"editor.formatOnSave": false,
 	"eslint.codeActionsOnSave.rules": null,
 	"cSpell.words": [
+		"hookform",
 		"swipeable",
 		"Swipeable"
 	]
