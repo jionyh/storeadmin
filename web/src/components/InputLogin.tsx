@@ -1,30 +1,34 @@
 /* eslint-disable react/display-name */
 import React, { useState } from 'react'
 import { BsEyeFill, BsEyeSlashFill } from 'react-icons/bs'
+import { Input as InputField } from '@/components/ui/input'
+import { Eye, EyeOff } from 'lucide-react'
 
 type InputProps = {
   placeholder?: string
   password?: boolean
 }
-export const Input = React.forwardRef<HTMLInputElement, InputProps>(
+export const InputLogin = React.forwardRef<HTMLInputElement, InputProps>(
   (props, ref) => {
     const { placeholder, password = false } = props
     const [showPassword, setShowPassword] = useState(false)
-
     return (
       <div className="relative flex w-full items-center">
-        <input
+        <InputField
           ref={ref}
-          className="w-full rounded border p-2 shadow-sm focus:outline-none"
           type={password && !showPassword ? 'password' : 'text'}
           placeholder={placeholder}
         />
         {password && (
           <div
             onClick={() => setShowPassword((prev) => !prev)}
-            className="absolute right-2 cursor-pointer text-2xl text-slate-400"
+            className="absolute right-2 cursor-pointer text-muted-foreground"
           >
-            {showPassword ? <BsEyeFill /> : <BsEyeSlashFill />}
+            {showPassword ? (
+              <Eye className="h-4 w-4" />
+            ) : (
+              <EyeOff className="h-4 w-4" />
+            )}
           </div>
         )}
       </div>
