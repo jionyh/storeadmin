@@ -11,10 +11,8 @@ import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
@@ -26,22 +24,20 @@ import {
   SelectItem,
 } from '@/components/ui/select'
 import { api } from '@/lib/axios'
-import React from 'react'
-
-const formSchema = z.object({
-  sales: z.array(
-    z.object({
-      payment_id: z.string().nonempty('Campo obrigatório'),
-      value: z.string().nonempty('Campo obrigatório'),
-    }),
-  ),
-})
+import React, { useState } from 'react'
+import { SalesFormDataType, salesFormSchema } from '@/types/FormDataTypes'
+import { Alert } from '@/components/alertDialog/Alert'
+import { useToast } from '@/components/ui/use-toast'
 
 export default function AddSales() {
   const paymentsMethods = usePayments()
+  const { toast } = useToast()
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [formData, setFormData] = useState<SalesFormDataType>()
+
+  const form = useForm<SalesFormDataType>({
+    resolver: zodResolver(salesFormSchema),
     defaultValues: {
       sales: [{ payment_id: '', value: '' }],
     },
@@ -52,12 +48,25 @@ export default function AddSales() {
     name: 'sales',
   })
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    const response = await api.post('/sales', values)
-    if (response.data.success) {
-      alert('Vendas criadas com sucesso!')
-    } else {
-      alert('Erro ao criar vendas')
+  async function onSubmit(values: SalesFormDataType) {
+    setFormData(values)
+    setIsDialogOpen(true)
+  }
+
+  async function submitForm() {
+    setIsDialogOpen(false)
+    if (formData) {
+      const response = await api.post('/sales', formData.sales)
+      if (response.data.success) {
+        toast({
+          description: 'Venda adiciona com sucesso!',
+        })
+      } else {
+        toast({
+          variant: 'destructive',
+          description: 'Problema ao criar a venda! Tente novamente.',
+        })
+      }
     }
   }
 
@@ -143,6 +152,11 @@ export default function AddSales() {
           </Form>
         </div>
       )}
+      <Alert
+        open={isDialogOpen}
+        setOpen={setIsDialogOpen}
+        submit={submitForm}
+      />
     </div>
   )
 }
