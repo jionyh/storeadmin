@@ -1,59 +1,124 @@
 'use client'
 import { Loader } from '@/components/Loader'
 import { PageHeader } from '@/components/PageHeader'
-import { Input } from '@/components/ui/input'
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from '@/components/ui/select'
+import * as z from 'zod'
+import {zodResolver} from '@hookform/resolvers/zod'
+import {useFieldArray, useForm} from 'react-hook-form'
 import { usePayments } from '@/utils/queries/payments'
-import { useRef } from 'react'
+import {X, Plus,Save} from 'lucide-react'
+
+import { Button } from "@/components/ui/button"
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select'
+import { api } from '@/lib/axios'
+import React from 'react'
+
+const formSchema = z.object({
+sales: z.array(
+  z.object({
+    payment_id: z.string().nonempty('Campo obrigatório'),
+    value: z.string().nonempty('Campo obrigatório'),
+  })
+)
+})
 
 export default function AddSales() {
-  const { data, isLoading, isError } = usePayments()
-  const paymentRef = useRef<HTMLSelectElement | null>(null)
-  const valueRef = useRef<HTMLInputElement | null>(null)
+  const paymentsMethods = usePayments()
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    console.log({
-      tipoPagamento: paymentRef.current?.value,
-      valor: valueRef.current?.value,
-    })
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues:{
+      sales:[{payment_id: '',value:''}]
+    }
+  })
+
+  const {fields,append,remove} = useFieldArray({
+    control: form.control,
+    name:'sales'
+  })
+
+  async function onSubmit(values: z.infer<typeof formSchema>){
+
+    const response = await api.post('/sales',values)
+    if(response.data.success){
+      alert('Vendas criadas com sucesso!')
+    }else{
+      alert('Erro ao criar vendas')
+    }
   }
+  
 
   return (
     <div>
       <PageHeader name="Adicionar vendas" />
-      {isLoading && <Loader visible />}
-      {data && (
-        <form className="flex w-full flex-col items-center justify-center gap-2 p-4">
-          <Select>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Forma de Pagamento" />
-            </SelectTrigger>
-            <SelectContent>
-              {data.paymentMethods.map((item) => (
-                <SelectItem key={item.id} value={item.id.toString()}>
-                  {item.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Input ref={valueRef} type="text" placeholder="Valor" />
-          <div className="my-1 w-2/3 border-t-2 border-dashed border-slate-500"></div>
-          <div className="flex w-full items-center justify-end gap-1">
-            <button className="rounded bg-blue-500 p-2 text-sm font-bold text-white shadow hover:bg-blue-400">
-              Novo Campo
-            </button>
-            <button className="rounded bg-green-500 p-2 text-sm font-bold text-white shadow hover:bg-green-400">
-              Salvar
-            </button>
+      {paymentsMethods.isLoading && <Loader visible />}
+      {paymentsMethods.data && (
+        <div className='p-4'>
+          <Form {...form}>
+          <form className='flex flex-col w=full gap-2' onSubmit={form.handleSubmit(onSubmit)}>
+            {fields.map((fields,index)=>(
+              <React.Fragment key={fields.id}>
+                {index === 0 ? '' : (
+                <span onClick={()=>remove(index)} className='flex justify-end'><X className='text-destructive h-4 w-4 cursor-pointer' /></span>
+                )}
+              <FormField
+                control={form.control}
+                name={`sales.${index}.payment_id`}
+                render={({field})=>(
+              <FormItem>
+                  <Select onValueChange={field.onChange}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Forma de Recebimento" />
+                    </SelectTrigger>
+                  </FormControl>
+                    <SelectContent>
+                      {paymentsMethods.data.paymentMethods.map((item) => (
+                        <SelectItem key={item.id} value={item.id.toString()}>
+                          {item.name}
+                        </SelectItem>
+                        ))}
+                    </SelectContent>
+                    <FormMessage />
+                  </Select>
+              </FormItem>
+            )}
+            />
+            <FormField
+              control={form.control}
+              name={`sales.${index}.value`}
+              render={({field})=>(
+                <FormItem>
+                    <FormControl>
+                      <Input placeholder="valor" {...field} />
+                    </FormControl>
+                  <FormMessage />
+                </FormItem>
+            )}/>
+            <div className="my-1 m-auto w-2/3 border-t-2 border-dashed"></div>
+            </React.Fragment>
+            ))}
+            <div className="flex w-full items-center justify-end gap-1">
+              <Button variant='blue' size='sm'
+              onClick={() => append({ payment_id: '', value: '' })}>
+                <Plus/>Novo Campo
+              </Button>
+            <Button type='submit' size='sm'>
+              <Save/>Salvar
+            </Button>
           </div>
-        </form>
+          </form>
+        </Form>
+        </div>
       )}
     </div>
   )

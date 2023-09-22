@@ -6,6 +6,7 @@ export const usePayments = () => {
   const payments = useQuery({
     queryKey: ['paymentsMethods'],
     queryFn: () => paymentMethodsApi.getAllPaymentsMethods(),
+    staleTime: Infinity
   })
 
   const returnData = {
