@@ -6,7 +6,7 @@ export const useSales = (params?: AllSalesParams) => {
   const sales = useQuery({
     queryKey: ['sales', { params }],
     queryFn: () => salesApi.getAllSales(params),
-    staleTime: Infinity
+    staleTime: Infinity,
   })
 
   const returnData = {

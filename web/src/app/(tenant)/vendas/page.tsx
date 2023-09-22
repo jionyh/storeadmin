@@ -18,7 +18,7 @@ import dayjs from 'dayjs'
 import Link from 'next/link'
 import React, { useState } from 'react'
 
-export default function Vendas() {
+export default function Sales() {
   const [date, setDate] = useState(dayjs().format('YYYY-MM-DD'))
 
   const { data, isLoading, isError } = useSales({

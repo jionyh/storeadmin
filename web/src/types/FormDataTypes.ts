@@ -10,3 +10,20 @@ export const salesFormSchema = z.object({
 })
 
 export type SalesFormDataType = z.infer<typeof salesFormSchema>
+
+// PurchaseForm //
+
+export const purchaseFormSchema = z.object({
+  purchases: z.array(
+    z.object({
+      category: z.string().nonempty('Campo obrigatório'),
+      quantity: z.string().nonempty('Campo obrigatório'),
+      value: z.string().nonempty('Campo obrigatório'),
+      product_id: z.string().nonempty('Campo obrigatório'),
+      unit_id: z.string().nonempty('Campo obrigatório'),
+      supplier: z.string().optional(),
+    }),
+  ),
+})
+
+export type PurchaseFormDataType = z.infer<typeof purchaseFormSchema>

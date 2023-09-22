@@ -1,42 +1,48 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Pagination } from "./commonsTypes";
-import { ErrorResponse } from "./errorTypes";
+import { Pagination } from './commonsTypes'
+import { ErrorResponse } from './errorTypes'
+
+export interface AllPurchasesParams {
+  date?: string
+  period?: string
+  perpage?: number
+}
 
 export interface Purchase {
-  id: number;
-  quantity: number;
-  value: string;
-  createAt: string;
-  product: string;
-  unit: string;
-  supplier: string;
+  id: number
+  quantity: number
+  value: string
+  createAt: string
+  product: string
+  unit: string
+  supplier: string
 }
 export interface Purchases {
-  pagination: Pagination;
-  "month totals"?: number;
-  "day totals"?: number;
-  "week totals"?: number;
+  pagination: Pagination
+  'month totals'?: number
+  'day totals'?: number
+  'week totals'?: number
   allPurchases: {
-    date: string;
-    total: string;
+    date: string
+    total: string
     dailyPurchases: {
-      category: string;
-      purchases: Purchase[];
-    }[];
-  }[];
+      category: string
+      purchases: Purchase[]
+    }[]
+  }[]
 }
 
 export interface AllPurchaseResponse {
-  success: boolean;
-  purchases: Purchases;
+  success: boolean
+  purchases: Purchases
 }
 
 export interface SinglePurchaseResponse {
-  success: boolean;
-  purchase: Purchase;
+  success: boolean
+  purchase: Purchase
 }
 
 export type PurchaseResponse =
   | SinglePurchaseResponse
   | AllPurchaseResponse
-  | ErrorResponse;
+  | ErrorResponse
