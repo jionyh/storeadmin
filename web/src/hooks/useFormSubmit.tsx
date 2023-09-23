@@ -5,29 +5,29 @@ import { queryClient } from '@/utils/queryClient'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
-function useFormSubmit<T>(type: { type: string }) {
+function useFormSubmit<T>(props: { endpoint: string, name:string }) {
   const [formData, setFormData] = useState<T>()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const { toast } = useToast()
   const router = useRouter()
 
   async function submitForm() {
-    console.log(formData)
     setIsDialogOpen(false)
 
     try {
-      const response = await api.post('/sales', formData)
+      const response = await api.post(`/${props.endpoint}`, formData)
+      console.log(formData)
 
       if (response.data.success) {
         toast({
-          description: 'Venda adicionada com sucesso!',
+          description: `${props.name}s adicionada com sucesso!`,
         })
-        queryClient.invalidateQueries({ queryKey: [`${type}`] })
+        queryClient.invalidateQueries({ queryKey: [`${props.endpoint}`] })
         router.back()
       } else {
         toast({
           variant: 'destructive',
-          description: 'Problema ao criar a venda! Tente novamente.',
+          description: `Problema ao criar a ${props.name}! Tente novamente.`,
         })
       }
     } catch (error) {

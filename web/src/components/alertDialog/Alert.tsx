@@ -25,9 +25,9 @@ export const Alert = ({ open = false, setOpen, submit }: AlertProps) => {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel onClick={() => setOpen(false)}>
-            Cancel
+            Cancelar
           </AlertDialogCancel>
-          <AlertDialogAction onClick={submit}>Continue</AlertDialogAction>
+          <AlertDialogAction onClick={submit}>Continuar</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

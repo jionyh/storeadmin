@@ -9,6 +9,12 @@ import {
 import { PurchaseFormDataType } from '@/types/FormDataTypes'
 import { Button } from '@/components/ui/button'
 import { PurchasesFormFields } from './PurchasesFormFields'
+import { CommonSelect } from '../commons/Select'
+import { FormField } from '@/components/ui/form'
+import { useCategory } from '@/utils/queries/category'
+import { Separator } from '@/components/ui/separator'
+import { useProducts } from '@/utils/queries/products'
+import { useUnits } from '@/utils/queries/units'
 
 type Props = {
   form: UseFormReturn<PurchaseFormDataType>
@@ -25,12 +31,27 @@ export const PurchasesForm = ({
   fields,
   remove,
 }: Props) => {
+  const category = useCategory()
+  const watchCategory = form.watch('category')
+  const products = useProducts(watchCategory)
+  const units = useUnits()
+  
   return (
     <form
       className="w=full flex flex-col gap-2"
       onSubmit={form.handleSubmit(onSubmit)}
     >
-      {fields.map((fields, index) => (
+      <FormField
+        control={form.control}
+        name={`category`}
+        render={({ field }) => (
+          <CommonSelect data={category.data.categories} placeholder='Selecione a categoria' onChange={field.onChange} />
+        )}/>
+
+        <Separator className='my-2'/>
+
+
+      {watchCategory && products.data && units.data && fields.map((fields, index) => (
         <PurchasesFormFields
           key={fields.id}
           form={form}
@@ -42,15 +63,9 @@ export const PurchasesForm = ({
         <Button
           variant="blue"
           size="sm"
+          disabled={watchCategory ? false : true}
           onClick={() =>
-            append({
-              category: '',
-              quantity: '',
-              value: '',
-              product_id: '',
-              unit_id: '',
-              supplier: '',
-            })
+            append({quantity: '', value: '', product_id: ' ', unit_id: ' ',supplier: '',})
           }
         >
           <Plus />

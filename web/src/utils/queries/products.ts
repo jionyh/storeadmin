@@ -1,19 +1,21 @@
-// import { useQuery } from '@tanstack/react-query'
-// import { getLogin, getSale } from "../api";
-// import { getPosts, getPost } from "./api";
+import { ProductsResponse } from '@/types/productTypes'
+import { useQuery } from '@tanstack/react-query'
+import { productsApi } from '../api/products'
 
-/* export const useSale = () =>
-  useQuery({
-    queryKey: ["sales"],
-    queryFn: () => getSale(),
-  });
+export const useProducts = (id:string) => {
+  const products = useQuery({
+    queryKey: ['products',{cat: id}],
+    queryFn: () => productsApi.getAllProducts(id),
+    staleTime: Infinity,
+  })
 
-export const usePost = (id: number) =>
-  useQuery({ queryKey: ["posts", id], queryFn: () => getPost(id) });
+  
 
+  const returnData = {
+    data: products.data as ProductsResponse,
+    isLoading: products.isLoading,
+    isError: products.isError,
+  }
 
-export const useLogin = (data: { email: string; password: string }) =>
-  useQuery({
-    queryKey: ["login"],
-    queryFn: () => getLogin(data),
-  }); */
+  return returnData
+}

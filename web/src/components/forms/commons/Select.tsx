@@ -6,7 +6,6 @@ import {
   SelectContent,
   SelectItem,
 } from '@/components/ui/select'
-import { undefined } from 'zod'
 
 type Props = {
   data: any[]
@@ -14,12 +13,14 @@ type Props = {
   onChange: any
 }
 
-export const CommonSelect = ({ data, onChange }: Props) => {
+export const CommonSelect = ({ data, onChange, placeholder }: Props) => {
   return (
     <FormItem>
       <Select onValueChange={onChange}>
         <FormControl>
-          <SelectTrigger>Selecione uma Categoria</SelectTrigger>
+          <SelectTrigger>
+          <SelectValue placeholder={placeholder} />
+          </SelectTrigger>
         </FormControl>
         <SelectContent>
           {data.map((item) => (

@@ -47,39 +47,43 @@ export default function Purchases() {
           {data && (
             <div className="">
               <Table className="pointer-events-none mt-2 w-full">
-                {data.purchases.allPurchases.map((sales, i) => (
+                {data.purchases.allPurchases.map((purchases, i) => (
                   <React.Fragment key={i}>
-                    <TableHeader>
-                      <TableRow className="">
+                    {purchases.dailyPurchases.map(daily=>(
+                      <React.Fragment key={daily.category}>
+                      <TableHeader>
+                      <TableRow className="h-5 bg-primary border">
                         <TableHead className="">
-                          <h3 className="font-semibold leading-none tracking-tight">
-                            {dayjs(sales.date).format('D [de] MMMM')}
-                          </h3>
+                          <span className="font-semibold text-primary-foreground text-left tracking-tight">
+                            {daily.category}
+                          </span>
                         </TableHead>
                         <TableHead></TableHead>
                         <TableHead></TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody className="border">
-                      {sales.dailySales.map((dailySales) => (
-                        <TableRow
-                          key={dailySales.id}
+                    {daily.purchases.map(itemPurchases =>(
+                      <TableRow
+                          key={itemPurchases.id}
                           className="odd:bg-primary/5 even:bg-primary/10"
                         >
-                          <TableCell>{dailySales.payment_id}</TableCell>
-                          <TableCell></TableCell>
+                          <TableCell>{itemPurchases.product}</TableCell>
+                          <TableCell className='text-right'>{itemPurchases.quantity} {itemPurchases.unit}</TableCell>
                           <TableCell className="text-end">
-                            € {dailySales.value.toFixed(2)}
+                            € {itemPurchases.value}
                           </TableCell>
                         </TableRow>
-                      ))}
+                    ))}
                     </TableBody>
+                      </React.Fragment>
+                    ))}
                     <TableFooter>
-                      <TableRow className="">
+                      <TableRow className="bg-muted-foreground">
                         <TableCell></TableCell>
                         <TableCell className="text-right">Total</TableCell>
                         <TableCell className="text-end">
-                          € {sales.total}
+                          € {purchases.total}
                         </TableCell>
                       </TableRow>
                     </TableFooter>

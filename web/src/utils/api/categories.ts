@@ -15,7 +15,6 @@ export const categoryApi = {
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         // If there's a response from the backend, return its data
-        console.log(error)
         throw new Error(error.response.data.error)
         // return error.response.data
       } else {

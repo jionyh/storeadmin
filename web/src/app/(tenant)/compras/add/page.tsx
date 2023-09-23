@@ -17,14 +17,17 @@ export default function AddPurchases() {
   const categories = useCategory()
 
   const { setFormData, isDialogOpen, setIsDialogOpen, submitForm } =
-    useFormSubmit<PurchaseFormDataType['purchases']>({ type: 'purchases' })
+    useFormSubmit<PurchaseFormDataType['purchases']>({ endpoint: 'purchases', name: 'compra' })
+
+
 
   const form = useForm<PurchaseFormDataType>({
     resolver: zodResolver(purchaseFormSchema),
+    mode: 'onSubmit',
     defaultValues: {
       purchases: [
         {
-          quantity: undefined,
+          quantity: '',
           value: '',
           product_id: '',
           unit_id: '',
@@ -33,6 +36,7 @@ export default function AddPurchases() {
       ],
     },
   })
+  
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,

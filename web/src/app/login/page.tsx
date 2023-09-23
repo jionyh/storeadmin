@@ -31,7 +31,7 @@ export default function Login() {
   }
 
   return (
-    <div className="mx-10 my-36">
+    <div className="mx-10 my-auto">
       <Card className="flex flex-col items-center justify-center p-7">
         <Logo />
         <CardContent>
@@ -54,15 +54,16 @@ export default function Login() {
               Fazer login
             </Button>
           </form>
-        </CardContent>
-
-        <Separator />
-        <div className="flex w-full flex-col items-end justify-end gap-2 px-7 pt-7">
+          <Separator />
+        <div className="flex mt-7 w-full flex-col items-center justify-end gap-1">
           <p className="text-bold">Esqueceu a senha?</p>
-          <Button className="" variant="destructive" size="sm">
+          <Button className="w-full" variant="destructive" size="sm">
             Recuperar
           </Button>
         </div>
+        </CardContent>
+
+        
       </Card>
       {loading && <Loader visible={loading} />}
     </div>

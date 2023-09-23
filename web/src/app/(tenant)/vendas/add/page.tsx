@@ -18,7 +18,7 @@ export default function AddSales() {
   const paymentsMethods = usePayments()
 
   const { setFormData, isDialogOpen, setIsDialogOpen, submitForm } =
-    useFormSubmit<SalesFormDataType['sales']>({ type: 'sales' })
+    useFormSubmit<SalesFormDataType['sales']>({ endpoint: 'sales', name: 'venda' })
 
   const form = useForm<SalesFormDataType>({
     resolver: zodResolver(salesFormSchema),

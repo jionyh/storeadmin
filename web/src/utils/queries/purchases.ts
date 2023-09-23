@@ -6,7 +6,7 @@ export const usePurchases = (params?: AllPurchasesParams) => {
   const purchases = useQuery({
     queryKey: ['purchases', { params }],
     queryFn: () => purchaseApi.getAllPurchases(params),
-    staleTime: Infinity,
+    staleTime: 60 * 60 * 3, // 3minutes
   })
 
   const returnData = {

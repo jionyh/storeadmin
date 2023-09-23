@@ -18,6 +18,9 @@ import { Input } from '@/components/ui/input'
 import { UseFieldArrayRemove, UseFormReturn } from 'react-hook-form'
 import { PurchaseFormDataType } from '@/types/FormDataTypes'
 import { useCategory } from '@/utils/queries/category'
+import { CommonSelect } from '../commons/Select'
+import { useProducts } from '@/utils/queries/products'
+import { useUnits } from '@/utils/queries/units'
 
 type Props = {
   index: number
@@ -26,7 +29,13 @@ type Props = {
 }
 
 export const PurchasesFormFields = ({ index, remove, form }: Props) => {
-  const { data } = useCategory()
+  const formWatch = form.watch()
+  const {data:ProductsData} = useProducts(formWatch.category)
+  const {data:UnitsData} = useUnits()
+
+  const getUnitAbbreviation = (id: string) => UnitsData.units.find(unit => unit.id.toString() === id)?.abbreviation || '';
+
+
   return (
     <>
       {index === 0 ? (
@@ -38,27 +47,31 @@ export const PurchasesFormFields = ({ index, remove, form }: Props) => {
       )}
       <FormField
         control={form.control}
-        name={`purchases.${index}.category`}
+        name={`purchases.${index}.product_id`}
         render={({ field }) => (
-          <FormItem>
-            <Select
-              defaultValue={data.categories[0].id.toString()}
-              onValueChange={field.onChange}
-            >
-              <FormControl>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-              </FormControl>
-              <SelectContent>
-                {data.categories.map((item) => (
-                  <SelectItem key={item.id} value={item.id.toString()}>
-                    {item.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-              <FormMessage />
-            </Select>
+          <CommonSelect data={ProductsData.products.products} onChange={field.onChange} placeholder='Selecione o produto'/>
+        )}
+      />
+      <FormField
+        control={form.control}
+        name={`purchases.${index}.unit_id`}
+        render={({ field }) => (
+          <CommonSelect data={UnitsData.units} onChange={field.onChange} placeholder='Selecione o tipo de unidade'/>
+        )}
+      />
+      <div className='flex gap-1 items-start'>
+      <FormField
+        control={form.control}
+        name={`purchases.${index}.quantity`}
+        render={({ field }) => (
+          <FormItem className='flex-1 top-0'>
+            <FormControl>
+              <div className='relative'>
+              <Input placeholder='Quantidade'  {...field} />
+              <span className='absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-muted-foreground'>{getUnitAbbreviation(formWatch.purchases[index].unit_id)}</span>
+              </div>
+            </FormControl>
+            <FormMessage />
           </FormItem>
         )}
       />
@@ -66,9 +79,22 @@ export const PurchasesFormFields = ({ index, remove, form }: Props) => {
         control={form.control}
         name={`purchases.${index}.value`}
         render={({ field }) => (
+          <FormItem className='flex-1 top-0'>
+            <FormControl>
+              <Input className='' placeholder="Valor" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      </div>
+      <FormField
+        control={form.control}
+        name={`purchases.${index}.supplier`}
+        render={({ field }) => (
           <FormItem>
             <FormControl>
-              <Input placeholder="valor" {...field} />
+              <Input placeholder="Fornecedor" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>

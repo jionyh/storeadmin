@@ -36,9 +36,9 @@ export default function Sales() {
 
         <DatePicker setDate={setDate} />
 
-        <div className="px-5">
+        <div className="px-5 w-full">
           <Link
-            className="flex w-full items-center justify-end"
+            className="flex items-center justify-end"
             href="/vendas/add"
           >
             <Button>Nova Venda</Button>
@@ -50,11 +50,11 @@ export default function Sales() {
                 {data.sales.allSales.map((sales, i) => (
                   <React.Fragment key={i}>
                     <TableHeader>
-                      <TableRow className="">
+                    <TableRow className="h-5 bg-primary border">
                         <TableHead className="">
-                          <h3 className="font-semibold leading-none tracking-tight">
+                          <span className="font-semibold text-primary-foreground text-left tracking-tight">
                             {dayjs(sales.date).format('D [de] MMMM')}
-                          </h3>
+                          </span>
                         </TableHead>
                         <TableHead></TableHead>
                         <TableHead></TableHead>
@@ -75,7 +75,7 @@ export default function Sales() {
                       ))}
                     </TableBody>
                     <TableFooter>
-                      <TableRow className="">
+                    <TableRow className="bg-muted-foreground">
                         <TableCell></TableCell>
                         <TableCell className="text-right">Total</TableCell>
                         <TableCell className="text-end">
