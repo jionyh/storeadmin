@@ -18,7 +18,7 @@ export const purchase = {
       date: date as string,
       period: period as Options["period"],
       pageNumber: parseInt(page as string) || 1,
-      resultsPerPage: parseInt(perpage as string) || 10,
+      resultsPerPage: parseInt(perpage as string),
     };
 
     const { totalRecords, purchase } = await purchaseService.getAllPurchase(

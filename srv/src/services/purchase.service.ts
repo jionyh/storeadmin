@@ -23,7 +23,8 @@ export const getAllPurchase = async (
     period = "month",
   } = Options;
 
-  const skip = (pageNumber - 1) * resultsPerPage;
+  const skip = resultsPerPage ? (pageNumber - 1) * resultsPerPage : undefined;
+  const take = resultsPerPage ? resultsPerPage : undefined;
 
   const searchOptions = {
     tenant_id,
@@ -48,7 +49,7 @@ export const getAllPurchase = async (
       include: { product: { include: { cat: true } }, unit: true },
       orderBy: { createAt: "asc" },
       skip,
-      take: resultsPerPage,
+      take,
     });
     return { totalRecords, purchase };
   } catch (e) {

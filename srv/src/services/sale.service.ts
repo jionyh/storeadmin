@@ -19,7 +19,8 @@ export const getAllSales = async (
     period = "month",
   } = Options;
 
-  const skip = (pageNumber - 1) * resultsPerPage;
+  const skip = resultsPerPage ? (pageNumber - 1) * resultsPerPage : undefined;
+  const take = resultsPerPage ? resultsPerPage : undefined;
 
   const searchOptions = {
     tenant_id,
@@ -45,7 +46,7 @@ export const getAllSales = async (
       include: { paymentMethod: true },
       orderBy: { createAt: "asc" },
       skip,
-      take: resultsPerPage,
+      take,
     });
     //if(totalRecords === 0 ) return false
 
@@ -62,6 +63,7 @@ export const getSaleById = async (tenant_id: number, id: number) => {
       id,
       tenant_id,
     },
+    include: { paymentMethod: true },
   });
 };
 

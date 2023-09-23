@@ -18,7 +18,7 @@ export const sale = {
       date: date as string,
       period: period as Options["period"],
       pageNumber: parseInt(page as string) || 1,
-      resultsPerPage: parseInt(perpage as string) || 10,
+      resultsPerPage: parseInt(perpage as string),
     };
 
     const { totalRecords, sales } = await saleService.getAllSales(
@@ -61,8 +61,6 @@ export const sale = {
       );
 
       if (!sale) return sendErrorResponse(res, 404, "saleNotfound");
-
-      const saleData = {};
 
       sendSuccessResponse(res, 200, "sale", formatSaleReturnWithoutTotal(sale));
     } catch (e) {

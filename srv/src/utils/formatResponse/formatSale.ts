@@ -49,5 +49,6 @@ export const formatSaleReturnWithoutTotal = (sale: SaleResponse) => ({
   id: sale.id,
   value: sale.value,
   payment_id: sale.payment_id,
+  payment: sale.paymentMethod.name,
   createAt: dayjs(sale.createAt).format("YYYY-MM-DD"),
 });
