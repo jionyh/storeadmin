@@ -1,15 +1,23 @@
-import dayjs from 'dayjs'
-import { prisma } from '../lib/prisma'
-import { Options } from '../types/ServiceOptionsType'
-import { SaleResponse, SaleType } from '../types/SalesType'
+import dayjs from "dayjs";
+import { prisma } from "../lib/prisma";
+import { Options } from "../types/ServiceOptionsType";
+import { SaleResponse, SaleType } from "../types/SalesType";
 
 type SaleRecord = {
-  totalRecords: number
-  sales:SaleResponse[]
-}
+  totalRecords: number;
+  sales: SaleResponse[];
+};
 
-export const getAllSales = async (tenant_id: number, Options:Options):Promise<SaleRecord> => {
-  const {date = dayjs(),pageNumber,resultsPerPage,period = 'month' } = Options
+export const getAllSales = async (
+  tenant_id: number,
+  Options: Options
+): Promise<SaleRecord> => {
+  const {
+    date = dayjs(),
+    pageNumber,
+    resultsPerPage,
+    period = "month",
+  } = Options;
 
   const skip = (pageNumber - 1) * resultsPerPage;
 
@@ -27,42 +35,42 @@ export const getAllSales = async (tenant_id: number, Options:Options):Promise<Sa
             .toDate()
         : undefined,
     },
-  }
+  };
 
-  try{
-
-    const totalRecords = await prisma.sale.count({where:searchOptions})
+  try {
+    const totalRecords = await prisma.sale.count({ where: searchOptions });
 
     const sales = await prisma.sale.findMany({
       where: searchOptions,
-      orderBy: { createAt: 'asc' },
+      include: { paymentMethod: true },
+      orderBy: { createAt: "asc" },
       skip,
       take: resultsPerPage,
-    })
+    });
     //if(totalRecords === 0 ) return false
 
-    return {totalRecords,sales}
-
-  }catch(e){
-    console.log(e)
-    throw new Error('An error occurred while fetching sales data.');
+    return { totalRecords, sales };
+  } catch (e) {
+    console.log(e);
+    throw new Error("An error occurred while fetching sales data.");
   }
+};
 
-}
-
-export const getSaleById = async (tenant_id: number,id: number) => {
-  return prisma.sale.findFirst({ where: { 
-    id,
-    tenant_id
-   } })
-}
+export const getSaleById = async (tenant_id: number, id: number) => {
+  return prisma.sale.findFirst({
+    where: {
+      id,
+      tenant_id,
+    },
+  });
+};
 
 export const createSale = async (data: SaleType[]) => {
   return prisma.sale.createMany({
     data,
-  })
-}
+  });
+};
 
 export const deleteSaleById = async (id: number) => {
-  return prisma.sale.delete({ where: { id } })
-}
+  return prisma.sale.delete({ where: { id } });
+};
