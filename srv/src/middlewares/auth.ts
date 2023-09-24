@@ -15,17 +15,16 @@ type JwtTokenType = {
 
 export const Auth = {
   private: async (req: Request, res: Response, next: NextFunction) => {
-    if (!req.headers.authorization)
-      return sendErrorResponse(res, 401, "invalidHeader");
+    const tokenHttp = req.cookies;
 
-    const [authType, token] = req.headers.authorization.split(" ");
-
-    if (authType !== "Bearer" || !token)
+    if (!tokenHttp || !tokenHttp.authToken)
       return sendErrorResponse(res, 401, "invalidToken");
+
+    const authToken = tokenHttp.authToken;
 
     try {
       const decodedToken = JWT.verify(
-        token,
+        authToken,
         process.env.JWT_SECRET_KEY as string
       ) as JwtTokenType;
       // Adiciona o tenant_id na requisição, assim é possível

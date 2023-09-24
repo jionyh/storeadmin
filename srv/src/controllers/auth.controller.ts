@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
-import { z } from "zod";
+import cookie from "cookie";
 import JWT from "jsonwebtoken";
 import dotenv from "dotenv";
 import * as authService from "../services/auth.service";
@@ -35,8 +35,6 @@ export const auth = {
     );
     if (!checkPassword) return sendErrorResponse(res, 401, "userNotFound");
 
-    console.log(user.tenant_id);
-
     /* Criação do jwt com as informações */
     const token = JWT.sign(
       {
@@ -45,9 +43,26 @@ export const auth = {
         tenant_id: user.tenant_id,
       },
       process.env.JWT_SECRET_KEY as string,
-      { expiresIn: "24h" }
+      { expiresIn: "8h" }
     );
 
-    sendSuccessResponse(res, 200, "token", token);
+    res.setHeader(
+      "Set-Cookie",
+      cookie.serialize("authToken", token, {
+        httpOnly: true,
+        maxAge: 60 * 60 * 8,
+        sameSite: "lax",
+        path: "/",
+        //secure: false,
+      })
+    );
+
+    const response = {
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    };
+
+    sendSuccessResponse(res, 200, "user", response);
   },
 };

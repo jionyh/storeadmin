@@ -1,29 +1,44 @@
-import 'express-async-errors'
-import express, { Request, Response, NextFunction } from 'express'
-import cors from 'cors'
-import morgan from 'morgan'
-import helmet from 'helmet'
-import router from './routes'
-import swaggerRouter from './swagger';
-import './cron/scheduleCost';
+import "express-async-errors";
+import express, { Request, Response, NextFunction } from "express";
+import cors from "cors";
+import morgan from "morgan";
+import helmet from "helmet";
+import router from "./routes";
+import swaggerRouter from "./swagger";
+import cookieParser from "cookie-parser";
+import "./cron/scheduleCost";
 
-const app = express()
+const app = express();
 
-app.use(morgan('tiny'))
+app.use(morgan("tiny"));
 
-app.use(cors())
+app.use(
+  cors({
+    credentials: true,
+    origin: true,
+  })
+);
 
-app.use(helmet())
+/* app.options(
+  "*",
+  cors({
+    credentials: true,
+    origin: true,
+  })
+); */
 
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+app.use(helmet());
 
-app.use('/api-docs', swaggerRouter); // Add this line to serve the Swagger documentation
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
-app.use(router)
+app.use("/api-docs", swaggerRouter); // Add this line to serve the Swagger documentation
+
+app.use(router);
 
 app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
-  res.status(500).send(error.message)
-})
+  res.status(500).send(error.message);
+});
 
-export default app
+export default app;

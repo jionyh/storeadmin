@@ -15,6 +15,8 @@
   "dependencies": {
     "@prisma/client": "^4.14.0",
     "bcrypt": "^5.1.0",
+    "cookie": "^0.5.0",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dayjs": "^1.11.7",
     "dotenv": "^16.0.3",
@@ -32,6 +34,8 @@
     "@mermaid-js/mermaid-cli": "^10.2.4",
     "@rocketseat/eslint-config": "^1.2.0",
     "@types/bcrypt": "^5.0.0",
+    "@types/cookie": "^0.5.2",
+    "@types/cookie-parser": "^1.4.4",
     "@types/cors": "^2.8.13",
     "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.17",
