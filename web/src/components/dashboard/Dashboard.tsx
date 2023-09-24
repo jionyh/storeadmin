@@ -22,14 +22,14 @@ export const Dashboard = ({ initialData }: Props) => {
     }
   }, [])
 
-  const valuePeriod =
+   const valuePeriod =
     cardData && selectedPeriod
       ? selectedPeriod === 'day'
-        ? cardData['day totals']?.toFixed(2) ?? ''
+        ? cardData['day totals']?.toFixed(2) ?? '0'
         : selectedPeriod === 'week'
-        ? cardData['week totals']?.toFixed(2) ?? ''
+        ? cardData['week totals']?.toFixed(2) ?? '0'
         : selectedPeriod === 'month'
-        ? cardData['month totals']?.toFixed(2) ?? ''
+        ? cardData['month totals']?.toFixed(2) ?? '0'
         : ''
       : ''
 

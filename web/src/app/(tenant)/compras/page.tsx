@@ -36,16 +36,15 @@ export default function Purchases() {
 
         <DatePicker setDate={setDate} />
 
-        <div className="px-5">
+        <div className="px-5 w-full">
           <Link
-            className="flex w-full items-center justify-end"
+            className="my-5 flex w-full items-center justify-end"
             href="/compras/add"
           >
-            <Button>Nova Compra</Button>
+            <Button size='sm'>Nova Compra</Button>
           </Link>
           {isError && <Empty title="compras" />}
           {data && (
-            <div className="">
               <Table className="pointer-events-none mt-2 w-full">
                 {data.purchases.allPurchases.map((purchases, i) => (
                   <React.Fragment key={i}>
@@ -90,7 +89,6 @@ export default function Purchases() {
                   </React.Fragment>
                 ))}
               </Table>
-            </div>
           )}
         </div>
       </main>

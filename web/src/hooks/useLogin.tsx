@@ -1,11 +1,8 @@
 'use client'
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { setCookie, hasCookie } from 'cookies-next'
-import { signIn, useSession, getSession } from 'next-auth/react'
+import { signIn } from 'next-auth/react'
 
 const useLogin = () => {
-  const router = useRouter()
   const [hasError, setHasError] = useState<string | null>(null)
 
   const login = async (email: string, password: string) => {
@@ -17,25 +14,13 @@ const useLogin = () => {
         password,
         callbackUrl: `/`,
       })
-      const userToken = await getSession()
 
-      if (!loginResponse?.error && userToken?.user.login.success) {
-        const cookie = hasCookie('token')
-
-        if (!cookie) {
-          setCookie('token', userToken.user.login.token, {
-            maxAge: 60 * 60 * 8, // 8 horas
-            path: '/', // Use this for cross-site cookies
-          })
-          const cookieAdd = hasCookie('token')
-          if (cookieAdd) {
+      if (!loginResponse?.error && loginResponse?.ok) {        
             return true
           }
-          return
-        }
-        router.push('/')
-      }
+        //router.push(
       setHasError(loginResponse!.error)
+    
     } catch (error) {
       // Handle any errors that occur during the login process
     }

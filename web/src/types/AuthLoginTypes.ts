@@ -1,6 +1,12 @@
+export interface AuthUser {
+  name: string
+  email: string
+  role: string
+}
+
 export interface AuthLogin {
   success: boolean
-  token: string
-  userName: string
-  email: string
-}
+    user: AuthUser
+  }
+
+

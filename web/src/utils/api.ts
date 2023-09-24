@@ -10,7 +10,7 @@ export const getLogin = async (data: {
   password: string
 }): Promise<LoginResponse> => {
   try {
-    const result = await api.post('/signin', data)
+    const result = await api.post('/signin', data,{ withCredentials:true})
     return result.data
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {

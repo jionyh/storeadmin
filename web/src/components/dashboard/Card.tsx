@@ -1,8 +1,7 @@
 'use client'
-import { LucideIcon, TrendingDown, TrendingUp } from 'lucide-react'
+import { TrendingDown, TrendingUp } from 'lucide-react'
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/card'
 import { Separator } from '../ui/separator'
-import { ReactElement, ReactNode } from 'react'
 
 type Props = {
   type: 'sell' | 'purchase'
@@ -10,7 +9,7 @@ type Props = {
   value: string
   period: string
 }
-export const DashboardCard = ({ type, title, value, period }: Props) => {
+export const DashboardCard = ({ type, title, value , period }: Props) => {
   return (
     <Card className="flex-1">
       <CardHeader className="pb-2">

@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { getLogin } from '@/utils/api'
+import { api } from '@/lib/axios'
+import { AuthUser } from '@/types/AuthLoginTypes'
+import { getLogin } from '@/utils/api/auth'
 import type { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import Cookies from 'js-cookie'
 
 export const authOptions: NextAuthOptions = {
   session: {
     strategy: 'jwt',
     maxAge: 60 * 60 * 8, // 8 horas
-  },
+  },  
   pages: {
     signIn: '/login',
   },
@@ -19,37 +20,35 @@ export const authOptions: NextAuthOptions = {
         email: { label: 'Email', type: 'text' },
         password: { label: 'Password', type: 'password' },
       },
-      async authorize(credentials): Promise<any> {
+      async authorize(credentials, req): Promise<any> {
         if (!credentials?.email && !credentials?.password) {
           throw new Error('invalid Credentials')
         }
-
         const { email, password } = credentials
 
-        return getLogin({ email, password }).then((response) => {
-          if (response.success) {
-            return response
-          } else {
-            throw new Error(response.error)
-          }
-        })
+        const response = await getLogin({ email, password })
+
+
+        if(!response)throw new Error('failed to fetch login')
+
+        if(!response.success)throw new Error(response.error)
+
+        return response.user
+ 
       },
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.login = user
-      }
+    async jwt({token,user}) {
+      if(user){
+      token.user = user
+    }
       return token
     },
-
-    async session({ session, token }) {
-      if (token) {
-        session.user.login = token.login
+    async session({token, session}){
+      if(token){
+        session.user = token.user as AuthUser
       }
-
       return session
-    },
-  },
-}
+    }
+}}

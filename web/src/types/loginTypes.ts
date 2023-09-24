@@ -2,7 +2,11 @@ import { ResponseError } from "./commonsTypes";
 
 type LoginResponseSuccess = {
   success: true;
-  token: string;
+  user:{
+    name: string
+    email: string
+    role: string
+  }
 };
 
 export type LoginResponse = LoginResponseSuccess | ResponseError;

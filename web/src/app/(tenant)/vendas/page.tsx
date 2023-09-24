@@ -33,19 +33,18 @@ export default function Sales() {
       <main className="flex-1 space-y-3">
         {/* Main Header - Title bar */}
         <PageHeader name="vendas" />
-
         <DatePicker setDate={setDate} />
 
-        <div className="px-5 w-full">
+        <div className="px-5 mb-3 w-full">
           <Link
-            className="flex items-center justify-end"
+            className="my-5 flex items-center justify-end"
             href="/vendas/add"
           >
-            <Button>Nova Venda</Button>
+            <Button size='sm'>Nova Venda</Button>
           </Link>
+
           {isError && <Empty title="vendas" />}
           {data && (
-            <div className="">
               <Table className="pointer-events-none mt-2 w-full">
                 {data.sales.allSales.map((sales, i) => (
                   <React.Fragment key={i}>
@@ -86,7 +85,6 @@ export default function Sales() {
                   </React.Fragment>
                 ))}
               </Table>
-            </div>
           )}
         </div>
       </main>
