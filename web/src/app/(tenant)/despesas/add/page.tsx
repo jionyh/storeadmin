@@ -5,46 +5,45 @@ import { Loader } from '@/components/Loader'
 import { PageHeader } from '@/components/PageHeader'
 import { Form } from '@/components/ui/form'
 import { Alert } from '@/components/alertDialog/Alert'
-import { PurchasesForm } from '@/components/forms/purchases/PurchasesForm'
 
 import useFormSubmit from '@/hooks/useFormSubmit'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useFieldArray, useForm } from 'react-hook-form'
-import { PurchaseFormDataType, purchaseFormSchema } from '@/types/FormDataTypes'
+import { CostFormDataType, costFormSchema } from '@/types/FormDataTypes'
 import { useCategory } from '@/utils/queries/category'
+import { CostForm } from '@/components/forms/costs/CostsForm'
 
 export default function AddCosts() {
   const categories = useCategory()
 
   const { setFormData, isDialogOpen, setIsDialogOpen, submitForm } =
-    useFormSubmit<PurchaseFormDataType['purchases']>({ endpoint: 'purchases', name: 'compra' })
+    useFormSubmit<CostFormDataType['costs']>({
+      endpoint: 'purchases',
+      name: 'compra',
+    })
 
-
-
-  const form = useForm<PurchaseFormDataType>({
-    resolver: zodResolver(purchaseFormSchema),
+  const form = useForm<CostFormDataType>({
+    resolver: zodResolver(costFormSchema),
     mode: 'onSubmit',
     defaultValues: {
-      purchases: [
+      costs: [
         {
-          quantity: '',
+          name: '',
           value: '',
-          product_id: '',
-          unit_id: '',
-          supplier: '',
+          date: '',
+          recurrent: false,
         },
       ],
     },
   })
-  
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
-    name: 'purchases',
+    name: 'costs',
   })
 
-  function onSubmit(values: PurchaseFormDataType) {
-    setFormData(values.purchases)
+  function onSubmit(values: CostFormDataType) {
+    setFormData(values.costs)
     setIsDialogOpen(true)
   }
 
@@ -52,19 +51,17 @@ export default function AddCosts() {
     <div>
       <PageHeader name="Adicionar despesas" />
       {categories.isLoading && <Loader visible />}
-      {categories.data && (
-        <div className="p-4">
-          <Form {...form}>
-            <PurchasesForm
-              append={append}
-              fields={fields}
-              form={form}
-              onSubmit={onSubmit}
-              remove={remove}
-            />
-          </Form>
-        </div>
-      )}
+      <div className="p-4">
+        <Form {...form}>
+          <CostForm
+            append={append}
+            fields={fields}
+            form={form}
+            onSubmit={onSubmit}
+            remove={remove}
+          />
+        </Form>
+      </div>
       <Alert
         open={isDialogOpen}
         setOpen={setIsDialogOpen}

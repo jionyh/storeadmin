@@ -27,3 +27,18 @@ export const purchaseFormSchema = z.object({
 })
 
 export type PurchaseFormDataType = z.infer<typeof purchaseFormSchema>
+
+// CostForm //
+
+export const costFormSchema = z.object({
+  costs: z.array(
+    z.object({
+      name: z.string().nonempty('Campo obrigatório'),
+      value: z.string().nonempty('Campo obrigatório'),
+      date: z.string().nonempty('Campo obrigatório'),
+      recurrent: z.boolean({ required_error: 'Campo obrigatório' }),
+    }),
+  ),
+})
+
+export type CostFormDataType = z.infer<typeof costFormSchema>

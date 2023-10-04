@@ -2,31 +2,25 @@
 import React from 'react'
 import {
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
 import { X } from 'lucide-react'
 import { Input } from '@/components/ui/input'
-import { SalesFormDataType } from '@/types/FormDataTypes'
+import { CostFormDataType } from '@/types/FormDataTypes'
 import { UseFieldArrayRemove, UseFormReturn } from 'react-hook-form'
-import { PaymentResponseSuccess } from '@/types/paymentTypes'
+import { Switch } from '@/components/ui/switch'
 
 type Props = {
   index: number
-  form: UseFormReturn<SalesFormDataType>
+  form: UseFormReturn<CostFormDataType>
   remove: UseFieldArrayRemove
-  payments: PaymentResponseSuccess
 }
 
-export const CostsFormFields = ({ index, remove, form, payments }: Props) => {
+export const CostsFormFields = ({ index, remove, form }: Props) => {
   return (
     <>
       {index === 0 ? (
@@ -38,36 +32,56 @@ export const CostsFormFields = ({ index, remove, form, payments }: Props) => {
       )}
       <FormField
         control={form.control}
-        name={`sales.${index}.payment_id`}
-        render={({ field }) => (
-          <FormItem>
-            <Select onValueChange={field.onChange}>
-              <FormControl>
-                <SelectTrigger>
-                  <SelectValue placeholder="Forma de Recebimento" />
-                </SelectTrigger>
-              </FormControl>
-              <SelectContent>
-                {payments.paymentMethods.map((item) => (
-                  <SelectItem key={item.id} value={item.id.toString()}>
-                    {item.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-              <FormMessage />
-            </Select>
-          </FormItem>
-        )}
-      />
-      <FormField
-        control={form.control}
-        name={`sales.${index}.value`}
+        name={`costs.${index}.name`}
         render={({ field }) => (
           <FormItem>
             <FormControl>
-              <Input placeholder="valor" {...field} />
+              <Input placeholder="Despesa" {...field} />
             </FormControl>
             <FormMessage />
+          </FormItem>
+        )}
+      />
+      <div className="flex items-center justify-between gap-1">
+        <FormField
+          control={form.control}
+          name={`costs.${index}.value`}
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Input placeholder="valor" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name={`costs.${index}.date`}
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Input placeholder="Data" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+      <FormField
+        control={form.control}
+        name={`costs.${index}.recurrent`}
+        render={({ field }) => (
+          <FormItem className="flex items-center justify-end text-muted-foreground">
+            <div className="flex items-center gap-1">
+              <FormLabel>Despesa recorrente?</FormLabel>
+              <FormControl>
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+            </div>
           </FormItem>
         )}
       />
