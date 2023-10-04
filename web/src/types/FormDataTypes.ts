@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import * as z from 'zod'
 
 export const salesFormSchema = z.object({
@@ -35,7 +36,7 @@ export const costFormSchema = z.object({
     z.object({
       name: z.string().nonempty('Campo obrigatório'),
       value: z.string().nonempty('Campo obrigatório'),
-      date: z.string().nonempty('Campo obrigatório'),
+      date: z.date().or(z.string({ required_error: 'Campo obrigatório' }).nonempty('Campo obrigatório')).transform(date => dayjs(date).format("YYYY-MM-DD")),
       recurrent: z.boolean({ required_error: 'Campo obrigatório' }),
     }),
   ),

@@ -19,9 +19,9 @@ export interface Purchase {
 }
 export interface Purchases {
   pagination: Pagination
-  'month totals'?: number
-  'day totals'?: number
-  'week totals'?: number
+  'month_totals'?: number
+  'day_totals'?: number
+  'week_totals'?: number
   allPurchases: {
     date: string
     total: string

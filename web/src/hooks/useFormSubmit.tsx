@@ -16,7 +16,6 @@ function useFormSubmit<T>(props: { endpoint: string, name:string }) {
 
     try {
       const response = await api.post(`/${props.endpoint}`, formData)
-      console.log(formData)
 
       if (response.data.success) {
         toast({

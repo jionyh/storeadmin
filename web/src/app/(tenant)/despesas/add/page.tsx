@@ -18,8 +18,8 @@ export default function AddCosts() {
 
   const { setFormData, isDialogOpen, setIsDialogOpen, submitForm } =
     useFormSubmit<CostFormDataType['costs']>({
-      endpoint: 'purchases',
-      name: 'compra',
+      endpoint: 'costs',
+      name: 'despesa',
     })
 
   const form = useForm<CostFormDataType>({
@@ -28,7 +28,7 @@ export default function AddCosts() {
     defaultValues: {
       costs: [
         {
-          name: '',
+          name: '', 
           value: '',
           date: '',
           recurrent: false,

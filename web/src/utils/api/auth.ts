@@ -11,7 +11,6 @@ export const getLogin = async (data: {
     return result.data
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
-      // If there's a response from the backend, return its data
       return error.response.data
     } else {
       throw new Error('Failed to fetch login')

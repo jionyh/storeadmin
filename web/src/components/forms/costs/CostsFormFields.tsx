@@ -1,5 +1,7 @@
 'use client'
 import React from 'react'
+import { format } from "date-fns"
+import { CalendarIcon } from "lucide-react"
 import {
   FormControl,
   FormDescription,
@@ -13,6 +15,15 @@ import { Input } from '@/components/ui/input'
 import { CostFormDataType } from '@/types/FormDataTypes'
 import { UseFieldArrayRemove, UseFormReturn } from 'react-hook-form'
 import { Switch } from '@/components/ui/switch'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { Button } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
+import { cn } from '@/lib/utils'
+
 
 type Props = {
   index: number
@@ -42,12 +53,12 @@ export const CostsFormFields = ({ index, remove, form }: Props) => {
           </FormItem>
         )}
       />
-      <div className="flex items-center justify-between gap-1">
+      <div className="flex items-start justify-between gap-1">
         <FormField
           control={form.control}
           name={`costs.${index}.value`}
           render={({ field }) => (
-            <FormItem>
+            <FormItem className='flex-1 top-0'>
               <FormControl>
                 <Input placeholder="valor" {...field} />
               </FormControl>
@@ -59,10 +70,35 @@ export const CostsFormFields = ({ index, remove, form }: Props) => {
           control={form.control}
           name={`costs.${index}.date`}
           render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input placeholder="Data" {...field} />
-              </FormControl>
+            <FormItem className='flex-1 top-0'>
+    <Popover>
+    <PopoverTrigger asChild>
+      <FormControl>
+        <Button
+          variant={"outline"}
+          className={cn(
+            "w-full pl-3 text-left font-normal",
+            !field.value && "text-muted-foreground"
+          )}
+        >
+          {field.value ? (
+            format(new Date(field.value), "P")
+          ) : (
+            <span>Selecione a data</span>
+          )}
+          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+        </Button>
+      </FormControl>
+    </PopoverTrigger>
+    <PopoverContent className="w-auto p-0" align="start">
+      <Calendar
+        mode="single"
+        selected={new Date(field.value)}
+        onSelect={field.onChange}
+        initialFocus
+      />
+    </PopoverContent>
+  </Popover>
               <FormMessage />
             </FormItem>
           )}
