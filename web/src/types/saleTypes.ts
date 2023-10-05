@@ -2,8 +2,8 @@ import { Pagination } from './commonsTypes'
 import { ErrorResponse } from './errorTypes'
 
 export interface AllSalesParams {
-  date?: string,
-  period?: string,
+  date?: string
+  period?: string
   perpage?: number
 }
 
@@ -11,6 +11,7 @@ export interface Sale {
   id: number
   value: number
   payment_id: number
+  payment: string
 }
 
 export interface AllSalesResponse {

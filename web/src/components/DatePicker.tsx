@@ -20,6 +20,7 @@ export const DatePicker = ({ setDate }: ParamTypes) => {
     weekDates,
   } = useDate()
   const [activeDay, setActiveDay] = useState(dayjs(selectedDate))
+  const [isFading, setIsFading] = useState(false)
 
   const handlers = useSwipeable({
     onSwiped: (eventData) => handleSwipe(eventData),
@@ -31,47 +32,52 @@ export const DatePicker = ({ setDate }: ParamTypes) => {
   }
 
   const handleSwipe = (eventData: SwipeEventData) => {
+    setIsFading(true)
     if (eventData.dir === 'Right') {
       handleLeftArrow()
-      return
+    } else {
+      handleRightArrow()
     }
-    handleRightArrow()
+    setTimeout(() => {
+      setIsFading(false)
+    }, 300)
   }
 
   useEffect(() => {
     const day = dayjs(activeDay).format('YYYY-MM-DD')
     setDate(day)
   }, [activeDay, setDate])
-  return (
-    <>
-      <div className="flex w-full items-center justify-center px-1">
-        <button className="" onClick={handleLeftArrow}>
-          <AiOutlineCaretLeft size={30} />
-        </button>
-        <div
-          {...handlers}
-          className="grid w-full select-none grid-cols-7 gap-0.5"
-        >
-          {weekDates.map((item, i) => (
-            <div
-              key={i}
-              className={`${
-                activeDay.isSame(item, 'day')
-                  ? 'bg-primary text-primary-foreground'
-                  : 'hover:bg-primary/5'
-              }  flex h-full w-full cursor-pointer flex-col items-center justify-center rounded border p-0.5 text-xs leading-tight`}
-              onClick={() => handleButton(item)}
-            >
-              <div className="">{getWeekDay(item).toUpperCase()}</div>
-              <button>{getDayAndMonth(item)}</button>
-            </div>
-          ))}
-        </div>
 
-        <button onClick={handleRightArrow}>
-          <AiOutlineCaretRight size={30} />
-        </button>
+  return (
+    <div className={`flex w-full items-center justify-center px-1`}>
+      <button className="" onClick={handleLeftArrow}>
+        <AiOutlineCaretLeft size={30} />
+      </button>
+      <div
+        {...handlers}
+        className={`grid w-full select-none grid-cols-7 gap-0.5 ${
+          isFading ? 'animate-slideLeft' : ''
+        }`}
+      >
+        {weekDates.map((item, i) => (
+          <div
+            key={i}
+            className={`${
+              activeDay.isSame(item, 'day')
+                ? 'bg-primary text-primary-foreground'
+                : 'hover:bg-primary/5'
+            }  flex h-full w-full cursor-pointer flex-col items-center justify-center rounded border p-0.5 text-xs leading-tight`}
+            onClick={() => handleButton(item)}
+          >
+            <div className="">{getWeekDay(item).toUpperCase()}</div>
+            <button>{getDayAndMonth(item)}</button>
+          </div>
+        ))}
       </div>
-    </>
+
+      <button onClick={handleRightArrow}>
+        <AiOutlineCaretRight size={30} />
+      </button>
+    </div>
   )
 }

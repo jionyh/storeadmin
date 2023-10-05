@@ -35,56 +35,56 @@ export default function Sales() {
         <PageHeader name="vendas" />
         <DatePicker setDate={setDate} />
 
-        <div className="px-5 mb-3 w-full">
+        <div className="mb-3 w-full px-5">
           <Link
             className="my-5 flex items-center justify-end"
             href="/vendas/add"
           >
-            <Button size='sm'>Nova Venda</Button>
+            <Button size="sm">Nova Venda</Button>
           </Link>
 
           {isError && <Empty title="vendas" />}
           {data && (
-              <Table className="pointer-events-none mt-2 w-full">
-                {data.sales.allSales.map((sales, i) => (
-                  <React.Fragment key={i}>
-                    <TableHeader>
-                    <TableRow className="h-5 bg-primary border">
-                        <TableHead className="">
-                          <span className="font-semibold text-primary-foreground text-left tracking-tight">
-                            {dayjs(sales.date).format('D [de] MMMM')}
-                          </span>
-                        </TableHead>
-                        <TableHead></TableHead>
-                        <TableHead></TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody className="border">
-                      {sales.dailySales.map((dailySales) => (
-                        <TableRow
-                          key={dailySales.id}
-                          className="odd:bg-primary/5 even:bg-primary/10"
-                        >
-                          <TableCell>{dailySales.payment_id}</TableCell>
-                          <TableCell></TableCell>
-                          <TableCell className="text-end">
-                            € {dailySales.value.toFixed(2)}
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                    <TableFooter>
-                    <TableRow className="bg-muted-foreground">
+            <Table className="pointer-events-none mt-2 w-full">
+              {data.sales.allSales.map((sales, i) => (
+                <React.Fragment key={i}>
+                  <TableHeader>
+                    <TableRow className="h-5 border bg-primary">
+                      <TableHead className="">
+                        <span className="text-left font-semibold tracking-tight text-primary-foreground">
+                          {dayjs(sales.date).format('D [de] MMMM')}
+                        </span>
+                      </TableHead>
+                      <TableHead></TableHead>
+                      <TableHead></TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody className="border">
+                    {sales.dailySales.map((dailySales) => (
+                      <TableRow
+                        key={dailySales.id}
+                        className="odd:bg-primary/5 even:bg-primary/10"
+                      >
+                        <TableCell>{dailySales.payment}</TableCell>
                         <TableCell></TableCell>
-                        <TableCell className="text-right">Total</TableCell>
                         <TableCell className="text-end">
-                          € {sales.total}
+                          € {dailySales.value.toFixed(2)}
                         </TableCell>
                       </TableRow>
-                    </TableFooter>
-                  </React.Fragment>
-                ))}
-              </Table>
+                    ))}
+                  </TableBody>
+                  <TableFooter>
+                    <TableRow className="bg-muted-foreground">
+                      <TableCell></TableCell>
+                      <TableCell className="text-right">Total</TableCell>
+                      <TableCell className="text-end">
+                        € {sales.total}
+                      </TableCell>
+                    </TableRow>
+                  </TableFooter>
+                </React.Fragment>
+              ))}
+            </Table>
           )}
         </div>
       </main>
