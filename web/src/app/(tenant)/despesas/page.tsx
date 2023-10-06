@@ -1,5 +1,4 @@
 'use client'
-import { DatePicker } from '@/components/DatePicker'
 import { Empty } from '@/components/Empty'
 import { Loader } from '@/components/Loader'
 import { PageHeader } from '@/components/PageHeader'
@@ -14,22 +13,26 @@ import {
   TableFooter,
 } from '@/components/ui/table'
 import { dataUtils } from '@/utils/dataUtils'
-import { useCosts } from '@/utils/queries/costs'
-import dayjs from 'dayjs'
+import { useCosts, useGetSingleCosts } from '@/utils/queries/costs'
 import Link from 'next/link'
 import React, { useState } from 'react'
 
 export default function Costs() {
-  const [date, setDate] = useState(dataUtils.getCurrentDay())
+  const [activeCostId, setActiveCostId] = useState(1)
+  const date = dataUtils.getCurrentDay()
 
   const { data, isLoading, isError } = useCosts({
     date,
     period: 'month',
   })
 
+  const { data: costData } = useGetSingleCosts(activeCostId)
+
   return (
     <>
       <Loader visible={isLoading} />
+
+      {costData && <p>{costData.cost.id}</p>}
 
       <main className="flex-1 space-y-3">
         {/* Main Header - Title bar */}
@@ -43,8 +46,8 @@ export default function Costs() {
           </Link>
           {isError && <Empty title="compras" />}
           {data && (
-            <Table className="pointer-events-none mt-2 w-full">
-              <TableHeader>
+            <Table className="mt-2 w-full">
+              <TableHeader className="pointer-events-none ">
                 <TableRow className="h-5 border bg-primary">
                   <TableHead colSpan={3} className="text-primary-foreground">
                     <span>{dataUtils.getCurrentMonth()}</span>
@@ -52,13 +55,14 @@ export default function Costs() {
                 </TableRow>
               </TableHeader>
               <TableBody className="border">
-                {data.costs.costs.map((costs, i) => (
+                {data.costs.costs.map((costs) => (
                   <TableRow
                     key={costs.id}
-                    className="odd:bg-primary/5 even:bg-primary/10"
+                    onClick={() => setActiveCostId(costs.id)}
+                    className="cursor-pointer odd:bg-primary/5 even:bg-primary/10"
                   >
                     <TableCell className="w-12">
-                      {dayjs(costs.createAt).format('DD/MM')}
+                      {dataUtils.getDayAndMonth(costs.createAt)}
                     </TableCell>
                     <TableCell>{costs.name}</TableCell>
                     <TableCell className="w-1/3">

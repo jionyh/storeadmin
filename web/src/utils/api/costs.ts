@@ -1,6 +1,11 @@
 /* eslint-disable no-useless-catch */
 import { api } from '@/lib/axios'
-import { AllCostParams, AllCostResponse, Cost, SingleCostResponse } from '@/types/costTypes'
+import {
+  AllCostParams,
+  AllCostResponse,
+  Cost,
+  SingleCostResponse,
+} from '@/types/costTypes'
 import { ErrorResponse } from '@/types/errorTypes'
 import axios from 'axios'
 
@@ -25,15 +30,13 @@ export const costApi = {
   },
   getCost: async (costId: number): Promise<SingleCostResponse> => {
     try {
-      const response = await api.get(`/costs${costId}`)
+      const response = await api.get(`/costs/${costId}`)
       return response.data
     } catch (error) {
       throw error
     }
   },
-  createCosts: async (
-    costData: Cost,
-  ): Promise<SingleCostResponse> => {
+  createCosts: async (costData: Cost): Promise<SingleCostResponse> => {
     try {
       const response = await api.post('/costs', costData)
       return response.data

@@ -1,15 +1,23 @@
-import dayjs from "dayjs"
+import dayjs from 'dayjs'
+import 'dayjs/locale/pt-br'
+
+dayjs.locale('pt-br')
 
 export const dataUtils = {
-  getCurrentMonth: (month:number = dayjs().month()+1)=>{
-    if(month < 1 || month > 12){
+  getCurrentMonth: (month: number = dayjs().month() + 1) => {
+    if (month < 1 || month > 12) {
       return 'Mês inválido'
     }
-    const currentMonth = dayjs().month(month-1).startOf('month')
+    const currentMonth = dayjs()
+      .month(month - 1)
+      .startOf('month')
     return currentMonth.format('MMMM [de] YYYY').toUpperCase()
   },
-  getCurrentDay: ()=>{
+  getCurrentDay: () => {
     return dayjs().format('YYYY-MM-DD')
-  }
-}
+  },
 
+  getDayAndMonth: (date: string) => {
+    return dayjs(date).format('DD/MM')
+  },
+}

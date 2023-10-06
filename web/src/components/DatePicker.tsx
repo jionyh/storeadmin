@@ -11,6 +11,7 @@ type ParamTypes = {
 }
 
 export const DatePicker = ({ setDate }: ParamTypes) => {
+  dayjs.locale('pt-br')
   const {
     handleLeftArrow,
     handleRightArrow,
