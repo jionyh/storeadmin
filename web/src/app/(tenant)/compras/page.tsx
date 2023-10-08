@@ -75,14 +75,14 @@ export default function Purchases() {
                           <TableRow
                             key={itemPurchases.id}
                             onClick={() => setActivePurchaseId(itemPurchases.id)}
-                            className="odd:bg-primary/5 even:bg-primary/10"
+                            className="odd:bg-primary/5 even:bg-primary/10 w-full"
                           >
-                            <TableCell>{itemPurchases.product}</TableCell>
-                            <TableCell className="text-right w-fit">
+                            <TableCell className='w-1/2'>{itemPurchases.product}</TableCell>
+                            <TableCell className="w-1/4">
                               {itemPurchases.quantity} {itemPurchases.unit}
                             </TableCell>
-                            <TableCell className="text-right">
-                              € {itemPurchases.value}
+                            <TableCell className="text-right w-1/4">
+                              <span>€ {itemPurchases.value}</span>
                             </TableCell>
                             <TableCell className='w-fit flex items-center justify-end gap-1'>
                               <div title='Visualizar'>
@@ -91,7 +91,7 @@ export default function Purchases() {
                               <div title='Deletar'>
                               <XSquare onClick={()=>setIsDialogOpen(true)} className='w-5 h-5 text-destructive cursor-pointer' />
                               </div>
-                        </TableCell>
+                            </TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
