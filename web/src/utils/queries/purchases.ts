@@ -4,7 +4,7 @@ import { purchaseApi } from '../api/purchases'
 
 export const usePurchases = (params?: AllPurchasesParams) => {
   const purchases = useQuery({
-    queryKey: ['purchases', { params }],
+    queryKey: ['purchases', params],
     queryFn: () => purchaseApi.getAllPurchases(params),
     staleTime: 60 * 60 * 3, // 3minutes
   })

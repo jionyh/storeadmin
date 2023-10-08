@@ -4,7 +4,7 @@ import { salesApi } from '../api/sales'
 
 export const useSales = (params?: AllSalesParams) => {
   const sales = useQuery({
-    queryKey: ['sales', { params }],
+    queryKey: ['sales', params ],
     queryFn: () => salesApi.getAllSales(params),
     staleTime: 60 * 60 * 3, // 3minutes
   })

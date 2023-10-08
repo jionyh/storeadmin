@@ -2,6 +2,7 @@
 import { Empty } from '@/components/Empty'
 import { Loader } from '@/components/Loader'
 import { PageHeader } from '@/components/PageHeader'
+import { Alert } from '@/components/alertDialog/Alert'
 import { Button } from '@/components/ui/button'
 import {
   Table,
@@ -12,28 +13,39 @@ import {
   TableCell,
   TableFooter,
 } from '@/components/ui/table'
+import { toast, useToast } from '@/components/ui/use-toast'
+import useDelete from '@/hooks/useDelete'
+import { costApi } from '@/utils/api/costs'
 import { dataUtils } from '@/utils/dataUtils'
 import { useCosts, useGetSingleCosts } from '@/utils/queries/costs'
+import { queryClient } from '@/utils/queryClient'
+import { PenSquare, XSquare } from 'lucide-react'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 export default function Costs() {
-  const [activeCostId, setActiveCostId] = useState(1)
+  const [activeCostId, setActiveCostId] = useState(0)
   const date = dataUtils.getCurrentDay()
 
   const { data, isLoading, isError } = useCosts({
     date,
     period: 'month',
   })
+  const { data: costData, isLoading: costLoading } = useGetSingleCosts(activeCostId)
 
-  const { data: costData } = useGetSingleCosts(activeCostId)
+  const {isDialogOpen, setIsDialogOpen,deleteAction} = useDelete({
+    endpoint:'costs',
+    activeId:activeCostId,
+    date,
+    period:'month'})
+
+  const handleShowAction = async (id:number)=>{
+    console.log(id)
+  }
 
   return (
     <>
-      <Loader visible={isLoading} />
-
-      {costData && <p>{costData.cost.id}</p>}
-
+      <Loader visible={isLoading && costLoading} />
       <main className="flex-1 space-y-3">
         {/* Main Header - Title bar */}
         <PageHeader name="despesas" />
@@ -46,10 +58,10 @@ export default function Costs() {
           </Link>
           {isError && <Empty title="compras" />}
           {data && (
-            <Table className="mt-2 w-full">
+            <Table className="mt-2 w-full select-none">
               <TableHeader className="pointer-events-none ">
                 <TableRow className="h-5 border bg-primary">
-                  <TableHead colSpan={3} className="text-primary-foreground">
+                  <TableHead colSpan={4} className="text-primary-foreground">
                     <span>{dataUtils.getCurrentMonth()}</span>
                   </TableHead>
                 </TableRow>
@@ -59,14 +71,22 @@ export default function Costs() {
                   <TableRow
                     key={costs.id}
                     onClick={() => setActiveCostId(costs.id)}
-                    className="cursor-pointer odd:bg-primary/5 even:bg-primary/10"
+                    className="odd:bg-primary/5 even:bg-primary/10"
                   >
                     <TableCell className="w-12">
                       {dataUtils.getDayAndMonth(costs.createAt)}
                     </TableCell>
                     <TableCell>{costs.name}</TableCell>
-                    <TableCell className="w-1/3">
+                    <TableCell className="text-right w-full">
                       € {costs.value.toFixed(2)}
+                    </TableCell>
+                    <TableCell className='w-fit flex items-center justify-end gap-1'>
+                    <div title='Visualizar'>
+                    <PenSquare onClick={()=>handleShowAction(costs.id)} className='w-5 h-5 text-primary cursor-pointer' />
+                    </div>
+                    <div title='Deletar'>
+                    <XSquare onClick={()=>setIsDialogOpen(true)} className='w-5 h-5 text-destructive cursor-pointer' />
+                    </div>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -74,13 +94,20 @@ export default function Costs() {
               <TableFooter>
                 <TableRow className="bg-muted-foreground">
                   <TableCell colSpan={2}>Total</TableCell>
-                  <TableCell>€ {data.costs.month_totals?.toFixed(2)}</TableCell>
+                  <TableCell className="text-right">€ {data.costs.month_totals?.toFixed(2)}</TableCell>
+                  <TableCell></TableCell>
                 </TableRow>
               </TableFooter>
             </Table>
           )}
         </div>
       </main>
+      <Alert
+        deleteTitle
+        open={isDialogOpen}
+        setOpen={setIsDialogOpen}
+        submit={deleteAction}
+      />
     </>
   )
 }

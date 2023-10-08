@@ -17,7 +17,7 @@ export const dataUtils = {
     return dayjs().format('YYYY-MM-DD')
   },
 
-  getDayAndMonth: (date: string) => {
-    return dayjs(date).format('DD/MM')
+  getDayAndMonth: (date: string, format:'long' | 'short' = 'short') => {
+    return dayjs(date).format(format === 'long' ? 'DD [de] MMMM' : 'DD/MM')
   },
 }
