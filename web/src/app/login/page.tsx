@@ -18,7 +18,7 @@ export default function Login() {
   const { login, hasError } = useLogin()
   const [loading, setLoading] = useState(false)
   const router = useRouter()
-  const {status} = useSession()
+  const { status } = useSession()
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     setLoading(true)
@@ -27,13 +27,13 @@ export default function Login() {
     const password = passwordRef.current?.value || ''
     const loggedUser = await login(email, password)
     if (loggedUser) {
-      await getLogin({email,password})
+      await getLogin({ email, password })
       router.push('/')
     }
     setLoading(false)
   }
 
-  if(status === 'authenticated'){
+  if (status === 'authenticated') {
     router.push('/')
   }
 
@@ -41,38 +41,38 @@ export default function Login() {
     <div className="mx-10 my-auto">
       {status === 'unauthenticated' && (
         <>
-                {loading && <Loader visible />}
-        <Card className="flex flex-col items-center justify-center p-7">
-          <Logo />
-          <CardContent>
-            <form
-              onSubmit={handleFormSubmit}
-              className="my-7 flex w-full flex-col items-center justify-center gap-5"
-            >
-              <InputLogin ref={emailRef} placeholder="Digite o email" />
-              <InputLogin
-                ref={passwordRef}
-                password
-                placeholder="Digite a senha"
-              />
-              {hasError && (
-                <p className="w-full rounded bg-destructive/40 p-1 text-center text-sm text-destructive">
-                  {hasError}
-                </p>
-              )}
-              <Button disabled={loading} className="w-full">
-                Fazer login
-              </Button>
-            </form>
-            <Separator />
-          <div className="flex mt-7 w-full flex-col items-center justify-end gap-1">
-            <p className="text-bold">Esqueceu a senha?</p>
-            <Button className="w-full" variant="destructive" size="sm">
-              Recuperar
-            </Button>
-          </div>
-          </CardContent>
-        </Card>
+          {loading && <Loader visible />}
+          <Card className="flex flex-col items-center justify-center p-7">
+            <Logo />
+            <CardContent>
+              <form
+                onSubmit={handleFormSubmit}
+                className="my-7 flex w-full flex-col items-center justify-center gap-5"
+              >
+                <InputLogin ref={emailRef} placeholder="Digite o email" />
+                <InputLogin
+                  ref={passwordRef}
+                  password
+                  placeholder="Digite a senha"
+                />
+                {hasError && (
+                  <p className="w-full rounded bg-destructive/40 p-1 text-center text-sm text-destructive">
+                    {hasError}
+                  </p>
+                )}
+                <Button disabled={loading} className="w-full">
+                  Fazer login
+                </Button>
+              </form>
+              <Separator />
+              <div className="mt-7 flex w-full flex-col items-center justify-end gap-1">
+                <p className="text-bold">Esqueceu a senha?</p>
+                <Button className="w-full" variant="destructive" size="sm">
+                  Recuperar
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         </>
       )}
     </div>

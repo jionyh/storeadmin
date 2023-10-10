@@ -31,15 +31,17 @@ export default function Costs() {
     date,
     period: 'month',
   })
-  const { data: costData, isLoading: costLoading } = useGetSingleCosts(activeCostId)
+  const { data: costData, isLoading: costLoading } =
+    useGetSingleCosts(activeCostId)
 
-  const {isDialogOpen, setIsDialogOpen,deleteAction} = useDelete({
-    endpoint:'costs',
-    activeId:activeCostId,
+  const { isDialogOpen, setIsDialogOpen, deleteAction } = useDelete({
+    endpoint: 'costs',
+    activeId: activeCostId,
     date,
-    period:'month'})
+    period: 'month',
+  })
 
-  const handleShowAction = async (id:number)=>{
+  const handleShowAction = async (id: number) => {
     console.log(id)
   }
 
@@ -77,16 +79,22 @@ export default function Costs() {
                       {dataUtils.getDayAndMonth(costs.createAt)}
                     </TableCell>
                     <TableCell>{costs.name}</TableCell>
-                    <TableCell className="text-right w-full">
+                    <TableCell className="w-full text-right">
                       € {costs.value.toFixed(2)}
                     </TableCell>
-                    <TableCell className='w-fit flex items-center justify-end gap-1'>
-                    <div title='Visualizar'>
-                    <PenSquare onClick={()=>handleShowAction(costs.id)} className='w-5 h-5 text-primary cursor-pointer' />
-                    </div>
-                    <div title='Deletar'>
-                    <XSquare onClick={()=>setIsDialogOpen(true)} className='w-5 h-5 text-destructive cursor-pointer' />
-                    </div>
+                    <TableCell className="flex w-fit items-center justify-end gap-1">
+                      <div title="Visualizar">
+                        <PenSquare
+                          onClick={() => handleShowAction(costs.id)}
+                          className="h-5 w-5 cursor-pointer text-primary"
+                        />
+                      </div>
+                      <div title="Deletar">
+                        <XSquare
+                          onClick={() => setIsDialogOpen(true)}
+                          className="h-5 w-5 cursor-pointer text-destructive"
+                        />
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -94,7 +102,9 @@ export default function Costs() {
               <TableFooter>
                 <TableRow className="bg-muted-foreground">
                   <TableCell colSpan={2}>Total</TableCell>
-                  <TableCell className="text-right">€ {data.costs.month_totals?.toFixed(2)}</TableCell>
+                  <TableCell className="text-right">
+                    € {data.costs.month_totals?.toFixed(2)}
+                  </TableCell>
                   <TableCell></TableCell>
                 </TableRow>
               </TableFooter>

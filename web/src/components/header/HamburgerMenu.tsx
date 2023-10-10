@@ -57,16 +57,18 @@ export const HamburgerMenu = () => {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <Link href="/configuracoes">
+          <Link href="/relatorios">
             <DropdownMenuItem className="flex cursor-pointer items-center gap-2 hover:bg-primary/5 hover:text-primary">
               <ClipboardList className="h-5 w-5" />
               Relatórios
             </DropdownMenuItem>
           </Link>
-          <DropdownMenuItem className="flex cursor-pointer items-center gap-2 hover:bg-primary/5 hover:text-primary">
-            <FileCog className="h-5 w-5" />
-            Configurações
-          </DropdownMenuItem>
+          <Link href="/configuracoes">
+            <DropdownMenuItem className="flex cursor-pointer items-center gap-2 hover:bg-primary/5 hover:text-primary">
+              <FileCog className="h-5 w-5" />
+              Configurações
+            </DropdownMenuItem>
+          </Link>
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { ChangeEvent, useEffect, useRef } from 'react'
 import {
   FormControl,
   FormField,
@@ -32,8 +32,11 @@ export const SalesFormFields = ({ index, remove, form, payments }: Props) => {
       {index === 0 ? (
         ''
       ) : (
-        <span onClick={() => remove(index)} className="flex justify-end">
-          <X className="h-4 w-4 cursor-pointer text-destructive" />
+        <span className="flex justify-end">
+          <X
+            onClick={() => remove(index)}
+            className="h-4 w-4 cursor-pointer text-destructive"
+          />
         </span>
       )}
       <FormField
