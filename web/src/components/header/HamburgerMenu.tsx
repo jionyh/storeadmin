@@ -63,10 +63,10 @@ export const HamburgerMenu = () => {
               Relatórios
             </DropdownMenuItem>
           </Link>
-          <Link href="/configuracoes">
+          <Link href="/cadastros">
             <DropdownMenuItem className="flex cursor-pointer items-center gap-2 hover:bg-primary/5 hover:text-primary">
               <FileCog className="h-5 w-5" />
-              Configurações
+              Cadastros
             </DropdownMenuItem>
           </Link>
         </DropdownMenuGroup>
