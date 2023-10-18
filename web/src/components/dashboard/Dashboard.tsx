@@ -21,7 +21,7 @@ export const Dashboard = () => {
     setSelectedPeriod(id)
   }, [])
   useEffect(() => {
-    dataFetchFunction('week')
+    dataFetchFunction(selectedPeriod)
   })
 
   const purchasesValue =

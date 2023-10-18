@@ -3,7 +3,7 @@ import { Separator } from '@/components/ui/separator'
 import { ReactNode } from 'react'
 
 const navConfigItems = [
-  { title: 'Categorias', href: '/cadastros' },
+  { title: 'Categorias', href: '/cadastros/categorias' },
   { title: 'Produtos', href: '/cadastros/produtos' },
   { title: 'Unidades', href: '/cadastros/unidades' },
   { title: 'Formas de Pagamentos', href: '/cadastros/formas_pagamento' },

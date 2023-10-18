@@ -6,9 +6,11 @@ import { useGetAllProducts } from "@/utils/queries/products";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import { usePathname } from "next/navigation";
 
-export default async function Produtos() {
+export default function Produtos() {
   const products = useGetAllProducts();
+  const path = usePathname()
 
   const data: Products[] = [];
 
@@ -30,7 +32,7 @@ export default async function Produtos() {
 
   return (
     <div className="mb-3 w-full px-5">
-      <Link className="my-5 flex items-center justify-end" href="/vendas/add">
+      <Link className="my-5 flex items-center justify-end" href={`${path}/add`}>
         <Button size="sm" variant="outline">
           <Plus className="h-3 w-3 text-inherit" /> Adicionar Produto
         </Button>

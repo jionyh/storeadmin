@@ -63,7 +63,7 @@ export const HamburgerMenu = () => {
               Relatórios
             </DropdownMenuItem>
           </Link>
-          <Link href="/cadastros">
+          <Link href="/cadastros/categorias">
             <DropdownMenuItem className="flex cursor-pointer items-center gap-2 hover:bg-primary/5 hover:text-primary">
               <FileCog className="h-5 w-5" />
               Cadastros

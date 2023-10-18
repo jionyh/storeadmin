@@ -16,9 +16,9 @@ function FormasPagamento() {
 
   return (
     <div className="mb-3 w-full px-5">
-      <Link className="my-5 flex items-center justify-end" href="/vendas/add">
-        <Button size="sm" variant='outline'><Plus className="h-3 w-3 text-inherit"/> Adicionar Forma de Pagamento</Button>
-      </Link>
+      <div className="my-5 flex items-center justify-end">
+        <Button disabled size="sm" variant='outline'><Plus className="h-3 w-3 text-inherit"/> Adicionar Forma de Pagamento</Button>
+      </div>
       {payments.data && <DefaultTable handleDelete={handlePaymentMethodDelete} title="formas de pagamento" data={payments.data.paymentMethods}/>}
     </div>
   );

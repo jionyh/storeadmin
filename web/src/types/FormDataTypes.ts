@@ -43,3 +43,41 @@ export const costFormSchema = z.object({
 })
 
 export type CostFormDataType = z.infer<typeof costFormSchema>
+
+// UnitForm //
+
+export const unitsFormSchema = z.object({
+  units: z.array(
+    z.object({
+      name: z.string().nonempty('Campo obrigatório'),
+      abbreviation: z.string().nonempty('Campo obrigatório'),
+    }),
+  ),
+})
+
+export type UnitsFormDataType = z.infer<typeof unitsFormSchema>
+
+// CategoriesForm //
+
+export const categoriesFormSchema = z.object({
+  categories: z.array(
+    z.object({
+      name: z.string().nonempty('Campo obrigatório')
+    }),
+  ),
+})
+
+export type CategoriesFormDataType = z.infer<typeof categoriesFormSchema>
+
+// ProductsForm //
+
+export const productsFormSchema = z.object({
+  products: z.array(
+    z.object({
+      name: z.string().nonempty('Campo obrigatório'),
+      category_id: z.coerce.string().nonempty('Campo obrigatório').transform(id=>parseInt(id))
+    }),
+  ),
+})
+
+export type ProductsFormDataType = z.infer<typeof productsFormSchema>
