@@ -10,27 +10,19 @@ import {
 type Props = {
   data: any[]
   onChange: any
-  field: any
-  disabled: boolean
+  placeholder?: string
 }
 
-export const CommonSelect = ({ data, onChange, field, disabled }: Props) => {
+export const CommonSelect = ({ data, onChange, placeholder }: Props) => {
   return (
     <FormItem>
-      <Select
-        disabled={disabled}
-        value={field.value.toString()}
-        onValueChange={onChange}
-      >
+      <Select onValueChange={onChange}>
         <FormControl>
           <SelectTrigger>
-            <SelectValue placeholder="" />
+            <SelectValue placeholder={placeholder} />
           </SelectTrigger>
         </FormControl>
         <SelectContent>
-          <SelectItem value="0" disabled>
-            Selecione a Categoria
-          </SelectItem>
           {data.map((item) => (
             <SelectItem key={item.id} value={item.id.toString()}>
               {item.name}

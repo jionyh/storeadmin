@@ -48,12 +48,31 @@ export const ProductsFormFields = ({ index, remove, form }: Props) => {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <CommonSelect
-                  field={field}
-                  disabled={selectedValue !== 0}
-                  data={categories.data.categories}
-                  onChange={field.onChange}
-                />
+                <FormItem>
+                  <Select
+                    {...field}
+                    disabled={selectedValue !== 0}
+                    value={field.value.toString()}
+                    onValueChange={field.onChange}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="0" disabled>
+                        Selecione a Categoria
+                      </SelectItem>
+                      {categories.data.categories.map((item) => (
+                        <SelectItem key={item.id} value={item.id.toString()}>
+                          {item.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                    <FormMessage />
+                  </Select>
+                </FormItem>
               </FormControl>
               <FormMessage />
             </FormItem>

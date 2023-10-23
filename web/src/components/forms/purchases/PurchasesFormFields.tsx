@@ -30,12 +30,13 @@ type Props = {
 
 export const PurchasesFormFields = ({ index, remove, form }: Props) => {
   const formWatch = form.watch()
-  const {data:ProductsData} = useProducts(formWatch.category)
-  const {data:UnitsData} = useUnits()
+  const { data: ProductsData } = useProducts(formWatch.category)
+  const { data: UnitsData } = useUnits()
 
-  const getUnitAbbreviation = (id: string) => UnitsData.units.find(unit => unit.id.toString() === id)?.abbreviation || '';
-
-
+  const getUnitAbbreviation = (id: string) =>
+    UnitsData.units.find((unit) => unit.id.toString() === id)?.abbreviation ||
+    ''
+  console.log(formWatch)
   return (
     <>
       {index === 0 ? (
@@ -49,44 +50,58 @@ export const PurchasesFormFields = ({ index, remove, form }: Props) => {
         control={form.control}
         name={`purchases.${index}.product_id`}
         render={({ field }) => (
-          <CommonSelect data={ProductsData.products.products} onChange={field.onChange} placeholder='Selecione o produto'/>
+          <CommonSelect
+            data={ProductsData.products.products}
+            onChange={field.onChange}
+            placeholder="Selecione o produto"
+          />
         )}
       />
       <FormField
         control={form.control}
         name={`purchases.${index}.unit_id`}
         render={({ field }) => (
-          <CommonSelect data={UnitsData.units} onChange={field.onChange} placeholder='Selecione o tipo de unidade'/>
+          <CommonSelect
+            data={UnitsData.units}
+            onChange={field.onChange}
+            placeholder="Selecione o tipo de unidade"
+          />
         )}
       />
-      <div className='flex gap-1 items-start'>
-      <FormField
-        control={form.control}
-        name={`purchases.${index}.quantity`}
-        render={({ field }) => (
-          <FormItem className='flex-1 top-0'>
-            <FormControl>
-              <div className='relative'>
-              <Input placeholder='Quantidade'  {...field} />
-              <span className='absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-muted-foreground'>{getUnitAbbreviation(formWatch.purchases[index].unit_id)}</span>
-              </div>
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      <FormField
-        control={form.control}
-        name={`purchases.${index}.value`}
-        render={({ field }) => (
-          <FormItem className='flex-1 top-0'>
-            <FormControl>
-              <Input className='' placeholder="Valor" {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+      <div className="flex items-start gap-1">
+        <FormField
+          control={form.control}
+          name={`purchases.${index}.quantity`}
+          render={({ field }) => (
+            <FormItem className="top-0 flex-1">
+              <FormControl>
+                <div className="relative">
+                  <Input
+                    placeholder="Quantidade"
+                    className="text-sm"
+                    {...field}
+                  />
+                  <span className="absolute right-1 top-1/2 -translate-y-1/2 transform text-xs text-muted-foreground">
+                    {getUnitAbbreviation(formWatch.purchases[index].unit_id)}
+                  </span>
+                </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name={`purchases.${index}.value`}
+          render={({ field }) => (
+            <FormItem className="top-0 flex-1">
+              <FormControl>
+                <Input className="" placeholder="Valor" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
       </div>
       <FormField
         control={form.control}

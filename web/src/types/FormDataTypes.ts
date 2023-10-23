@@ -18,6 +18,7 @@ export const purchaseFormSchema = z.object({
   category: z.string().nonempty('Campo obrigatório'),
   purchases: z.array(
     z.object({
+      purchase_id: z.string().optional(),
       product_id: z.string().nonempty('Campo obrigatório'),
       unit_id: z.string().nonempty('Campo obrigatório'),
       quantity: z.string().nonempty('Campo obrigatório'),

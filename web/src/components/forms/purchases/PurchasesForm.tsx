@@ -35,7 +35,9 @@ export const PurchasesForm = ({
   const watchCategory = form.watch('category')
   const products = useProducts(watchCategory)
   const units = useUnits()
-  
+
+  console.log('form', fields)
+
   return (
     <form
       className="w=full flex flex-col gap-2"
@@ -45,27 +47,40 @@ export const PurchasesForm = ({
         control={form.control}
         name={`category`}
         render={({ field }) => (
-          <CommonSelect data={category.data.categories} placeholder='Selecione a categoria' onChange={field.onChange} />
-        )}/>
+          <CommonSelect
+            data={category.data.categories}
+            placeholder="Selecione a categoria"
+            onChange={field.onChange}
+          />
+        )}
+      />
 
-        <Separator className='my-2'/>
+      <Separator className="my-2" />
 
-
-      {watchCategory && products.data && units.data && fields.map((fields, index) => (
-        <PurchasesFormFields
-          key={fields.id}
-          form={form}
-          index={index}
-          remove={remove}
-        />
-      ))}
+      {watchCategory &&
+        products.data &&
+        units.data &&
+        fields.map((fields, index) => (
+          <PurchasesFormFields
+            key={fields.id}
+            form={form}
+            index={index}
+            remove={remove}
+          />
+        ))}
       <div className="flex w-full items-center justify-end gap-1">
         <Button
           variant="blue"
           size="sm"
-          disabled={watchCategory ? false : true}
+          disabled={!watchCategory}
           onClick={() =>
-            append({quantity: '', value: '', product_id: ' ', unit_id: ' ',supplier: '',})
+            append({
+              quantity: '',
+              value: '0',
+              product_id: ' ',
+              unit_id: ' ',
+              supplier: '',
+            })
           }
         >
           <Plus />
