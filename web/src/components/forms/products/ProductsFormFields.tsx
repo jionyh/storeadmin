@@ -7,10 +7,17 @@ import {
 } from '@/components/ui/form'
 import { X } from 'lucide-react'
 import { Input } from '@/components/ui/input'
-import { CategoriesFormDataType, ProductsFormDataType } from '@/types/FormDataTypes'
+import { ProductsFormDataType } from '@/types/FormDataTypes'
 import { UseFieldArrayRemove, UseFormReturn } from 'react-hook-form'
-import { CommonSelect } from '../commons/Select'
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from '@/components/ui/select'
 import { useCategory } from '@/utils/queries/category'
+import { CommonSelect } from '../commons/Select'
 
 type Props = {
   index: number
@@ -19,10 +26,8 @@ type Props = {
 }
 
 export const ProductsFormFields = ({ index, remove, form }: Props) => {
-
   const categories = useCategory()
-
-  console.log(form.control._names)
+  const selectedValue = form.watch(`products.${index}.category_id`)
 
   return (
     <>
@@ -36,20 +41,25 @@ export const ProductsFormFields = ({ index, remove, form }: Props) => {
           />
         </span>
       )}
-      {categories.data &&  <FormField
-        control={form.control}
-        name={`products.${index}.category_id`}
-        render={({ field }) => (
-          <FormItem>
-            <FormControl>
-            {field.value 
-            ? <Input disabled placeholder='Categoria'{...field}/> 
-            : <CommonSelect data={categories.data.categories} onChange={field.onChange} placeholder='Selecione a categoria'/>}
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />}
+      {categories.data && (
+        <FormField
+          control={form.control}
+          name={`products.${index}.category_id`}
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <CommonSelect
+                  field={field}
+                  disabled={selectedValue !== 0}
+                  data={categories.data.categories}
+                  onChange={field.onChange}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      )}
       <FormField
         control={form.control}
         name={`products.${index}.name`}

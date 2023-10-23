@@ -9,6 +9,7 @@ import {
 import { ProductsFormDataType } from '@/types/FormDataTypes'
 import { Button } from '@/components/ui/button'
 import { ProductsFormFields } from './ProductsFormFields'
+import { undefined } from 'zod'
 
 type Props = {
   form: UseFormReturn<ProductsFormDataType>
@@ -25,7 +26,7 @@ export const ProductsForm = ({
   fields,
   remove,
 }: Props) => {
-  const isEditForm = fields.findIndex(field => field.product_id) !== -1
+  const isEditForm = fields.findIndex((field) => field.prod_id) !== -1
   return (
     <form
       className="w=full flex flex-col gap-2"
@@ -44,7 +45,7 @@ export const ProductsForm = ({
           variant="blue"
           disabled={isEditForm}
           size="sm"
-          onClick={() => append({ name: '', category_id:0})}
+          onClick={() => append({ name: '', category_id: 0 })}
         >
           <Plus />
           Novo Campo

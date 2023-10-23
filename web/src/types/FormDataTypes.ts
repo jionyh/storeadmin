@@ -36,7 +36,14 @@ export const costFormSchema = z.object({
     z.object({
       name: z.string().nonempty('Campo obrigatório'),
       value: z.string().nonempty('Campo obrigatório'),
-      date: z.date().or(z.string({ required_error: 'Campo obrigatório' }).nonempty('Campo obrigatório')).transform(date => dayjs(date).format("YYYY-MM-DD")),
+      date: z
+        .date()
+        .or(
+          z
+            .string({ required_error: 'Campo obrigatório' })
+            .nonempty('Campo obrigatório'),
+        )
+        .transform((date) => dayjs(date).format('YYYY-MM-DD')),
       recurrent: z.boolean({ required_error: 'Campo obrigatório' }),
     }),
   ),
@@ -62,7 +69,7 @@ export type UnitsFormDataType = z.infer<typeof unitsFormSchema>
 export const categoriesFormSchema = z.object({
   categories: z.array(
     z.object({
-      name: z.string().nonempty('Campo obrigatório')
+      name: z.string().nonempty('Campo obrigatório'),
     }),
   ),
 })
@@ -74,9 +81,12 @@ export type CategoriesFormDataType = z.infer<typeof categoriesFormSchema>
 export const productsFormSchema = z.object({
   products: z.array(
     z.object({
-      product_id: z.number().optional(),
+      prod_id: z.string().optional(),
       name: z.string().nonempty('Campo obrigatório'),
-      category_id: z.coerce.string().nonempty('Campo obrigatório').transform(cat=>parseInt(cat))
+      category_id: z.coerce
+        .string()
+        .nonempty('Campo obrigatório')
+        .transform((cat) => parseInt(cat)),
     }),
   ),
 })
