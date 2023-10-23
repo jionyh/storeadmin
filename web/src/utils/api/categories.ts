@@ -22,7 +22,6 @@ export const categoryApi = {
       }
     }
   },
-
   createPaymentsMethods: async (
     saleData: Sale,
   ): Promise<SingleSaleResponse> => {

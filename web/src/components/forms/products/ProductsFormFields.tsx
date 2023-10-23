@@ -22,6 +22,8 @@ export const ProductsFormFields = ({ index, remove, form }: Props) => {
 
   const categories = useCategory()
 
+  console.log(form.control._names)
+
   return (
     <>
       {index === 0 ? (
@@ -40,7 +42,9 @@ export const ProductsFormFields = ({ index, remove, form }: Props) => {
         render={({ field }) => (
           <FormItem>
             <FormControl>
-            <CommonSelect data={categories.data.categories} onChange={field.onChange} placeholder='Selecione a categoria'/>
+            {field.value 
+            ? <Input disabled placeholder='Categoria'{...field}/> 
+            : <CommonSelect data={categories.data.categories} onChange={field.onChange} placeholder='Selecione a categoria'/>}
             </FormControl>
             <FormMessage />
           </FormItem>

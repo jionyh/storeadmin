@@ -74,8 +74,9 @@ export type CategoriesFormDataType = z.infer<typeof categoriesFormSchema>
 export const productsFormSchema = z.object({
   products: z.array(
     z.object({
+      product_id: z.number().optional(),
       name: z.string().nonempty('Campo obrigatório'),
-      category_id: z.coerce.string().nonempty('Campo obrigatório').transform(id=>parseInt(id))
+      category_id: z.coerce.string().nonempty('Campo obrigatório').transform(cat=>parseInt(cat))
     }),
   ),
 })

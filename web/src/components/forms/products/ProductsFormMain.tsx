@@ -1,7 +1,6 @@
 'use client'
 import React from 'react'
 
-import { PageHeader } from '@/components/PageHeader'
 import { Form } from '@/components/ui/form'
 import { Alert } from '@/components/alertDialog/Alert'
 
@@ -11,35 +10,44 @@ import { useFieldArray, useForm } from 'react-hook-form'
 
 import { ProductsFormDataType, productsFormSchema } from '@/types/FormDataTypes'
 import { ProductsForm } from '@/components/forms/products/ProductsForm'
+import { Product } from '@/types/productTypes'
 
-function AddProducts(){
+type ProductsFormMainProps = {
+  initialData?: Product[]
+}
+
+export const ProductsFormMain = ({initialData}:ProductsFormMainProps)=>{
 
   const { setFormData, isDialogOpen, setIsDialogOpen, submitForm } =
-    useFormSubmit<ProductsFormDataType['products']>({
-      endpoint: 'products',
-      name: 'categoria',
-    })
-
-  const form = useForm<ProductsFormDataType>({
-    resolver: zodResolver(productsFormSchema),
-    defaultValues: {
-      products: [{ name: '', category_id: 0}],
-    },
+  useFormSubmit<ProductsFormDataType['products']>({
+    endpoint: 'products',
+    name: 'produto',
   })
 
-  const { fields, append, remove } = useFieldArray({
-    control: form.control,
-    name: 'products',
-  })
+const form = useForm<ProductsFormDataType>({
+  resolver: zodResolver(productsFormSchema),
+  defaultValues: {
+    products: initialData && initialData?.length > 0 ? initialData : [{ name: '', category_id: 0}],
+  },
+})
 
-  function onSubmit(values: ProductsFormDataType) {
-    setFormData(values.products)
-    setIsDialogOpen(true)
-  }
+const { fields, append, remove } = useFieldArray({
+  control: form.control,
+  name: 'products',
+})
 
-  return (
+function onSubmit(values: ProductsFormDataType) {
+  setFormData(values.products)
+  setIsDialogOpen(true)
+}
+
+console.log(fields)
+
+  return(
     <div>
-      <PageHeader name="Adicionar produtos" />
+      <h2 className='text-lg font-semibold leading-none tracking-tight text-center'>
+        {initialData && initialData?.length > 0 ? 'Editar Produto' : 'Adicionar Produto'}
+        </h2>
         <div className="p-4">
           <Form {...form}>
             <ProductsForm
@@ -59,5 +67,3 @@ function AddProducts(){
     </div>
   )
 }
-
-export default AddProducts

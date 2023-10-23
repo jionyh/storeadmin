@@ -25,6 +25,7 @@ export const ProductsForm = ({
   fields,
   remove,
 }: Props) => {
+  const isEditForm = fields.findIndex(field => field.product_id) !== -1
   return (
     <form
       className="w=full flex flex-col gap-2"
@@ -41,6 +42,7 @@ export const ProductsForm = ({
       <div className="flex w-full items-center justify-end gap-1">
         <Button
           variant="blue"
+          disabled={isEditForm}
           size="sm"
           onClick={() => append({ name: '', category_id:0})}
         >

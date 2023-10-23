@@ -1,7 +1,5 @@
 'use client'
-import React from 'react'
 
-import { PageHeader } from '@/components/PageHeader'
 import { Form } from '@/components/ui/form'
 import { Alert } from '@/components/alertDialog/Alert'
 
@@ -12,8 +10,11 @@ import { useFieldArray, useForm } from 'react-hook-form'
 import { CategoriesFormDataType, categoriesFormSchema } from '@/types/FormDataTypes'
 import { CategoriesForm } from '@/components/forms/categories/CategoriesForm'
 
-function AddCategories(){
+type CategoriesFormMainProps = {
+  initialData?: CategoriesFormDataType['categories']
+}
 
+export const CategoriesFormMain = ({initialData}:CategoriesFormMainProps)=>{
   const { setFormData, isDialogOpen, setIsDialogOpen, submitForm } =
     useFormSubmit<CategoriesFormDataType['categories']>({
       endpoint: 'categories',
@@ -23,7 +24,7 @@ function AddCategories(){
   const form = useForm<CategoriesFormDataType>({
     resolver: zodResolver(categoriesFormSchema),
     defaultValues: {
-      categories: [{ name: ''}],
+      categories: initialData && initialData?.length > 0 ? initialData : [{ name: ''}],
     },
   })
 
@@ -37,19 +38,21 @@ function AddCategories(){
     setIsDialogOpen(true)
   }
 
-  return (
+  return(
     <div>
-      <PageHeader name="Adicionar categoria" />
-        <div className="p-4">
-          <Form {...form}>
-            <CategoriesForm
-              append={append}
-              fields={fields}
-              form={form}
-              onSubmit={onSubmit}
-              remove={remove}
-            />
-          </Form>
+      <h2 className='text-lg font-semibold leading-none tracking-tight text-center'>
+        {initialData && initialData?.length > 0 ? 'Editar Categoria' : 'Adicionar nova categoria'}
+        </h2>
+      <div className="p-4">
+<Form {...form}>
+    <CategoriesForm
+      append={append}
+      fields={fields}
+      form={form}
+      onSubmit={onSubmit}
+      remove={remove}
+    />
+  </Form>
         </div>
       <Alert
         open={isDialogOpen}
@@ -57,7 +60,6 @@ function AddCategories(){
         submit={submitForm}
       />
     </div>
+    
   )
 }
-
-export default AddCategories
