@@ -5,7 +5,11 @@ import { queryClient } from '@/utils/queryClient'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
-function useFormSubmit<T>(props: { endpoint: string, name:string }) {
+function useFormSubmit<T>(props: {
+  endpoint: string
+  name: string
+  onSuccess?: (status: boolean) => void
+}) {
   const [formData, setFormData] = useState<T>()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const { toast } = useToast()
@@ -13,6 +17,14 @@ function useFormSubmit<T>(props: { endpoint: string, name:string }) {
 
   async function submitForm() {
     setIsDialogOpen(false)
+
+    const onSuccess = () => {
+      if (props.onSuccess) {
+        return props.onSuccess(false)
+      } else {
+        return router.back
+      }
+    }
 
     try {
       const response = await api.post(`/${props.endpoint}`, formData)
@@ -22,7 +34,7 @@ function useFormSubmit<T>(props: { endpoint: string, name:string }) {
           description: `${props.name}s adicionada com sucesso!`,
         })
         queryClient.invalidateQueries({ queryKey: [`${props.endpoint}`] })
-        router.back()
+        onSuccess()
       } else {
         toast({
           variant: 'destructive',

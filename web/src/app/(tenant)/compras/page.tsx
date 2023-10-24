@@ -17,7 +17,6 @@ import {
   TableFooter,
 } from '@/components/ui/table'
 import useDelete from '@/hooks/useDelete'
-import { Purchase } from '@/types/purchaseTypes'
 import { usePurchases } from '@/utils/queries/purchases'
 import dayjs from 'dayjs'
 import { PenSquare, XSquare } from 'lucide-react'
@@ -33,13 +32,15 @@ type ActivePurchaseType = {
   supplier: string
 }
 
-const defaultPurchase = [{
-  quantity: '',
-  value: '0',
-  product_id: '',
-  unit_id: ' ',
-  supplier: '',
-}]
+const defaultPurchase = [
+  {
+    quantity: '',
+    value: '0',
+    product_id: '',
+    unit_id: ' ',
+    supplier: '',
+  },
+]
 
 export default function Purchases() {
   const [activePurchaseId, setActivePurchaseId] = useState(0)
@@ -62,7 +63,6 @@ export default function Purchases() {
   const handleShowAction = async (id: number) => {
     setActivePurchase(defaultPurchase)
     if (isLoading) return
-    const activePurchase = []
     const allPurchases = data.purchases.allPurchases
     for (const purchase of allPurchases) {
       for (const dailyPurchase of purchase.dailyPurchases) {
@@ -71,15 +71,17 @@ export default function Purchases() {
         )
 
         if (foundPurchase) {
-          setActivePurchase([{
-            category: dailyPurchase.category,
-            purchase_id: foundPurchase.id,
-            quantity: foundPurchase.quantity.toString(),
-            value: foundPurchase.value,
-            product_id: foundPurchase.product,
-            unit_id: foundPurchase.unit,
-            supplier: foundPurchase.supplier,
-          }])
+          setActivePurchase([
+            {
+              category: dailyPurchase.category,
+              purchase_id: foundPurchase.id,
+              quantity: foundPurchase.quantity.toString(),
+              value: foundPurchase.value,
+              product_id: foundPurchase.product,
+              unit_id: foundPurchase.unit,
+              supplier: foundPurchase.supplier,
+            },
+          ])
         }
       }
     }
@@ -185,7 +187,7 @@ export default function Purchases() {
         submit={deleteAction}
       />
       <ModalForm open={open} setOpen={setOpen}>
-        <PurchasesFormMain initialData={activePurchase} />
+        <PurchasesFormMain initialData={activePurchase} onSuccess={setOpen} />
       </ModalForm>
     </>
   )

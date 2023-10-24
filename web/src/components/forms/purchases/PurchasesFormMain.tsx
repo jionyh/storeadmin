@@ -22,6 +22,7 @@ type PurchaseFormMainProps = {
     supplier: string
     category?: string
   }[]
+  onSuccess?: (status: boolean) => void
 }
 
 const emptyFields = [
@@ -34,7 +35,10 @@ const emptyFields = [
   },
 ]
 
-export const PurchasesFormMain = ({ initialData }: PurchaseFormMainProps) => {
+export const PurchasesFormMain = ({
+  initialData,
+  onSuccess,
+}: PurchaseFormMainProps) => {
   const categories = useCategory()
 
   const itsEditForm = initialData?.some((el) => el.purchase_id !== undefined)
@@ -43,6 +47,7 @@ export const PurchasesFormMain = ({ initialData }: PurchaseFormMainProps) => {
     useFormSubmit<PurchaseFormDataType['purchases']>({
       endpoint: 'purchases',
       name: 'compra',
+      onSuccess,
     })
 
   const form = useForm<PurchaseFormDataType>({
@@ -63,8 +68,6 @@ export const PurchasesFormMain = ({ initialData }: PurchaseFormMainProps) => {
     setFormData(values.purchases)
     setIsDialogOpen(true)
   }
-
-  console.log(initialData)
 
   return (
     <div>
