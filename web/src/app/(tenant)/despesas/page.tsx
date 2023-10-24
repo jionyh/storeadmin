@@ -3,6 +3,8 @@ import { Empty } from '@/components/Empty'
 import { Loader } from '@/components/Loader'
 import { PageHeader } from '@/components/PageHeader'
 import { Alert } from '@/components/alertDialog/Alert'
+import { CostsFormMain } from '@/components/forms/costs/CostsFormMain'
+import { ModalForm } from '@/components/modalForm/ModalForm'
 import { Button } from '@/components/ui/button'
 import {
   Table,
@@ -13,19 +15,32 @@ import {
   TableCell,
   TableFooter,
 } from '@/components/ui/table'
-import { toast, useToast } from '@/components/ui/use-toast'
 import useDelete from '@/hooks/useDelete'
-import { costApi } from '@/utils/api/costs'
 import { dataUtils } from '@/utils/dataUtils'
 import { useCosts, useGetSingleCosts } from '@/utils/queries/costs'
-import { queryClient } from '@/utils/queryClient'
 import { PenSquare, XSquare } from 'lucide-react'
-import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
+
+type ActiveCostType = {
+  cost_id?: number
+  name: string
+  value: string
+  date: string
+}
+
+const defaultCost = [
+  {
+    name: '',
+    value: '',
+    date: '',
+  },
+]
 
 export default function Costs() {
   const [activeCostId, setActiveCostId] = useState(0)
+  const [activeCost, setActiveCost] = useState<ActiveCostType[]>(defaultCost)
   const date = dataUtils.getCurrentDay()
+  const [open, setOpen] = useState(false)
 
   const { data, isLoading, isError } = useCosts({
     date,
@@ -42,7 +57,27 @@ export default function Costs() {
   })
 
   const handleShowAction = async (id: number) => {
-    console.log(id)
+    setActiveCost(defaultCost)
+    if (isLoading) return
+    const allCosts = data.costs.costs
+    const foundCost = allCosts.find((cost) => cost.id === id)
+
+    if (foundCost) {
+      setActiveCost([
+        {
+          cost_id: foundCost.id,
+          name: foundCost.name,
+          value: foundCost.value.toString(),
+          date: foundCost.createAt,
+        },
+      ])
+    }
+    setOpen(true)
+  }
+
+  const handleButtonAddClick = () => {
+    setActiveCost(defaultCost)
+    setOpen(true)
   }
 
   return (
@@ -52,12 +87,11 @@ export default function Costs() {
         {/* Main Header - Title bar */}
         <PageHeader name="despesas" />
         <div className="w-full px-5">
-          <Link
-            className="my-5 flex w-full items-center justify-end"
-            href="/despesas/add"
-          >
-            <Button size="sm">Nova Despesa</Button>
-          </Link>
+          <div className="my-5 flex items-center justify-end">
+            <Button onClick={handleButtonAddClick} size="sm">
+              Nova Venda
+            </Button>
+          </div>
           {isError && <Empty title="compras" />}
           {data && (
             <Table className="mt-2 w-full select-none">
@@ -118,6 +152,9 @@ export default function Costs() {
         setOpen={setIsDialogOpen}
         submit={deleteAction}
       />
+      <ModalForm open={open} setOpen={setOpen}>
+        <CostsFormMain initialData={activeCost} onSuccess={setOpen} />
+      </ModalForm>
     </>
   )
 }
