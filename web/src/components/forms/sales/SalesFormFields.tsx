@@ -4,6 +4,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from '@/components/ui/form'
 import {
@@ -51,8 +52,15 @@ export const SalesFormFields = ({
         <FormField
           control={form.control}
           name={`sales.${index}.payment_id`}
-          render={({ field }) => <Input {...field} disabled />}
+          render={({ field }) => (
+          <>
+          <FormLabel>Forma de Pagamento</FormLabel>
+          <Input {...field} disabled />
+          </>
+          )}
         />
+
+        
       ) : (
         <FormField
           control={form.control}
@@ -83,6 +91,7 @@ export const SalesFormFields = ({
         name={`sales.${index}.value`}
         render={({ field }) => (
           <FormItem>
+            {edit && <FormLabel>Valor</FormLabel>}
             <FormControl>
               <Input
                 placeholder="valor"

@@ -34,7 +34,7 @@ const { fields, append, remove } = useFieldArray({
 })
 
 function onSubmit(values: UnitsFormDataType) {
-  setFormData(values.units[0])
+  setFormData(values.units)
   setIsDialogOpen(true)
 }
 

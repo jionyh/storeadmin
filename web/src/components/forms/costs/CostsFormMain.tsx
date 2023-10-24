@@ -78,6 +78,7 @@ export const CostsFormMain = ({
                 append={append}
                 fields={fields}
                 form={form}
+                edit={itsEditForm}
                 onSubmit={onSubmit}
                 remove={remove}
               />

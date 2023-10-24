@@ -89,7 +89,7 @@ export default function Costs() {
         <div className="w-full px-5">
           <div className="my-5 flex items-center justify-end">
             <Button onClick={handleButtonAddClick} size="sm">
-              Nova Venda
+              Nova Despesa
             </Button>
           </div>
           {isError && <Empty title="compras" />}

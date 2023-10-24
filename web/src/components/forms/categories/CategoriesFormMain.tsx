@@ -34,7 +34,7 @@ export const CategoriesFormMain = ({initialData}:CategoriesFormMainProps)=>{
   })
 
   function onSubmit(values: CategoriesFormDataType) {
-    setFormData(values.categories[0])
+    setFormData(values.categories)
     setIsDialogOpen(true)
   }
 
