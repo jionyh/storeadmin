@@ -18,8 +18,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} m-auto max-w-lg `}>
+      <body className={`${inter.className} bg-muted-foreground`}>
+        <div className='m-auto max-w-lg'>
         <Providers>{children}</Providers>
+        </div>
         <Toaster />
       </body>
     </html>

@@ -15,6 +15,7 @@ import { useCategory } from '@/utils/queries/category'
 import { Separator } from '@/components/ui/separator'
 import { useProducts } from '@/utils/queries/products'
 import { useUnits } from '@/utils/queries/units'
+import { Input } from '@/components/ui/input'
 
 type Props = {
   form: UseFormReturn<PurchaseFormDataType>
@@ -22,6 +23,7 @@ type Props = {
   fields: FieldArrayWithId<PurchaseFormDataType, 'purchases', 'id'>[]
   onSubmit: (values: PurchaseFormDataType) => void
   remove: UseFieldArrayRemove
+  edit: boolean
 }
 
 export const PurchasesForm = ({
@@ -30,20 +32,27 @@ export const PurchasesForm = ({
   onSubmit,
   fields,
   remove,
+  edit = false
 }: Props) => {
   const category = useCategory()
   const watchCategory = form.watch('category')
   const products = useProducts(watchCategory)
   const units = useUnits()
 
-  console.log('form', fields)
+  console.log(watchCategory)
 
   return (
     <form
       className="w=full flex flex-col gap-2"
       onSubmit={form.handleSubmit(onSubmit)}
     >
-      <FormField
+    {edit ?  <FormField
+        control={form.control}
+        name={`category`}
+        render={({ field }) => (
+          <Input {...field} disabled />
+        )}
+      /> :  <FormField
         control={form.control}
         name={`category`}
         render={({ field }) => (
@@ -53,23 +62,26 @@ export const PurchasesForm = ({
             onChange={field.onChange}
           />
         )}
-      />
+      />}
+
+      
 
       <Separator className="my-2" />
 
-      {watchCategory &&
+      {(edit || (!edit && watchCategory &&
         products.data &&
-        units.data &&
+        units.data)) &&
         fields.map((fields, index) => (
           <PurchasesFormFields
             key={fields.id}
             form={form}
+            edit={edit}
             index={index}
             remove={remove}
           />
         ))}
       <div className="flex w-full items-center justify-end gap-1">
-        <Button
+        {!edit && <Button
           variant="blue"
           size="sm"
           disabled={!watchCategory}
@@ -85,10 +97,10 @@ export const PurchasesForm = ({
         >
           <Plus />
           Novo Campo
-        </Button>
+        </Button>}
         <Button type="submit" size="sm">
           <Save />
-          Salvar
+          {edit ? 'Editar' : 'Salvar'}
         </Button>
       </div>
     </form>

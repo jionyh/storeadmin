@@ -15,20 +15,29 @@ import { useCategory } from '@/utils/queries/category'
 import { Purchase } from '@/types/purchaseTypes'
 
 type PurchaseFormMainProps = {
-  initialData?: {
+  initialData: {
     purchase_id?: number
     quantity: string
     value: string
     product_id: string
     unit_id: string
     supplier: string
-  }
+    category?:string
+  }[]
 }
+
+const emptyFields = [{
+  quantity: '',
+  value: '',
+  product_id: '',
+  unit_id: '',
+  supplier: '',
+}]
 
 export const PurchasesFormMain = ({ initialData }: PurchaseFormMainProps) => {
   const categories = useCategory()
 
-  console.log(initialData)
+  const itsEditForm = initialData?.some(el=>el.purchase_id !== undefined)
 
   const { setFormData, isDialogOpen, setIsDialogOpen, submitForm } =
     useFormSubmit<PurchaseFormDataType['purchases']>({
@@ -40,18 +49,12 @@ export const PurchasesFormMain = ({ initialData }: PurchaseFormMainProps) => {
     resolver: zodResolver(purchaseFormSchema),
     mode: 'onSubmit',
     defaultValues: {
-      purchases: initialData?.purchase_id
+      purchases: itsEditForm
         ? initialData
-        : [
-            {
-              purchase_id: undefined,
-              quantity: '',
-              value: '',
-              product_id: '',
-              unit_id: '',
-              supplier: '',
-            },
-          ],
+        : emptyFields,
+      category: itsEditForm
+        ? initialData[0].category
+        : ''
     },
   })
 
@@ -65,10 +68,12 @@ export const PurchasesFormMain = ({ initialData }: PurchaseFormMainProps) => {
     setIsDialogOpen(true)
   }
 
+  console.log(initialData)
+
   return (
     <div>
       <h2 className="text-center text-lg font-semibold leading-none tracking-tight">
-        {initialData?.purchase_id ? 'Editar Compra' : 'Adicionar Compra'}
+        {itsEditForm ? 'Editar Compra' : 'Adicionar Compra'}
       </h2>
       <div className="p-4">
         {categories.isLoading && <Loader visible />}
@@ -79,6 +84,7 @@ export const PurchasesFormMain = ({ initialData }: PurchaseFormMainProps) => {
                 append={append}
                 fields={fields}
                 form={form}
+                edit={itsEditForm}
                 onSubmit={onSubmit}
                 remove={remove}
               />

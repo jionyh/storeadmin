@@ -27,23 +27,24 @@ type ActivePurchaseType = {
   purchase_id?: number
   quantity: string
   value: string
+  category?: string
   product_id: string
   unit_id: string
   supplier: string
 }
 
-const defaultPurchase = {
+const defaultPurchase = [{
   quantity: '',
   value: '0',
-  product_id: ' ',
+  product_id: '',
   unit_id: ' ',
   supplier: '',
-}
+}]
 
 export default function Purchases() {
   const [activePurchaseId, setActivePurchaseId] = useState(0)
   const [activePurchase, setActivePurchase] =
-    useState<ActivePurchaseType>(defaultPurchase)
+    useState<ActivePurchaseType[]>(defaultPurchase)
   const [date, setDate] = useState(dayjs().format('YYYY-MM-DD'))
   const [open, setOpen] = useState(false)
 
@@ -61,6 +62,7 @@ export default function Purchases() {
   const handleShowAction = async (id: number) => {
     setActivePurchase(defaultPurchase)
     if (isLoading) return
+    const activePurchase = []
     const allPurchases = data.purchases.allPurchases
     for (const purchase of allPurchases) {
       for (const dailyPurchase of purchase.dailyPurchases) {
@@ -69,14 +71,15 @@ export default function Purchases() {
         )
 
         if (foundPurchase) {
-          setActivePurchase({
+          setActivePurchase([{
+            category: dailyPurchase.category,
             purchase_id: foundPurchase.id,
             quantity: foundPurchase.quantity.toString(),
             value: foundPurchase.value,
             product_id: foundPurchase.product,
             unit_id: foundPurchase.unit,
             supplier: foundPurchase.supplier,
-          })
+          }])
         }
       }
     }
