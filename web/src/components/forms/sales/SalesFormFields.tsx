@@ -18,15 +18,23 @@ import { Input } from '@/components/ui/input'
 import { SalesFormDataType } from '@/types/FormDataTypes'
 import { UseFieldArrayRemove, UseFormReturn } from 'react-hook-form'
 import { PaymentResponseSuccess } from '@/types/paymentTypes'
+import { formatCurrency } from '@/utils/formatCurrency'
 
 type Props = {
   index: number
   form: UseFormReturn<SalesFormDataType>
   remove: UseFieldArrayRemove
   payments: PaymentResponseSuccess
+  edit: boolean
 }
 
-export const SalesFormFields = ({ index, remove, form, payments }: Props) => {
+export const SalesFormFields = ({
+  index,
+  remove,
+  form,
+  payments,
+  edit,
+}: Props) => {
   return (
     <>
       {index === 0 ? (
@@ -39,36 +47,48 @@ export const SalesFormFields = ({ index, remove, form, payments }: Props) => {
           />
         </span>
       )}
-      <FormField
-        control={form.control}
-        name={`sales.${index}.payment_id`}
-        render={({ field }) => (
-          <FormItem>
-            <Select onValueChange={field.onChange}>
-              <FormControl>
-                <SelectTrigger>
-                  <SelectValue placeholder="Forma de Recebimento" />
-                </SelectTrigger>
-              </FormControl>
-              <SelectContent>
-                {payments.paymentMethods.map((item) => (
-                  <SelectItem key={item.id} value={item.id.toString()}>
-                    {item.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-              <FormMessage />
-            </Select>
-          </FormItem>
-        )}
-      />
+      {edit ? (
+        <FormField
+          control={form.control}
+          name={`sales.${index}.payment_id`}
+          render={({ field }) => <Input {...field} disabled />}
+        />
+      ) : (
+        <FormField
+          control={form.control}
+          name={`sales.${index}.payment_id`}
+          render={({ field }) => (
+            <FormItem>
+              <Select onValueChange={field.onChange}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Forma de Recebimento" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {payments.paymentMethods.map((item) => (
+                    <SelectItem key={item.id} value={item.id.toString()}>
+                      {item.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+                <FormMessage />
+              </Select>
+            </FormItem>
+          )}
+        />
+      )}
       <FormField
         control={form.control}
         name={`sales.${index}.value`}
         render={({ field }) => (
           <FormItem>
             <FormControl>
-              <Input placeholder="valor" {...field} />
+              <Input
+                placeholder="valor"
+                {...field}
+                value={edit ? formatCurrency(field.value) : field.value}
+              />
             </FormControl>
             <FormMessage />
           </FormItem>

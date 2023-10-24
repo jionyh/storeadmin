@@ -18,6 +18,7 @@ type Props = {
   onSubmit: (values: SalesFormDataType) => void
   remove: UseFieldArrayRemove
   paymentsMethods: PaymentResponseSuccess
+  edit: boolean
 }
 
 export const SalesForm = ({
@@ -26,6 +27,7 @@ export const SalesForm = ({
   onSubmit,
   fields,
   remove,
+  edit,
   paymentsMethods,
 }: Props) => {
   return (
@@ -37,23 +39,26 @@ export const SalesForm = ({
         <SalesFormFields
           key={fields.id}
           form={form}
+          edit={edit}
           index={index}
           payments={paymentsMethods}
           remove={remove}
         />
       ))}
       <div className="flex w-full items-center justify-end gap-1">
-        <Button
-          variant="blue"
-          size="sm"
-          onClick={() => append({ payment_id: '', value: '' })}
-        >
-          <Plus />
-          Novo Campo
-        </Button>
-        <Button type="submit" size="sm">
+        {!edit && (
+          <Button
+            variant="blue"
+            size="sm"
+            onClick={() => append({ payment_id: '', value: '' })}
+          >
+            <Plus />
+            Novo Campo
+          </Button>
+        )}
+        <Button disabled={edit} type="submit" size="sm">
           <Save />
-          Salvar
+          {edit ? 'Editar' : 'Salvar'}
         </Button>
       </div>
     </form>
