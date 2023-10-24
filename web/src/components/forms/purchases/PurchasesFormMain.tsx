@@ -2,7 +2,6 @@
 import React from 'react'
 
 import { Loader } from '@/components/Loader'
-import { PageHeader } from '@/components/PageHeader'
 import { Form } from '@/components/ui/form'
 import { Alert } from '@/components/alertDialog/Alert'
 import { PurchasesForm } from '@/components/forms/purchases/PurchasesForm'
@@ -12,7 +11,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { PurchaseFormDataType, purchaseFormSchema } from '@/types/FormDataTypes'
 import { useCategory } from '@/utils/queries/category'
-import { Purchase } from '@/types/purchaseTypes'
 
 type PurchaseFormMainProps = {
   initialData: {
@@ -22,22 +20,24 @@ type PurchaseFormMainProps = {
     product_id: string
     unit_id: string
     supplier: string
-    category?:string
+    category?: string
   }[]
 }
 
-const emptyFields = [{
-  quantity: '',
-  value: '',
-  product_id: '',
-  unit_id: '',
-  supplier: '',
-}]
+const emptyFields = [
+  {
+    quantity: '',
+    value: '',
+    product_id: '',
+    unit_id: '',
+    supplier: '',
+  },
+]
 
 export const PurchasesFormMain = ({ initialData }: PurchaseFormMainProps) => {
   const categories = useCategory()
 
-  const itsEditForm = initialData?.some(el=>el.purchase_id !== undefined)
+  const itsEditForm = initialData?.some((el) => el.purchase_id !== undefined)
 
   const { setFormData, isDialogOpen, setIsDialogOpen, submitForm } =
     useFormSubmit<PurchaseFormDataType['purchases']>({
@@ -49,12 +49,8 @@ export const PurchasesFormMain = ({ initialData }: PurchaseFormMainProps) => {
     resolver: zodResolver(purchaseFormSchema),
     mode: 'onSubmit',
     defaultValues: {
-      purchases: itsEditForm
-        ? initialData
-        : emptyFields,
-      category: itsEditForm
-        ? initialData[0].category
-        : ''
+      purchases: itsEditForm ? initialData : emptyFields,
+      category: itsEditForm ? initialData[0].category : '',
     },
   })
 

@@ -52,7 +52,7 @@ export const DatePicker = ({ setDate }: ParamTypes) => {
   return (
     <div className={`flex w-full items-center justify-center px-1`}>
       <button className="" onClick={handleLeftArrow}>
-        <AiOutlineCaretLeft size={30} />
+        <AiOutlineCaretLeft size={30} className="text-primary" />
       </button>
       <div
         {...handlers}
@@ -77,7 +77,7 @@ export const DatePicker = ({ setDate }: ParamTypes) => {
       </div>
 
       <button onClick={handleRightArrow}>
-        <AiOutlineCaretRight size={30} />
+        <AiOutlineCaretRight size={30} className="text-primary" />
       </button>
     </div>
   )

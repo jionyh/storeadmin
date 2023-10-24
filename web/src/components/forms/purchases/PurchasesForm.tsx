@@ -32,45 +32,41 @@ export const PurchasesForm = ({
   onSubmit,
   fields,
   remove,
-  edit = false
+  edit = false,
 }: Props) => {
   const category = useCategory()
   const watchCategory = form.watch('category')
   const products = useProducts(watchCategory)
   const units = useUnits()
 
-  console.log(watchCategory)
-
   return (
     <form
       className="w=full flex flex-col gap-2"
       onSubmit={form.handleSubmit(onSubmit)}
     >
-    {edit ?  <FormField
-        control={form.control}
-        name={`category`}
-        render={({ field }) => (
-          <Input {...field} disabled />
-        )}
-      /> :  <FormField
-        control={form.control}
-        name={`category`}
-        render={({ field }) => (
-          <CommonSelect
-            data={category.data.categories}
-            placeholder="Selecione a categoria"
-            onChange={field.onChange}
-          />
-        )}
-      />}
-
-      
+      {edit ? (
+        <FormField
+          control={form.control}
+          name={`category`}
+          render={({ field }) => <Input {...field} disabled />}
+        />
+      ) : (
+        <FormField
+          control={form.control}
+          name={`category`}
+          render={({ field }) => (
+            <CommonSelect
+              data={category.data.categories}
+              placeholder="Selecione a categoria"
+              onChange={field.onChange}
+            />
+          )}
+        />
+      )}
 
       <Separator className="my-2" />
 
-      {(edit || (!edit && watchCategory &&
-        products.data &&
-        units.data)) &&
+      {(edit || (!edit && watchCategory && products.data && units.data)) &&
         fields.map((fields, index) => (
           <PurchasesFormFields
             key={fields.id}
@@ -81,24 +77,26 @@ export const PurchasesForm = ({
           />
         ))}
       <div className="flex w-full items-center justify-end gap-1">
-        {!edit && <Button
-          variant="blue"
-          size="sm"
-          disabled={!watchCategory}
-          onClick={() =>
-            append({
-              quantity: '',
-              value: '0',
-              product_id: ' ',
-              unit_id: ' ',
-              supplier: '',
-            })
-          }
-        >
-          <Plus />
-          Novo Campo
-        </Button>}
-        <Button type="submit" size="sm">
+        {!edit && (
+          <Button
+            variant="blue"
+            size="sm"
+            disabled={!watchCategory}
+            onClick={() =>
+              append({
+                quantity: '',
+                value: '0',
+                product_id: ' ',
+                unit_id: ' ',
+                supplier: '',
+              })
+            }
+          >
+            <Plus />
+            Novo Campo
+          </Button>
+        )}
+        <Button type="submit" size="sm" disabled={edit}>
           <Save />
           {edit ? 'Editar' : 'Salvar'}
         </Button>

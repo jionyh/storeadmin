@@ -18,7 +18,7 @@ export const PageHeader = ({ name }: PageHeaderProps) => {
           className="absolute left-0 cursor-pointer"
           onClick={handleBackButton}
         >
-          <AiOutlineCaretLeft size={30} className="" />
+          <AiOutlineCaretLeft size={30} className="text-primary" />
         </div>
         <h2 className="w-full text-center text-xl font-bold ">
           {name.toUpperCase()}
