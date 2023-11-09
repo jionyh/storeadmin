@@ -1,5 +1,5 @@
 'use client'
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
+import { Avatar, AvatarFallback } from '../ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -16,10 +16,15 @@ import { getInitials } from '@/utils/getInitials'
 import { capitalize } from '@/utils/capitalizeNames'
 import { Loader } from '../Loader'
 
-export const UserMenu = () => {
-  const { data } = useSession()
+type Props = {
+  user:{
+    email: string
+    name: string
+    role: string
+  }
+}
 
-  if (!data) return <Loader visible />
+export const UserMenu = ({user}:Props) => {
 
   return (
     <DropdownMenu>
@@ -30,7 +35,7 @@ export const UserMenu = () => {
         >
           <Avatar className="h-9 w-9">
             <AvatarFallback className="bg-white text-lg text-primary ">
-              {getInitials(data.user.name)}
+              {getInitials(user.name)}
             </AvatarFallback>
           </Avatar>
         </Button>
@@ -43,9 +48,9 @@ export const UserMenu = () => {
         <DropdownMenuLabel className="font-normal text-primary">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none">
-              {capitalize(data.user.name)}
+              {capitalize(user.name)}
             </p>
-            <p className="text-xs leading-none">{data.user.email}</p>
+            <p className="text-xs leading-none">{user.email}</p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
