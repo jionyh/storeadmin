@@ -48,7 +48,6 @@ export const SalesForm = ({
   paymentsMethods,
 }: Props) => {
 
-  console.log(form.watch('date'))
   return (
     <form
       className="w=full flex flex-col gap-2"

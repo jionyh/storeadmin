@@ -32,14 +32,10 @@ export const SalesFormMain = ({
 }: SalesFormMainProps) => {
   const paymentsMethods = usePayments()
 
-  console.log('toLocateDateString',new Date(date).toLocaleDateString('pt-BR'))
-  console.log('toLocaleTimeString',new Date(date).toLocaleTimeString('pt-BR'))
-  console.log('toLocateString',new Date(date).toLocaleString('pt-BR'))
-
   const itsEditForm = initialData?.some((el) => el.sale_id !== undefined)
 
   const { setFormData, isDialogOpen, setIsDialogOpen, submitForm } =
-    useFormSubmit<SalesFormDataType['sales']>({
+    useFormSubmit<SalesFormDataType>({
       endpoint: 'sales',
       name: 'venda',
       onSuccess,
@@ -59,7 +55,7 @@ export const SalesFormMain = ({
   })
 
   function onSubmit(values: SalesFormDataType) {
-    setFormData(values.sales)
+    setFormData(values)
     setIsDialogOpen(true)
   }
 

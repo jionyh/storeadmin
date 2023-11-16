@@ -8,16 +8,8 @@ type SaleRecord = {
   sales: SaleResponse[];
 };
 
-export const getAllSales = async (
-  tenant_id: number,
-  Options: Options
-): Promise<SaleRecord> => {
-  const {
-    date = dayjs(),
-    pageNumber,
-    resultsPerPage,
-    period = "month",
-  } = Options;
+export const getAllSales = async (tenant_id: number, Options: Options): Promise<SaleRecord> => {
+  const { date = dayjs(), pageNumber, resultsPerPage, period = "month" } = Options;
 
   const skip = resultsPerPage ? (pageNumber - 1) * resultsPerPage : undefined;
   const take = resultsPerPage ? resultsPerPage : undefined;

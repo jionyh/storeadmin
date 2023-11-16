@@ -58,16 +58,15 @@ export const sale = {
   },
 
   createSale: async (req: Request, res: Response) => {
-    const parse = createSaleSchema.array().nonempty("Dados não enviados").safeParse(req.body);
+    const parse = createSaleSchema.safeParse(req.body);
 
     if (!parse.success) return sendErrorResponse(res, 400, parse.error.issues);
-    console.log(parse.data);
 
     let saleData: { createAt: Date; value: number; payment_id: number; tenant_id: number }[] = [];
 
-    parse.data.map((i) => {
+    parse.data.sales.map((i) => {
       saleData.push({
-        createAt: i.date,
+        createAt: parse.data.date,
         value: i.value,
         payment_id: i.payment_id,
         tenant_id: req.tenant_id,

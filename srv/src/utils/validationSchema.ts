@@ -25,14 +25,18 @@ export const createSaleSchema = z.object({
     .string()
     .default(defaultDate)
     .transform((date) => dayjs(date).toDate()),
-  value: z
-    .string({ required_error: "o campo valor é obrigatório" })
-    .nonempty("preencha o valor da despesa")
-    .transform((number) => parseFloat(number.replace(",", "."))),
-  payment_id: z
-    .string({ required_error: "o campo método de pagamento é obrigatório" })
-    .nonempty("preencha o método de pagamento")
-    .transform((number) => parseFloat(number)),
+  sales: z.array(
+    z.object({
+      value: z
+        .string({ required_error: "o campo valor é obrigatório" })
+        .nonempty("preencha o valor da despesa")
+        .transform((number) => parseFloat(number.replace(",", "."))),
+      payment_id: z
+        .string({ required_error: "o campo método de pagamento é obrigatório" })
+        .nonempty("preencha o método de pagamento")
+        .transform((number) => parseFloat(number)),
+    })
+  ),
 });
 
 export const createCategorySchema = z.object({
