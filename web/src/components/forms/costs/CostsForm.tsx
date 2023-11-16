@@ -16,9 +16,10 @@ type Props = {
   fields: FieldArrayWithId<CostFormDataType, 'costs', 'id'>[]
   onSubmit: (values: CostFormDataType) => void
   remove: UseFieldArrayRemove
+  edit:boolean
 }
 
-export const CostForm = ({ form, append, onSubmit, fields, remove }: Props) => {
+export const CostForm = ({ form, append, onSubmit, fields, remove, edit }: Props) => {
   return (
     <form
       className="w=full flex flex-col gap-2"
@@ -30,10 +31,11 @@ export const CostForm = ({ form, append, onSubmit, fields, remove }: Props) => {
           form={form}
           index={index}
           remove={remove}
+          edit={edit}
         />
       ))}
       <div className="flex w-full items-center justify-end gap-1">
-        <Button
+        {!edit && <Button
           variant="blue"
           size="sm"
           onClick={() =>
@@ -42,10 +44,10 @@ export const CostForm = ({ form, append, onSubmit, fields, remove }: Props) => {
         >
           <Plus />
           Novo Campo
-        </Button>
+        </Button>}
         <Button type="submit" size="sm">
           <Save />
-          Salvar
+          {edit ? 'Editar' : 'Salvar'}
         </Button>
       </div>
     </form>

@@ -9,13 +9,13 @@ import { SessionProvider } from 'next-auth/react'
 type Props = {
   children: ReactNode
 }
+//<ReactQueryDevtools initialIsOpen={false} panelPosition="right" />
 
 export const Providers = ({ children }: Props) => {
   return (
     <ErrorBoundary fallback={<div>Something went wrong</div>}>
       <QueryClientProvider client={queryClient}>
         <SessionProvider>{children}</SessionProvider>
-        <ReactQueryDevtools initialIsOpen={false} panelPosition="right" />
       </QueryClientProvider>
     </ErrorBoundary>
   )

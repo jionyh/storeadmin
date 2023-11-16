@@ -23,15 +23,17 @@ import {
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import { cn } from '@/lib/utils'
+import { formatCurrency } from '@/utils/formatCurrency'
 
 
 type Props = {
   index: number
   form: UseFormReturn<CostFormDataType>
   remove: UseFieldArrayRemove
+  edit: boolean
 }
 
-export const CostsFormFields = ({ index, remove, form }: Props) => {
+export const CostsFormFields = ({ index, remove, form, edit }: Props) => {
   return (
     <>
       {index === 0 ? (
@@ -46,6 +48,7 @@ export const CostsFormFields = ({ index, remove, form }: Props) => {
         name={`costs.${index}.name`}
         render={({ field }) => (
           <FormItem>
+            {edit && <FormLabel>Nome da Despesa</FormLabel>}
             <FormControl>
               <Input placeholder="Despesa" {...field} />
             </FormControl>
@@ -59,8 +62,9 @@ export const CostsFormFields = ({ index, remove, form }: Props) => {
           name={`costs.${index}.value`}
           render={({ field }) => (
             <FormItem className='flex-1 top-0'>
+              {edit && <FormLabel>Valor</FormLabel>}
               <FormControl>
-                <Input placeholder="valor" {...field} />
+                <Input placeholder="valor" {...field} value={edit ? formatCurrency(field.value): field.value} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -71,10 +75,12 @@ export const CostsFormFields = ({ index, remove, form }: Props) => {
           name={`costs.${index}.date`}
           render={({ field }) => (
             <FormItem className='flex-1 top-0'>
+            {edit && <FormLabel>Data</FormLabel>}
     <Popover>
     <PopoverTrigger asChild>
       <FormControl>
         <Button
+        disabled={edit}
           variant={"outline"}
           className={cn(
             "w-full pl-3 text-left font-normal",
