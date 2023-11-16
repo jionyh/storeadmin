@@ -1,10 +1,8 @@
 'use client'
 import React from 'react'
-import { format } from "date-fns"
 import { CalendarIcon } from "lucide-react"
 import {
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -24,6 +22,8 @@ import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import { cn } from '@/lib/utils'
 import { formatCurrency } from '@/utils/formatCurrency'
+
+import { dataUtils } from '@/utils/dataUtils'
 
 
 type Props = {
@@ -88,7 +88,7 @@ export const CostsFormFields = ({ index, remove, form, edit }: Props) => {
           )}
         >
           {field.value ? (
-            format(new Date(field.value), "P")
+            dataUtils.formatFormData(field.value)
           ) : (
             <span>Selecione a data</span>
           )}

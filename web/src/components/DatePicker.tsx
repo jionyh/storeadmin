@@ -45,7 +45,7 @@ export const DatePicker = ({ setDate }: ParamTypes) => {
   }
 
   useEffect(() => {
-    const day = dayjs(activeDay).format('YYYY-MM-DD')
+    const day = dayjs(activeDay).format('YYYY-MM-DDTHH:mm:ss')
     setDate(day)
   }, [activeDay, setDate])
 

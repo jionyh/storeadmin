@@ -1,5 +1,8 @@
+import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pt-br'
+import { date } from 'zod'
 
 dayjs.locale('pt-br')
 
@@ -15,6 +18,10 @@ export const dataUtils = {
   },
   getCurrentDay: () => {
     return dayjs().format('YYYY-MM-DD')
+  },
+
+  formatFormData: (d:string)=> {
+      return format(new Date(d), 'P', {locale: ptBR})
   },
 
   getDayAndMonth: (date: string, format:'long' | 'short' = 'short') => {

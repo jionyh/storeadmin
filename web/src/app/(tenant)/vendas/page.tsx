@@ -21,7 +21,7 @@ import { dataUtils } from '@/utils/dataUtils'
 import { useSales } from '@/utils/queries/sales'
 import dayjs from 'dayjs'
 import { PenSquare, XSquare } from 'lucide-react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 type ActiveSaleType = {
   sale_id?: number
@@ -34,7 +34,7 @@ const defaultSale = [{ payment_id: '', value: '' }]
 export default function Sales() {
   const [activeSaleId, setActiveSaleId] = useState(0)
   const [activeSale, setActiveSale] = useState<ActiveSaleType[]>(defaultSale)
-  const [date, setDate] = useState(dayjs().format('YYYY-MM-DD'))
+  const [date, setDate] = useState(dayjs().format('YYYY-MM-DDTHH:mm:ss'))
   const [open, setOpen] = useState(false)
 
   const { data, isLoading, isError } = useSales({
@@ -73,6 +73,11 @@ export default function Sales() {
     setActiveSale(defaultSale)
     setOpen(true)
   }
+
+  useEffect(() => {
+    console.log('date Mudou', date)
+  }, [date])
+  
 
   return (
     <>
@@ -157,7 +162,7 @@ export default function Sales() {
         submit={deleteAction}
       />
       <ModalForm open={open} setOpen={setOpen}>
-        <SalesFormMain initialData={activeSale} onSuccess={setOpen} />
+        <SalesFormMain initialData={activeSale} date={date} onSuccess={setOpen} />
       </ModalForm>
     </>
   )

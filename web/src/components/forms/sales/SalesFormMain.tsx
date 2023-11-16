@@ -14,6 +14,7 @@ import { usePayments } from '@/utils/queries/payments'
 import { SalesFormDataType, salesFormSchema } from '@/types/FormDataTypes'
 
 type SalesFormMainProps = {
+  date: string
   initialData: {
     sale_id?: number
     value: string
@@ -25,10 +26,15 @@ type SalesFormMainProps = {
 const emptyFields = [{ payment_id: '', value: '' }]
 
 export const SalesFormMain = ({
+  date,
   initialData,
   onSuccess,
 }: SalesFormMainProps) => {
   const paymentsMethods = usePayments()
+
+  console.log('toLocateDateString',new Date(date).toLocaleDateString('pt-BR'))
+  console.log('toLocaleTimeString',new Date(date).toLocaleTimeString('pt-BR'))
+  console.log('toLocateString',new Date(date).toLocaleString('pt-BR'))
 
   const itsEditForm = initialData?.some((el) => el.sale_id !== undefined)
 
@@ -42,6 +48,7 @@ export const SalesFormMain = ({
   const form = useForm<SalesFormDataType>({
     resolver: zodResolver(salesFormSchema),
     defaultValues: {
+      date: new Date(date).toISOString(),
       sales: itsEditForm ? initialData : emptyFields,
     },
   })
