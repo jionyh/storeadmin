@@ -1,4 +1,5 @@
 export type SaleType = {
+  createAt: Date;
   value: number;
   payment_id: number;
   tenant_id: number;
