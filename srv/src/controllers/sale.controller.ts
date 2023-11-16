@@ -3,11 +3,7 @@ import * as saleService from "../services/sale.service";
 import { sendErrorResponse, sendSuccessResponse } from "../utils/sendResponse";
 import { createSaleSchema } from "../utils/validationSchema";
 import { Options } from "../types/ServiceOptionsType";
-import { SaleResponse } from "../types/SalesType";
-import {
-  formatSaleReturnWithoutTotal,
-  formatSalesReturnWithTotal,
-} from "../utils/formatResponse/formatSale";
+import { formatSaleReturnWithoutTotal, formatSalesReturnWithTotal } from "../utils/formatResponse/formatSale";
 import { sumValues } from "../utils/sumValuesFromArray";
 
 export const sale = {
@@ -21,13 +17,9 @@ export const sale = {
       resultsPerPage: parseInt(perpage as string),
     };
 
-    const { totalRecords, sales } = await saleService.getAllSales(
-      req.tenant_id,
-      options
-    );
+    const { totalRecords, sales } = await saleService.getAllSales(req.tenant_id, options);
 
-    if (sales.length < 1 && totalRecords < 1)
-      return sendErrorResponse(res, 404, "saleNotfound");
+    if (sales.length < 1 && totalRecords < 1) return sendErrorResponse(res, 404, "saleNotfound");
 
     const totalPages = Math.ceil(totalRecords / options.resultsPerPage);
 
@@ -55,10 +47,7 @@ export const sale = {
     if (!id) return sendErrorResponse(res, 400, "idNotSent");
 
     try {
-      const sale = await saleService.getSaleById(
-        req.tenant_id,
-        parseInt(id as string)
-      );
+      const sale = await saleService.getSaleById(req.tenant_id, parseInt(id as string));
 
       if (!sale) return sendErrorResponse(res, 404, "saleNotfound");
 
@@ -69,18 +58,16 @@ export const sale = {
   },
 
   createSale: async (req: Request, res: Response) => {
-    const parse = createSaleSchema
-      .array()
-      .nonempty("Dados não enviados")
-      .safeParse(req.body);
+    const parse = createSaleSchema.array().nonempty("Dados não enviados").safeParse(req.body);
 
     if (!parse.success) return sendErrorResponse(res, 400, parse.error.issues);
+    console.log(parse.data);
 
-    let saleData: { value: number; payment_id: number; tenant_id: number }[] =
-      [];
+    let saleData: { createAt: Date; value: number; payment_id: number; tenant_id: number }[] = [];
 
     parse.data.map((i) => {
       saleData.push({
+        createAt: i.date,
         value: i.value,
         payment_id: i.payment_id,
         tenant_id: req.tenant_id,

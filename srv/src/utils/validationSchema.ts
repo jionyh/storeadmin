@@ -3,10 +3,7 @@ import { z } from "zod";
 import { defaultDate } from "./dateUtils";
 
 export const createCostSchema = z.object({
-  name: z
-    .string({ required_error: "o campo nome é obrigatório" })
-    .nonempty("preencha o nome da despesa")
-    .toLowerCase(),
+  name: z.string({ required_error: "o campo nome é obrigatório" }).nonempty("preencha o nome da despesa").toLowerCase(),
   value: z
     .string({ required_error: "o campo valor é obrigatório" })
     .nonempty("preencha o valor da despesa")
@@ -24,6 +21,10 @@ export const signInSchema = z.object({
 });
 
 export const createSaleSchema = z.object({
+  date: z
+    .string()
+    .default(defaultDate)
+    .transform((date) => dayjs(date).toDate()),
   value: z
     .string({ required_error: "o campo valor é obrigatório" })
     .nonempty("preencha o valor da despesa")
@@ -35,30 +36,16 @@ export const createSaleSchema = z.object({
 });
 
 export const createCategorySchema = z.object({
-  name: z
-    .string({ required_error: "o campo nome é obrigatório" })
-    .nonempty("preencha o nome da categoria")
-    .toLowerCase(),
+  name: z.string({ required_error: "o campo nome é obrigatório" }).nonempty("preencha o nome da categoria").toLowerCase(),
 });
 export const createUnitSchema = z.object({
-  name: z
-    .string({ required_error: "o campo nome é obrigatório" })
-    .nonempty("preencha o nome da unidade")
-    .toLowerCase(),
-  abbreviation: z
-    .string({ required_error: "o campo nome é obrigatório" })
-    .nonempty("preencha o nome da unidade")
-    .toLowerCase(),
+  name: z.string({ required_error: "o campo nome é obrigatório" }).nonempty("preencha o nome da unidade").toLowerCase(),
+  abbreviation: z.string({ required_error: "o campo nome é obrigatório" }).nonempty("preencha o nome da unidade").toLowerCase(),
 });
 
 export const createProductSchema = z.object({
-  name: z
-    .string({ required_error: "o campo nome é obrigatório" })
-    .nonempty("preencha o nome do produto")
-    .toLowerCase(),
-  category_id: z
-    .number({ required_error: "o campo categoria é obrigatório" })
-    .nonnegative(),
+  name: z.string({ required_error: "o campo nome é obrigatório" }).nonempty("preencha o nome do produto").toLowerCase(),
+  category_id: z.number({ required_error: "o campo categoria é obrigatório" }).nonnegative(),
 });
 
 export const createPurchaseSchema = z.object({
