@@ -62,7 +62,7 @@ export const SalesFormMain = ({
   return (
     <div>
       <h2 className="text-center text-lg font-semibold leading-none tracking-tight">
-        {itsEditForm ? 'Editar Compra' : 'Adicionar Compra'}
+        {itsEditForm ? 'Visualizar Compra' : 'Adicionar Compra'}
       </h2>
       <div className="p-4">
         {paymentsMethods.isLoading && <Loader visible />}

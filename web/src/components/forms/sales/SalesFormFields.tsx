@@ -1,4 +1,3 @@
-'use client'
 import React from 'react'
 import {
   FormControl,
@@ -94,6 +93,7 @@ export const SalesFormFields = ({
             {edit && <FormLabel>Valor</FormLabel>}
             <FormControl>
               <Input
+              disabled={edit}
                 placeholder="valor"
                 {...field}
                 value={edit ? formatCurrency(field.value) : field.value}

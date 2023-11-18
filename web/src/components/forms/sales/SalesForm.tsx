@@ -116,10 +116,10 @@ export const SalesForm = ({
             Novo Campo
           </Button>
         )}
-        <Button disabled={edit} type="submit" size="sm">
+        {!edit && <Button disabled={edit} type="submit" size="sm">
           <Save />
           {edit ? "Editar" : "Salvar"}
-        </Button>
+        </Button>}
       </div>
     </form>
   );
