@@ -30,6 +30,7 @@ type ActivePurchaseType = {
   product_id: string
   unit_id: string
   supplier: string
+  payment: string
 }
 
 const defaultPurchase = [
@@ -39,6 +40,7 @@ const defaultPurchase = [
     product_id: '',
     unit_id: ' ',
     supplier: '',
+    payment: 'cartao'
   },
 ]
 
@@ -80,6 +82,7 @@ export default function Purchases() {
               product_id: foundPurchase.product,
               unit_id: foundPurchase.unit,
               supplier: foundPurchase.supplier,
+              payment: foundPurchase.payment
             },
           ])
         }

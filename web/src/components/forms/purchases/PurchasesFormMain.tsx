@@ -20,6 +20,7 @@ type PurchaseFormMainProps = {
     product_id: string
     unit_id: string
     supplier: string
+    payment: string
     category?: string
   }[]
   onSuccess?: (status: boolean) => void
@@ -32,6 +33,7 @@ const emptyFields = [
     product_id: '',
     unit_id: '',
     supplier: '',
+    payment: 'cartao'
   },
 ]
 
@@ -53,6 +55,7 @@ export const PurchasesFormMain = ({
   const form = useForm<PurchaseFormDataType>({
     resolver: zodResolver(purchaseFormSchema),
     mode: 'onSubmit',
+    
     defaultValues: {
       purchases: itsEditForm ? initialData : emptyFields,
       category: itsEditForm ? initialData[0].category : '',
@@ -72,7 +75,7 @@ export const PurchasesFormMain = ({
   return (
     <div>
       <h2 className="text-center text-lg font-semibold leading-none tracking-tight">
-        {itsEditForm ? 'Editar Compra' : 'Adicionar Compra'}
+        {itsEditForm ? 'Visualizar Compra' : 'Adicionar Compra'}
       </h2>
       <div className="p-4">
         {categories.isLoading && <Loader visible />}

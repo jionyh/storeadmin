@@ -89,6 +89,7 @@ export const PurchasesForm = ({
                 product_id: ' ',
                 unit_id: ' ',
                 supplier: '',
+                payment: 'cartao'
               })
             }
           >
@@ -96,10 +97,10 @@ export const PurchasesForm = ({
             Novo Campo
           </Button>
         )}
-        <Button type="submit" size="sm" disabled={edit}>
+        {!edit && <Button type="submit" size="sm" disabled={edit}>
           <Save />
           {edit ? 'Editar' : 'Salvar'}
-        </Button>
+        </Button>}
       </div>
     </form>
   )

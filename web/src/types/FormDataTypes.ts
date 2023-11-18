@@ -32,6 +32,7 @@ export const purchaseFormSchema = z.object({
       quantity: z.string().nonempty('Campo obrigatório'),
       value: z.string().nonempty('Campo obrigatório'),
       supplier: z.string().optional(),
+      payment: z.string().nonempty('Campo obrigatório')
     }),
   ),
 })

@@ -16,6 +16,7 @@ export interface Purchase {
   product: string
   unit: string
   supplier: string
+  payment: string
 }
 export interface Purchases {
   pagination: Pagination
