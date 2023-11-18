@@ -46,10 +46,6 @@ export const Dashboard = () => {
         : '0'
       : '0'
 
-      console.log({
-        sales: salesValue,
-        purchases: purchasesValue
-      })
   return (
     <>
       {purchasesLoading || (salesLoading && <Loader visible />)}
