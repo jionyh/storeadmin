@@ -5,21 +5,10 @@ import { formatPaymentMethodResponse } from "../utils/formatResponse/formatPayme
 
 export const paymentMethod = {
   getAllPayments: async (req: Request, res: Response) => {
-    const paymentMethods = await paymentService.getAllPaymentMethods(
-      req.tenant_id
-    );
-    console.log(paymentMethods);
+    const paymentMethods = await paymentService.getAllPaymentMethods(req.tenant_id);
 
-    if (paymentMethods.length < 1)
-      return sendErrorResponse(res, 404, "paymentNotFound");
+    if (paymentMethods.length < 1) return sendErrorResponse(res, 404, "paymentNotFound");
 
-    console.log(paymentMethods);
-
-    sendSuccessResponse(
-      res,
-      200,
-      "paymentMethods",
-      formatPaymentMethodResponse(paymentMethods)
-    );
+    sendSuccessResponse(res, 200, "paymentMethods", formatPaymentMethodResponse(paymentMethods));
   },
 };

@@ -113,11 +113,18 @@ model Purchase {
   unit_id    Int
   tenant_id  Int
   supplier   String
+  payment    Payments
   tenant     Tenant   @relation(fields: [tenant_id], references: [id])
   product    Product  @relation(fields: [product_id], references: [id])
   unit       Unit     @relation(fields: [unit_id], references: [id])
 
   @@map("purchases")
+}
+
+enum Payments {
+  dinheiro
+  cartao
+  outros
 }
 
 // End Purchase Models

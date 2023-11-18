@@ -1,5 +1,4 @@
-import { CategoryResponse } from "./CategoryType";
-import { ProductResponse } from "./ProductType";
+type paymentType = "dinheiro" | "cartao" | "outros";
 
 export type PurchaseType = {
   quantity: number;
@@ -8,6 +7,7 @@ export type PurchaseType = {
   unit_id: number;
   supplier: string;
   tenant_id: number;
+  payment: paymentType;
 };
 
 export type PurchaseResponse = {
@@ -19,6 +19,7 @@ export type PurchaseResponse = {
   unit_id: number;
   tenant_id: number;
   supplier: string;
+  payment: paymentType;
 };
 
 export type PurchaseResponseComplete = {
@@ -30,6 +31,7 @@ export type PurchaseResponseComplete = {
   unit_id: number;
   tenant_id: number;
   supplier: string;
+  payment: paymentType;
   product: {
     id: number;
     name: string;
@@ -75,6 +77,7 @@ type DailyPurchases = {
   product: string;
   unit: string;
   supplier: string;
+  payment: paymentType;
 };
 
 export type PurchaseReturn = {

@@ -73,4 +73,5 @@ export const createPurchaseSchema = z.object({
     .string()
     .optional()
     .transform((i) => (i === "" ? "---" : i)),
+  payment: z.union([z.literal("dinheiro"), z.literal("cartao"), z.literal("outros")]),
 });

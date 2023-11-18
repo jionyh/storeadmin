@@ -1,43 +1,29 @@
 import dayjs from "dayjs";
-import {
-  PurchaseDay,
-  PurchaseResponseComplete,
-} from "../../types/PurchaseType";
+import { PurchaseDay, PurchaseResponseComplete } from "../../types/PurchaseType";
 import { Capitalize } from "../capitalizeFirstLetter";
 
-export const formatPurchasesReturnWithTotal = (
-  purchase: PurchaseResponseComplete[]
-) => {
+export const formatPurchasesReturnWithTotal = (purchase: PurchaseResponseComplete[]) => {
   const formatReturn: PurchaseDay[] = [];
 
   purchase.forEach((item) => {
     /* Verifica se existe o index no array de formatReturn com a data */
     const day = dayjs(item.createAt).format("YYYY-MM-DD");
-    const existingDayIndex = formatReturn.findIndex(
-      (entry) => entry.date === day
-    );
+    const existingDayIndex = formatReturn.findIndex((entry) => entry.date === day);
     /* Caso encontre a data no array, verifica se existe o array de categoria */
     if (existingDayIndex !== -1) {
-      const existingCategoryIndex = formatReturn[
-        existingDayIndex
-      ].dailyPurchases.findIndex(
-        (cat) => cat.category.toLowerCase() === item.product.cat.name
-      );
+      const existingCategoryIndex = formatReturn[existingDayIndex].dailyPurchases.findIndex((cat) => cat.category.toLowerCase() === item.product.cat.name);
       /* Se existe o array de Categoria, faz o push com os dados */
       if (existingCategoryIndex !== -1) {
-        formatReturn[existingDayIndex].total = (
-          parseFloat(formatReturn[existingDayIndex].total) + item.value
-        ).toFixed(2);
+        formatReturn[existingDayIndex].total = (parseFloat(formatReturn[existingDayIndex].total) + item.value).toFixed(2);
 
-        formatReturn[existingDayIndex].dailyPurchases[
-          existingCategoryIndex
-        ].purchases.push({
+        formatReturn[existingDayIndex].dailyPurchases[existingCategoryIndex].purchases.push({
           id: item.id,
           quantity: item.quantity,
           value: item.value.toFixed(2),
           product: Capitalize(item.product.name),
           unit: item.unit.abbreviation.toUpperCase(),
           supplier: Capitalize(item.supplier),
+          payment: item.payment,
         });
         /* Senão ele cria o array com o nome da categoria */
       } else {
@@ -51,6 +37,7 @@ export const formatPurchasesReturnWithTotal = (
               product: Capitalize(item.product.name),
               unit: item.unit.abbreviation.toUpperCase(),
               supplier: Capitalize(item.supplier),
+              payment: item.payment,
             },
           ],
         });
@@ -71,6 +58,7 @@ export const formatPurchasesReturnWithTotal = (
                 product: Capitalize(item.product.name),
                 unit: item.unit.abbreviation.toUpperCase(),
                 supplier: Capitalize(item.supplier),
+                payment: item.payment,
               },
             ],
           },
@@ -82,9 +70,7 @@ export const formatPurchasesReturnWithTotal = (
   return formatReturn;
 };
 
-export const formatPurchaseReturnWithoutTotal = (
-  purchase: PurchaseResponseComplete
-) => ({
+export const formatPurchaseReturnWithoutTotal = (purchase: PurchaseResponseComplete) => ({
   id: purchase.id,
   quantity: purchase.quantity,
   value: purchase.value.toFixed(2),
@@ -92,4 +78,5 @@ export const formatPurchaseReturnWithoutTotal = (
   product: Capitalize(purchase.product.name),
   unit: purchase.unit.abbreviation.toUpperCase(),
   supplier: Capitalize(purchase.supplier),
+  payment: purchase.payment,
 });
