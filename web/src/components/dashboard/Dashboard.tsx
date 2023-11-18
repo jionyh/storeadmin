@@ -23,7 +23,7 @@ export const Dashboard = () => {
   useEffect(() => {
     dataFetchFunction(selectedPeriod)
   })
-
+  
   const purchasesValue =
     purchasesData && selectedPeriod
       ? selectedPeriod === 'day'
@@ -46,6 +46,10 @@ export const Dashboard = () => {
         : '0'
       : '0'
 
+      console.log({
+        sales: salesValue,
+        purchases: purchasesValue
+      })
   return (
     <>
       {purchasesLoading || (salesLoading && <Loader visible />)}

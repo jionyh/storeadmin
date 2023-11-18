@@ -74,11 +74,6 @@ export default function Sales() {
     setOpen(true)
   }
 
-  useEffect(() => {
-    console.log('date Mudou', date)
-  }, [date])
-  
-
   return (
     <>
       <Loader visible={isLoading} />

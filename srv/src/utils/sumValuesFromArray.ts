@@ -6,23 +6,23 @@
  * @param {string} period - The period name to include in the result.
  * @returns {{ total: number, periodName: string }} An object containing the total sum of "value" property and the period name.
  */
-  
-    export const sumValues = <T extends { value: number }>(items: T[],period:string) => {
-   /**
+
+export const sumValues = <T extends { value: number }>(items: T[], period: string) => {
+  /**
    * The total sum of the "value" property.
    *
    * @type {number}
    */
-      let total: number = items.reduce((sum, item) => {
-        return sum + item.value;
-      }, 0);
-    
+  let total: number = items.reduce((sum, item) => {
+    return sum + item.value;
+  }, 0);
+
   /**
    * The period name.
    *
    * @type {string}
    */
-      const periodName: string = `${period} totals`
+  const periodName: string = `${period}_totals`;
 
-      return {total, periodName}
-    };
+  return { total, periodName };
+};
