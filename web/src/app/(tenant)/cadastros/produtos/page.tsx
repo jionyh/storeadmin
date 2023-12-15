@@ -54,7 +54,6 @@ export default function Produtos() {
       <div className="my-5 flex items-center justify-end">
         <Button
           onClick={handleButtonAddClick}
-          className="my-5 flex items-center justify-end"
           size="sm"
           variant="outline"
         >

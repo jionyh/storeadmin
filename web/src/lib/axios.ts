@@ -2,7 +2,7 @@ import axios from 'axios'
 import { getCookie } from 'cookies-next'
 
 //const baseURL = 'https://api.jiony.dev'
-const baseURL = 'http://localhost:4001'
+const baseURL = 'http://192.168.1.14:4001'
 const isServer = typeof window === 'undefined'
 
 export const api = axios.create({

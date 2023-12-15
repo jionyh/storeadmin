@@ -11,7 +11,7 @@ const navConfigItems = [
 
 export default function ConfigLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="m-auto flex h-screen w-full min-w-[375px] flex-col">
+    <div className="mx-auto flex h-auto w-full min-w-[375px] flex-col">
       <NavConfigButtons items={navConfigItems} />
       <Separator/>
       {children}

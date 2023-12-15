@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} bg-muted-foreground`}>
-        <div className='m-auto max-w-lg'>
+        <div className='m-auto w-full sm:max-w-md'>
         <Providers>{children}</Providers>
         </div>
         <Toaster />
