@@ -41,7 +41,7 @@ export const UserMenu = ({user}:Props) => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className="w-fit min-w-[170px]"
+        className="w-fit"
         align="end"
         forceMount
       >

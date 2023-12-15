@@ -32,7 +32,7 @@ export const HamburgerMenu = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent
         className="w-fit min-w-[170px] text-primary"
-        align="end"
+        align="start"
         forceMount
       >
         <DropdownMenuGroup>
