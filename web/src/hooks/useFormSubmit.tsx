@@ -9,6 +9,7 @@ function useFormSubmit<T>(props: {
   endpoint: string
   name: string
   onSuccess?: (status: boolean) => void
+  edit?:boolean
 }) {
   const [formData, setFormData] = useState<T>()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -26,12 +27,20 @@ function useFormSubmit<T>(props: {
       }
     }
 
+    let costId = Array.isArray(formData) && formData.length > 0 && formData[0].cost_id
+
+    const requestFn = props.edit ? api.put(`/${props.endpoint}/${costId}}`, formData) : api.post(`/${props.endpoint}`, formData)
+
+    const toastSuccessMessage = props.edit 
+    ? `${props.name} editada com sucesso!` 
+    : `${props.name}s adicionada com sucesso!`
+
     try {
-      const response = await api.post(`/${props.endpoint}`, formData)
+      const response = await requestFn
 
       if (response.data.success) {
         toast({
-          description: `${props.name}s adicionada com sucesso!`,
+          description: toastSuccessMessage,
         })
         queryClient.invalidateQueries({ queryKey: [`${props.endpoint}`] })
         onSuccess()

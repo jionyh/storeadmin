@@ -56,7 +56,7 @@ export const CostsFormFields = ({ index, remove, form, edit }: Props) => {
           </FormItem>
         )}
       />
-      <div className="flex items-start justify-between gap-1">
+      <div className="flex items-start justify-between gap-1 ">
         <FormField
           control={form.control}
           name={`costs.${index}.value`}
@@ -64,7 +64,7 @@ export const CostsFormFields = ({ index, remove, form, edit }: Props) => {
             <FormItem className='flex-1 top-0'>
               {edit && <FormLabel>Valor</FormLabel>}
               <FormControl>
-                <Input placeholder="valor" {...field} value={edit ? formatCurrency(field.value): field.value} />
+                <Input placeholder="Valor" {...field} value={edit ? formatCurrency(field.value): field.value} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -90,7 +90,7 @@ export const CostsFormFields = ({ index, remove, form, edit }: Props) => {
           {field.value ? (
             dataUtils.formatFormData(field.value)
           ) : (
-            <span>Selecione a data</span>
+            <span>Data</span>
           )}
           <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
         </Button>
@@ -119,6 +119,7 @@ export const CostsFormFields = ({ index, remove, form, edit }: Props) => {
               <FormLabel>Despesa recorrente?</FormLabel>
               <FormControl>
                 <Switch
+                  disabled={!field.value}
                   checked={field.value}
                   onCheckedChange={field.onChange}
                 />

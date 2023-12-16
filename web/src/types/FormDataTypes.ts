@@ -44,6 +44,7 @@ export type PurchaseFormDataType = z.infer<typeof purchaseFormSchema>
 export const costFormSchema = z.object({
   costs: z.array(
     z.object({
+      cost_id: z.number().optional(),
       name: z.string().nonempty('Campo obrigatório'),
       value: z.string().nonempty('Campo obrigatório'),
       date: z

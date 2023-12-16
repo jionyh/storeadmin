@@ -36,7 +36,7 @@ export const CostsFormMain = ({
   onSuccess,
 }: SalesFormMainProps) => {
   const paymentsMethods = usePayments()
-
+  
   const itsEditForm = initialData?.some((el) => el.cost_id !== undefined)
 
   const { setFormData, isDialogOpen, setIsDialogOpen, submitForm } =
@@ -44,6 +44,7 @@ export const CostsFormMain = ({
       endpoint: 'costs',
       name: 'despesa',
       onSuccess,
+      edit: itsEditForm
     })
 
   const form = useForm<CostFormDataType>({
