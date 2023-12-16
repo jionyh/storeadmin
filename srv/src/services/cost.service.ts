@@ -1,15 +1,16 @@
-import dayjs from 'dayjs'
-import { prisma } from '../lib/prisma'
-import { CostRecurrentResponse, CostRecurrentType, CostResponse, CostType } from '../types/CostsType'
-import { Options } from '../types/ServiceOptionsType'
+import dayjs from "dayjs";
+import { prisma } from "../lib/prisma";
+import { CostRecurrentResponse, CostRecurrentType, CostResponse, CostType } from "../types/CostsType";
+import { Options } from "../types/ServiceOptionsType";
+import { boolean } from "zod";
 
 interface CostRecord {
-  totalRecords: number
-  costs:CostResponse[]
+  totalRecords: number;
+  costs: CostResponse[];
 }
 
-export const getAllCosts = async (tenant_id: number, Options:Options):Promise<CostRecord> => {
-  const {date = dayjs(),pageNumber,resultsPerPage,period = 'month' } = Options
+export const getAllCosts = async (tenant_id: number, Options: Options): Promise<CostRecord> => {
+  const { date = dayjs(), pageNumber, resultsPerPage, period = "month" } = Options;
 
   const skip = (pageNumber - 1) * resultsPerPage;
 
@@ -27,69 +28,79 @@ export const getAllCosts = async (tenant_id: number, Options:Options):Promise<Co
             .toDate()
         : undefined,
     },
-  }
-  
-  try{
+  };
 
-    const totalRecords = await prisma.cost.count({where:searchOptions})
+  try {
+    const totalRecords = await prisma.cost.count({ where: searchOptions });
 
-    const costs = await prisma.cost.findMany({
+    const recurrentCosts = await prisma.costRecurrent.findMany({
+      where: {
+        tenant_id,
+      },
+      orderBy: { createAt: "asc" },
+    });
+
+    const monthlyCosts = await prisma.cost.findMany({
       where: searchOptions,
-      orderBy: { createAt: 'asc' },
+      orderBy: { createAt: "asc" },
       skip,
       take: resultsPerPage,
-    })
-   
-    
+    });
+
+    const costs: Array<CostResponse> = monthlyCosts.map((cost) => ({
+      ...cost,
+      recurrent: recurrentCosts.some((recurrent) => recurrent.name === cost.name && recurrent.value === cost.value && recurrent.tenant_id === cost.tenant_id),
+    }));
+
     //if(totalRecords === 0 ) return false
 
-    return {totalRecords,costs}
-
-  }catch(e){
-    console.log(e)
-    throw new Error('An error occurred while fetching costs data.');
+    return { totalRecords, costs };
+  } catch (e) {
+    console.log(e);
+    throw new Error("An error occurred while fetching costs data.");
   }
+};
 
-}
-
-export const getAllActiveRecurrentCost = async():Promise<CostRecurrentResponse[]>=>{
+export const getAllActiveRecurrentCost = async (): Promise<CostRecurrentResponse[]> => {
   return await prisma.costRecurrent.findMany({
-    where:{
-      recurrent: true
-    }
-  })
-}
+    where: {
+      recurrent: true,
+    },
+  });
+};
 
-export const getCostById = async (tenant_id: number,id: number) => {
-  return prisma.cost.findFirst({ where: { 
-    id,
-    tenant_id
-   } })
-}
+export const getCostById = async (tenant_id: number, id: number) => {
+  return prisma.cost.findFirst({
+    where: {
+      id,
+      tenant_id,
+    },
+  });
+};
 
 export const createCost = async (data: CostType) => {
   return prisma.cost.create({
-    data:{
+    data: {
       name: data.name,
       value: data.value,
       createAt: data.createAt,
-      tenant_id: data.tenant_id
-    }
-  })
-}
+      tenant_id: data.tenant_id,
+    },
+  });
+};
 
-export const createCostRecurrent = async(data:CostRecurrentType)=>{
+export const createCostRecurrent = async (data: CostRecurrentType) => {
   return prisma.costRecurrent.create({
-    data:{
+    data: {
       name: data.name,
       value: data.value,
       createAt: data.createAt,
       recurrent: data.recurrent,
-      tenant_id: data.tenant_id
-    }
-  })
-}
+      tenant_id: data.tenant_id,
+    },
+  });
+};
 
 export const deleteCostById = async (id: number) => {
-  return prisma.cost.delete({ where: { id } })
-}
+  return prisma.cost.delete({ where: { id } });
+};
