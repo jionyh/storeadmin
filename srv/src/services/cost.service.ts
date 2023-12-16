@@ -89,6 +89,7 @@ export const createCost = async (data: CostType) => {
       value: data.value,
       createAt: data.createAt,
       tenant_id: data.tenant_id,
+      recurrent_id: data.recurrent_id,
     },
   });
 };

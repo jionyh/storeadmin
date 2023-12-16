@@ -72,8 +72,12 @@ export const cost = {
     try {
       for (const cost of costData) {
         if (cost.recurrent) {
-          await costService.createCost(cost);
-          await costService.createCostRecurrent(cost);
+          const recurrentCostCreated = await costService.createCostRecurrent(cost);
+          const recurrentCostData = {
+            ...cost,
+            recurrent_id: recurrentCostCreated.id,
+          };
+          await costService.createCost({ ...cost, recurrent_id: recurrentCostCreated.id });
         } else {
           await costService.createCost(cost);
         }
@@ -104,8 +108,8 @@ export const cost = {
 
     try {
       const deleteRecurrent = await costService.deleteRecurrentCost(parseInt(id as string));
-      if(!deleteRecurrent) return sendErrorResponse(res,400,"costNotFound")
-      sendSuccessResponse(res, 200);      
+      if (!deleteRecurrent) return sendErrorResponse(res, 400, "costNotFound");
+      sendSuccessResponse(res, 200);
     } catch (e) {
       sendErrorResponse(res, 400, "costNotFound");
     }

@@ -3,6 +3,7 @@ export type CostType = {
   value: number;
   tenant_id: number;
   createAt: Date;
+  recurrent_id?: number;
 };
 
 export type CostRecurrentType = {
