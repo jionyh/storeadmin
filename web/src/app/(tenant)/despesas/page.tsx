@@ -26,6 +26,7 @@ type ActiveCostType = {
   name: string
   value: string
   date: string
+  recurrent: boolean
 }
 
 const defaultCost = [
@@ -33,6 +34,7 @@ const defaultCost = [
     name: '',
     value: '',
     date: '',
+    recurrent: false
   },
 ]
 
@@ -69,6 +71,7 @@ export default function Costs() {
           name: foundCost.name,
           value: foundCost.value.toString(),
           date: foundCost.createAt,
+          recurrent: foundCost.recurrent
         },
       ])
     }

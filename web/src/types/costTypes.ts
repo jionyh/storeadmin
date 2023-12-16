@@ -13,6 +13,7 @@ export interface Cost {
   name: string
   value: number
   createAt: string
+  recurrent: boolean
 }
 
 export interface AllCostResponse {
