@@ -44,12 +44,14 @@ enum Role {
 }
 
 model Cost {
-  id        Int      @id @default(autoincrement())
-  name      String
-  value     Float
-  createAt  DateTime @default(now())
-  tenant_id Int
-  tenant    Tenant   @relation(fields: [tenant_id], references: [id])
+  id              Int            @id @default(autoincrement())
+  name            String
+  value           Float
+  createAt        DateTime       @default(now())
+  tenant_id       Int
+  tenant          Tenant         @relation(fields: [tenant_id], references: [id])
+  costRecurrentId CostRecurrent? @relation(fields: [recurrent_id], references: [id])
+  recurrent_id    Int?
 
   @@map("costs")
 }
@@ -62,6 +64,7 @@ model CostRecurrent {
   recurrent Boolean
   tenant_id Int
   tenant    Tenant   @relation(fields: [tenant_id], references: [id])
+  Cost      Cost[]
 
   @@map("costsRecurrents")
 }

@@ -1,5 +1,5 @@
-import express from 'express';
-import { cost } from '../controllers/cost.controller'
+import express from "express";
+import { cost } from "../controllers/cost.controller";
 const router = express.Router();
 
 /**
@@ -167,11 +167,11 @@ const router = express.Router();
  *         - value
  */
 
-
 // Rotas de despesas //
-router.get('/', cost.getAllCosts)
-router.get('/:id', cost.getCost)
-router.post('/', cost.createCost)
-router.delete('/:id', cost.deleteCost)
+router.get("/", cost.getAllCosts);
+router.get("/:id", cost.getCost);
+router.post("/", cost.createCost);
+router.delete("/:id", cost.deleteCost);
+router.put("/:id", cost.deleteRecurrentCost);
 
-export default router
+export default router;

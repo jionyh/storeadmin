@@ -49,7 +49,7 @@ export const getAllCosts = async (tenant_id: number, Options: Options): Promise<
 
     const costs: Array<CostResponse> = monthlyCosts.map((cost) => ({
       ...cost,
-      recurrent: recurrentCosts.some((recurrent) => recurrent.name === cost.name && recurrent.value === cost.value && recurrent.tenant_id === cost.tenant_id),
+      recurrent: recurrentCosts.some((recurrent) => recurrent.id === cost.recurrent_id),
     }));
 
     //if(totalRecords === 0 ) return false
@@ -74,7 +74,7 @@ export const getCostById = async (tenant_id: number, id: number) => {
 
   if (!cost) return null;
 
-  const isRecurrent = await prisma.costRecurrent.findFirst({ where: { name: cost.name, value: cost.value, tenant_id } });
+  const isRecurrent = cost.recurrent_id ? await prisma.costRecurrent.findFirst({ where: { id: cost.recurrent_id } }) : false;
 
   return {
     ...cost,
@@ -107,4 +107,14 @@ export const createCostRecurrent = async (data: CostRecurrentType) => {
 
 export const deleteCostById = async (id: number) => {
   return prisma.cost.delete({ where: { id } });
+};
+
+export const deleteRecurrentCost = async (id: number) => {
+  const cost = await prisma.cost.findUniqueOrThrow({ where: { id } });
+
+  if (!cost || cost.recurrent_id === null) return false;
+
+  await prisma.costRecurrent.delete({ where: { id: cost.recurrent_id } });
+  await prisma.cost.updateMany({ where: { id }, data: { recurrent_id: null } });
+  return true;
 };

@@ -20,13 +20,9 @@ export const cost = {
       resultsPerPage: parseInt(perpage as string) || 10,
     };
 
-    const { totalRecords, costs } = await costService.getAllCosts(
-      req.tenant_id,
-      options
-    );
+    const { totalRecords, costs } = await costService.getAllCosts(req.tenant_id, options);
 
-    if (costs.length < 1 && totalRecords < 1)
-      return sendErrorResponse(res, 404, "costNotFound");
+    if (costs.length < 1 && totalRecords < 1) return sendErrorResponse(res, 404, "costNotFound");
 
     const { total, periodName } = sumValues(costs, period as string);
 
@@ -46,10 +42,7 @@ export const cost = {
     if (!req.tenant_id) return sendErrorResponse(res, 404, "tenantNotFound");
 
     try {
-      const cost = await costService.getCostById(
-        req.tenant_id,
-        parseInt(id as string)
-      );
+      const cost = await costService.getCostById(req.tenant_id, parseInt(id as string));
 
       if (!cost) return sendErrorResponse(res, 404, "costNotFound");
 
@@ -60,36 +53,32 @@ export const cost = {
   },
 
   createCost: async (req: Request, res: Response) => {
-    const parse = createCostSchema
-      .array()
-      .nonempty("Dados não enviados")
-      .safeParse(req.body);
+    const parse = createCostSchema.array().nonempty("Dados não enviados").safeParse(req.body);
 
     if (!parse.success) return sendErrorResponse(res, 400, parse.error.issues);
 
-    let costData: { name: string; value: number; tenant_id: number, createAt: Date, recurrent: boolean}[] = [];
-    
+    let costData: { name: string; value: number; tenant_id: number; createAt: Date; recurrent: boolean }[] = [];
+
     parse.data.map((i) => {
       costData.push({
         name: i.name,
         value: i.value,
         createAt: i.date,
         recurrent: i.recurrent,
-        tenant_id: req.tenant_id
+        tenant_id: req.tenant_id,
       });
     });
 
     try {
-      for(const cost of costData) {
-        if(cost.recurrent){
+      for (const cost of costData) {
+        if (cost.recurrent) {
           await costService.createCost(cost);
-          await costService.createCostRecurrent(cost)
-        }else{
+          await costService.createCostRecurrent(cost);
+        } else {
           await costService.createCost(cost);
         }
       }
       sendSuccessResponse(res, 200);
-
     } catch (e) {
       console.log(e);
       sendErrorResponse(res, 400, "createCostError");
@@ -104,6 +93,19 @@ export const cost = {
     try {
       await costService.deleteCostById(parseInt(id as string));
       sendSuccessResponse(res, 200);
+    } catch (e) {
+      sendErrorResponse(res, 400, "costNotFound");
+    }
+  },
+
+  deleteRecurrentCost: async (req: Request, res: Response) => {
+    const { id } = req.params;
+    if (!id) return sendErrorResponse(res, 400, "idNotSent");
+
+    try {
+      const deleteRecurrent = await costService.deleteRecurrentCost(parseInt(id as string));
+      if(!deleteRecurrent) return sendErrorResponse(res,400,"costNotFound")
+      sendSuccessResponse(res, 200);      
     } catch (e) {
       sendErrorResponse(res, 400, "costNotFound");
     }
