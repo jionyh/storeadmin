@@ -70,12 +70,16 @@ export const getAllActiveRecurrentCost = async (): Promise<CostRecurrentResponse
 };
 
 export const getCostById = async (tenant_id: number, id: number) => {
-  return prisma.cost.findFirst({
-    where: {
-      id,
-      tenant_id,
-    },
-  });
+  const cost = await prisma.cost.findFirst({ where: { id, tenant_id } });
+
+  if (!cost) return null;
+
+  const isRecurrent = await prisma.costRecurrent.findFirst({ where: { name: cost.name, value: cost.value, tenant_id } });
+
+  return {
+    ...cost,
+    recurrent: Boolean(isRecurrent),
+  };
 };
 
 export const createCost = async (data: CostType) => {

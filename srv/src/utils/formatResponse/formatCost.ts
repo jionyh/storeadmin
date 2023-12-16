@@ -23,7 +23,7 @@ export const formatCostResponse = (costs: CostResponse[] | CostResponse) => {
       name: Capitalize(costs.name),
       value: costs.value,
       createAt: dayjs(costs.createAt).format("YYYY-MM-DD"),
-      recurrent: costs.recurrent ? costs.recurrent : false,
+      recurrent: costs.recurrent,
     };
   }
 
