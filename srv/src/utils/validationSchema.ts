@@ -75,3 +75,11 @@ export const createPurchaseSchema = z.object({
     .transform((i) => (i === "" ? "---" : i)),
   payment: z.union([z.literal("dinheiro"), z.literal("cartao"), z.literal("outros")]),
 });
+
+export const editUserSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  email: z.string().email(),
+  currentPassword: z.string(),
+  newPassword: z.string().min(6, "Requerimento mínimo de 6 caracteres"),
+});

@@ -21,6 +21,7 @@ export enum ErrorMessages {
   productAlreadyExist = "Produto já existente",
   purchaseNotfound = "Compra não localizada!",
   createPurchaseError = "Erro ao criar compras",
+  editUserError = "Erro ao editar usuário",
 }
 
 export interface SuccessMessages {

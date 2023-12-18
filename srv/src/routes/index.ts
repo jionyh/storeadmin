@@ -8,6 +8,7 @@ import unitsRoutes from "./units.routes";
 import productsRoutes from "./products.routes";
 import authRoutes from "./auth.routes";
 import paymentRoutes from "./paymentMethods.routes";
+import userRoutes from "./user.routes";
 
 const router = express.Router();
 
@@ -23,6 +24,7 @@ router.use("/categories", Auth.private, categoriesRoutes);
 router.use("/units", Auth.private, unitsRoutes);
 router.use("/paymentsmethods", Auth.private, paymentRoutes);
 router.use("/products", Auth.private, productsRoutes);
+router.use("/users", Auth.private, userRoutes);
 router.use("/", authRoutes);
 
 export default router;

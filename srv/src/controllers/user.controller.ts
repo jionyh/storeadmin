@@ -5,6 +5,10 @@ import JWT, { JwtPayload } from "jsonwebtoken";
 import dotenv from "dotenv";
 import bcrypt from "bcrypt";
 import { Prisma } from "@prisma/client";
+import * as userService from "../services/user.service";
+import { sendErrorResponse, sendSuccessResponse } from "../utils/sendResponse";
+import { formatUserResponse } from "../utils/formatResponse/formatUser";
+import { editUserSchema } from "../utils/validationSchema";
 
 dotenv.config();
 
@@ -53,6 +57,51 @@ export const user = {
         }
       }
       res.json({ success: false, message: e });
+    }
+  },
+
+  getUser: async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    if (!id) return sendErrorResponse(res, 400, "idNotSent");
+
+    try {
+      const user = await userService.getUser(parseInt(id as string));
+
+      if (!user) return sendErrorResponse(res, 404, "userNotFound");
+
+      sendSuccessResponse(res, 200, "user", formatUserResponse(user));
+    } catch (e) {
+      sendErrorResponse(res, 500, "userNotFound");
+    }
+  },
+
+  changePassword: async (req: Request, res: Response) => {
+    const parse = editUserSchema.safeParse(req.body);
+
+    if (!parse.success) return sendErrorResponse(res, 400, parse.error.issues);
+
+    const user = await userService.getUser(parse.data.id);
+    if (!user) return sendErrorResponse(res, 401, "userNotFound");
+
+    const checkPassword = await bcrypt.compare(parse.data.currentPassword, user.passwordHash);
+
+    if (!checkPassword) return sendErrorResponse(res, 401, "userNotFound");
+
+    const newUserData = {
+      id: parse.data.id,
+      name: parse.data.name,
+      email: parse.data.email,
+      passwordHash: await bcrypt.hash(parse.data.newPassword, 10),
+    };
+
+    try {
+      const changePassword = await userService.changePassword(newUserData);
+      console.log(changePassword);
+      sendSuccessResponse(res, 200);
+    } catch (e) {
+      console.log(e);
+      sendErrorResponse(res, 400, "editUserError");
     }
   },
 };
