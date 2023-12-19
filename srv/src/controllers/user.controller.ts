@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { prisma } from "../lib/prisma";
 import { z } from "zod";
-import JWT, { JwtPayload } from "jsonwebtoken";
+import * as authService from "../services/auth.service";
 import dotenv from "dotenv";
 import bcrypt from "bcrypt";
 import { Prisma } from "@prisma/client";
@@ -81,7 +81,10 @@ export const user = {
 
     if (!parse.success) return sendErrorResponse(res, 400, parse.error.issues);
 
-    const user = await userService.getUser(parse.data.id);
+    const userId = await userService.getUserByEmail(parse.data.email);
+    if (!userId) return sendErrorResponse(res, 401, "userNotFound");
+
+    const user = await userService.getUser(userId.id);
     if (!user) return sendErrorResponse(res, 401, "userNotFound");
 
     const checkPassword = await bcrypt.compare(parse.data.currentPassword, user.passwordHash);
@@ -89,7 +92,7 @@ export const user = {
     if (!checkPassword) return sendErrorResponse(res, 401, "userNotFound");
 
     const newUserData = {
-      id: parse.data.id,
+      id: userId.id,
       name: parse.data.name,
       email: parse.data.email,
       passwordHash: await bcrypt.hash(parse.data.newPassword, 10),
@@ -97,7 +100,6 @@ export const user = {
 
     try {
       const changePassword = await userService.changePassword(newUserData);
-      console.log(changePassword);
       sendSuccessResponse(res, 200);
     } catch (e) {
       console.log(e);

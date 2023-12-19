@@ -77,7 +77,6 @@ export const createPurchaseSchema = z.object({
 });
 
 export const editUserSchema = z.object({
-  id: z.number(),
   name: z.string(),
   email: z.string().email(),
   currentPassword: z.string(),

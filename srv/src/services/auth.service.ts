@@ -12,20 +12,3 @@ export const getTenantIdBySlug = async (slug: string) => {
     throw new Error("Failed to get tenant by slug");
   }
 };
-
-export const getUserByTenant = async (email: string) => {
-  try {
-    const user = await prisma.user.findFirst({
-      where: {
-        email,
-      },
-    });
-
-    if (user) {
-      return user;
-    } else return null;
-  } catch (e) {
-    console.log("Error fetching user by tenant and email:", e);
-    throw new Error("Failed to get user by tenant and email");
-  }
-};

@@ -4,6 +4,7 @@ import cookie from "cookie";
 import JWT from "jsonwebtoken";
 import dotenv from "dotenv";
 import * as authService from "../services/auth.service";
+import * as userService from "../services/user.service";
 import { sendErrorResponse, sendSuccessResponse } from "../utils/sendResponse";
 import { signInSchema } from "../utils/validationSchema";
 
@@ -25,14 +26,11 @@ export const auth = {
     //if(!tenantId) return sendErrorResponse(res,404, 'userNotFound')
 
     /* Busca Usuario pelo email */
-    const user = await authService.getUserByTenant(parse.data.email);
+    const user = await userService.getUserByEmail(parse.data.email);
     if (!user) return sendErrorResponse(res, 401, "userNotFound");
 
     /* Verifica o password */
-    const checkPassword = await bcrypt.compare(
-      parse.data.password,
-      user.passwordHash
-    );
+    const checkPassword = await bcrypt.compare(parse.data.password, user.passwordHash);
     if (!checkPassword) return sendErrorResponse(res, 401, "userNotFound");
 
     /* Criação do jwt com as informações */
