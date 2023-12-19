@@ -6,6 +6,6 @@ export interface Pagination {
 }
 
 export interface ResponseError {
-  success: false;
-  error: string;
-};
+  success: false
+  error: string
+}

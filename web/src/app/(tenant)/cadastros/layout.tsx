@@ -13,7 +13,7 @@ export default function ConfigLayout({ children }: { children: ReactNode }) {
   return (
     <div className="mx-auto flex h-auto w-full min-w-[375px] flex-col">
       <NavConfigButtons items={navConfigItems} />
-      <Separator/>
+      <Separator />
       {children}
     </div>
   )

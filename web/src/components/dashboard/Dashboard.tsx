@@ -23,7 +23,7 @@ export const Dashboard = () => {
   useEffect(() => {
     dataFetchFunction(selectedPeriod)
   })
-  
+
   const purchasesValue =
     purchasesData && selectedPeriod
       ? selectedPeriod === 'day'

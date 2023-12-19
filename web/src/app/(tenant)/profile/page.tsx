@@ -1,24 +1,23 @@
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/api/auth/[...nextauth]/options'
-import { UserFormMain } from "@/components/forms/user/userForm";
-import { Loader } from '@/components/Loader';
-import { UserFormDataType } from '@/types/FormDataTypes';
+import { UserFormMain } from '@/components/forms/user/userForm'
+import { Loader } from '@/components/Loader'
+import { UserFormDataType } from '@/types/FormDataTypes'
 
 export default async function Profile() {
-
   const userSession = await getServerSession(authOptions)
 
-  let initialData:UserFormDataType = {
+  const initialData: UserFormDataType = {
     name: '',
     email: '',
     role: '',
     currentPassword: '',
     newPassword: '',
-    confirmNewPassword: ''
+    confirmNewPassword: '',
   }
 
-  if(userSession){
-    const { name, email, role } = userSession.user;
+  if (userSession) {
+    const { name, email, role } = userSession.user
     initialData.name = name
     initialData.email = email
     initialData.role = role
@@ -26,8 +25,11 @@ export default async function Profile() {
 
   return (
     <>
-    {userSession ? <UserFormMain initialData={initialData}/> : <Loader visible/>}
+      {userSession ? (
+        <UserFormMain initialData={initialData} />
+      ) : (
+        <Loader visible />
+      )}
     </>
-
-  );
+  )
 }

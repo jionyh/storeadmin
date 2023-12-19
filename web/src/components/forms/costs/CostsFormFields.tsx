@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import { CalendarIcon } from "lucide-react"
+import { CalendarIcon, X } from 'lucide-react'
 import {
   FormControl,
   FormField,
@@ -8,7 +8,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { X } from 'lucide-react'
+
 import { Input } from '@/components/ui/input'
 import { CostFormDataType } from '@/types/FormDataTypes'
 import { UseFieldArrayRemove, UseFormReturn } from 'react-hook-form'
@@ -17,14 +17,13 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
+} from '@/components/ui/popover'
+import { Button } from '@/components/ui/button'
+import { Calendar } from '@/components/ui/calendar'
 import { cn } from '@/lib/utils'
 import { formatCurrency } from '@/utils/formatCurrency'
 
 import { dataUtils } from '@/utils/dataUtils'
-
 
 type Props = {
   index: number
@@ -61,10 +60,14 @@ export const CostsFormFields = ({ index, remove, form, edit }: Props) => {
           control={form.control}
           name={`costs.${index}.value`}
           render={({ field }) => (
-            <FormItem className='flex-1 top-0'>
+            <FormItem className="top-0 flex-1">
               {edit && <FormLabel>Valor</FormLabel>}
               <FormControl>
-                <Input placeholder="Valor" {...field} value={edit ? formatCurrency(field.value): field.value} />
+                <Input
+                  placeholder="Valor"
+                  {...field}
+                  value={edit ? formatCurrency(field.value) : field.value}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -74,37 +77,37 @@ export const CostsFormFields = ({ index, remove, form, edit }: Props) => {
           control={form.control}
           name={`costs.${index}.date`}
           render={({ field }) => (
-            <FormItem className='flex-1 top-0'>
-            {edit && <FormLabel>Data</FormLabel>}
-    <Popover>
-    <PopoverTrigger asChild>
-      <FormControl>
-        <Button
-        disabled={edit}
-          variant={"outline"}
-          className={cn(
-            "w-full pl-3 text-left font-normal",
-            !field.value && "text-muted-foreground"
-          )}
-        >
-          {field.value ? (
-            dataUtils.formatFormData(field.value)
-          ) : (
-            <span>Data</span>
-          )}
-          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-        </Button>
-      </FormControl>
-    </PopoverTrigger>
-    <PopoverContent className="w-auto p-0" align="start">
-      <Calendar
-        mode="single"
-        selected={new Date(field.value)}
-        onSelect={field.onChange}
-        initialFocus
-      />
-    </PopoverContent>
-  </Popover>
+            <FormItem className="top-0 flex-1">
+              {edit && <FormLabel>Data</FormLabel>}
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      disabled={edit}
+                      variant={'outline'}
+                      className={cn(
+                        'w-full pl-3 text-left font-normal',
+                        !field.value && 'text-muted-foreground',
+                      )}
+                    >
+                      {field.value ? (
+                        dataUtils.formatFormData(field.value)
+                      ) : (
+                        <span>Data</span>
+                      )}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={new Date(field.value)}
+                    onSelect={field.onChange}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
               <FormMessage />
             </FormItem>
           )}

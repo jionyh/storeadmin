@@ -157,7 +157,11 @@ export default function Sales() {
         submit={deleteAction}
       />
       <ModalForm open={open} setOpen={setOpen}>
-        <SalesFormMain initialData={activeSale} date={date} onSuccess={setOpen} />
+        <SalesFormMain
+          initialData={activeSale}
+          date={date}
+          onSuccess={setOpen}
+        />
       </ModalForm>
     </>
   )

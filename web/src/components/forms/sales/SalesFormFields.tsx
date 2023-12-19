@@ -52,14 +52,12 @@ export const SalesFormFields = ({
           control={form.control}
           name={`sales.${index}.payment_id`}
           render={({ field }) => (
-          <>
-          <FormLabel>Forma de Pagamento</FormLabel>
-          <Input {...field} disabled />
-          </>
+            <>
+              <FormLabel>Forma de Pagamento</FormLabel>
+              <Input {...field} disabled />
+            </>
           )}
         />
-
-        
       ) : (
         <FormField
           control={form.control}
@@ -93,7 +91,7 @@ export const SalesFormFields = ({
             {edit && <FormLabel>Valor</FormLabel>}
             <FormControl>
               <Input
-              disabled={edit}
+                disabled={edit}
                 placeholder="valor"
                 {...field}
                 value={edit ? formatCurrency(field.value) : field.value}

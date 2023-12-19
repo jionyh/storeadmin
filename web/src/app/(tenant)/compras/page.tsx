@@ -40,7 +40,7 @@ const defaultPurchase = [
     product_id: '',
     unit_id: ' ',
     supplier: '',
-    payment: 'cartao'
+    payment: 'cartao',
   },
 ]
 
@@ -82,7 +82,7 @@ export default function Purchases() {
               product_id: foundPurchase.product,
               unit_id: foundPurchase.unit,
               supplier: foundPurchase.supplier,
-              payment: foundPurchase.payment
+              payment: foundPurchase.payment,
             },
           ])
         }

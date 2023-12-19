@@ -34,7 +34,7 @@ const defaultCost = [
     name: '',
     value: '',
     date: '',
-    recurrent: false
+    recurrent: false,
   },
 ]
 
@@ -71,7 +71,7 @@ export default function Costs() {
           name: foundCost.name,
           value: foundCost.value.toString(),
           date: foundCost.createAt,
-          recurrent: foundCost.recurrent
+          recurrent: foundCost.recurrent,
         },
       ])
     }

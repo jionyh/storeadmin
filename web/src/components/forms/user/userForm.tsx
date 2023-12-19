@@ -1,20 +1,20 @@
-"use client";
-import { Button } from "@/components/ui/button";
+'use client'
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
-import { Switch } from "@/components/ui/switch";
-import { userFormSchema, UserFormDataType } from "@/types/FormDataTypes";
-import { capitalize } from "@/utils/capitalizeNames";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+} from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Separator } from '@/components/ui/separator'
+import { Switch } from '@/components/ui/switch'
+import { userFormSchema, UserFormDataType } from '@/types/FormDataTypes'
+import { capitalize } from '@/utils/capitalizeNames'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 import {
   Form,
   FormControl,
@@ -22,27 +22,27 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import useFormSubmit from "@/hooks/useFormSubmit";
-import { Alert } from "@/components/alertDialog/Alert";
+} from '@/components/ui/form'
+import useFormSubmit from '@/hooks/useFormSubmit'
+import { Alert } from '@/components/alertDialog/Alert'
 
 type UserFormMainProps = {
-  initialData: UserFormDataType;
-};
+  initialData: UserFormDataType
+}
 
 export const UserFormMain = ({ initialData }: UserFormMainProps) => {
-  const [editPassword, setEditPassword] = useState<Boolean>(false);
+  const [editPassword, setEditPassword] = useState<boolean>(false)
 
   const { setFormData, isDialogOpen, setIsDialogOpen, submitForm } =
-  useFormSubmit<UserFormDataType>({
-    endpoint: 'users/edit',
-    name: 'usuario',
-  })
+    useFormSubmit<UserFormDataType>({
+      endpoint: 'users/edit',
+      name: 'usuario',
+    })
 
   const form = useForm<UserFormDataType>({
     resolver: zodResolver(userFormSchema),
     defaultValues: initialData,
-  });
+  })
 
   function onSubmit(values: UserFormDataType) {
     setFormData(values)
@@ -83,7 +83,7 @@ export const UserFormMain = ({ initialData }: UserFormMainProps) => {
                         <Switch
                           disabled
                           id="role"
-                          checked={initialData.role === "Admin" ? true : false}
+                          checked={initialData.role === 'Admin'}
                         />
                       </FormControl>
                     </div>
@@ -101,7 +101,7 @@ export const UserFormMain = ({ initialData }: UserFormMainProps) => {
                       <FormItem>
                         <FormLabel>Senha Atual</FormLabel>
                         <FormControl>
-                        <Input type="password" {...field} />
+                          <Input type="password" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -114,7 +114,7 @@ export const UserFormMain = ({ initialData }: UserFormMainProps) => {
                       <FormItem>
                         <FormLabel>Nova Senha</FormLabel>
                         <FormControl>
-                        <Input type="password" {...field} />
+                          <Input type="password" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -157,5 +157,5 @@ export const UserFormMain = ({ initialData }: UserFormMainProps) => {
         submit={submitForm}
       />
     </Card>
-  );
-};
+  )
+}

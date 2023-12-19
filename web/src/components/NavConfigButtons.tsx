@@ -21,7 +21,7 @@ export const NavConfigButtons = ({ items }: Props) => {
           key={item.href}
           href={item.href}
           className={cn(
-            ButtonVariants({ variant: 'ghost', size:'sm' }),
+            ButtonVariants({ variant: 'ghost', size: 'sm' }),
             pathname.startsWith(item.href)
               ? 'border border-primary hover:bg-primary/5'
               : 'hover:bg-transparent hover:underline',

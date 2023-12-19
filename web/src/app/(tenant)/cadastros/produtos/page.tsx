@@ -52,11 +52,7 @@ export default function Produtos() {
   return (
     <div className="mb-3 w-full px-5">
       <div className="my-5 flex items-center justify-end">
-        <Button
-          onClick={handleButtonAddClick}
-          size="sm"
-          variant="outline"
-        >
+        <Button onClick={handleButtonAddClick} size="sm" variant="outline">
           <Plus className="h-3 w-3 text-inherit" /> Adicionar Produto
         </Button>
       </div>

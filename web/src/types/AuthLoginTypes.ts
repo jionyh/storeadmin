@@ -6,7 +6,5 @@ export interface AuthUser {
 
 export interface AuthLogin {
   success: boolean
-    user: AuthUser
-  }
-
-
+  user: AuthUser
+}

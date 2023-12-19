@@ -15,22 +15,29 @@ type AlertProps = {
   deleteTitle?: boolean
 }
 
-export const Alert = ({ open = false, setOpen, submit, deleteTitle}: AlertProps) => {
-  const title = deleteTitle ? 'Você tem certeza que deseja deletar o registro?' : 'Você tem certeza que deseja continuar?'
+export const Alert = ({
+  open = false,
+  setOpen,
+  submit,
+  deleteTitle,
+}: AlertProps) => {
+  const title = deleteTitle
+    ? 'Você tem certeza que deseja deletar o registro?'
+    : 'Você tem certeza que deseja continuar?'
   const submitButtonTitle = deleteTitle ? 'Deletar' : 'Continuar'
   return (
     <AlertDialog open={open}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>
-            {title}
-          </AlertDialogTitle>
+          <AlertDialogTitle>{title}</AlertDialogTitle>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel onClick={() => setOpen(false)}>
             Cancelar
           </AlertDialogCancel>
-          <AlertDialogAction onClick={submit}>{submitButtonTitle}</AlertDialogAction>
+          <AlertDialogAction onClick={submit}>
+            {submitButtonTitle}
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

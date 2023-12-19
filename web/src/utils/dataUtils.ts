@@ -20,11 +20,11 @@ export const dataUtils = {
     return dayjs().format('YYYY-MM-DD')
   },
 
-  formatFormData: (d:string)=> {
-      return format(new Date(d), 'P', {locale: ptBR})
+  formatFormData: (d: string) => {
+    return format(new Date(d), 'P', { locale: ptBR })
   },
 
-  getDayAndMonth: (date: string, format:'long' | 'short' = 'short') => {
+  getDayAndMonth: (date: string, format: 'long' | 'short' = 'short') => {
     return dayjs(date).format(format === 'long' ? 'DD [de] MMMM' : 'DD/MM')
   },
 }

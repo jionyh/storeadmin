@@ -6,7 +6,10 @@ import {
   UseFieldArrayRemove,
   UseFormReturn,
 } from 'react-hook-form'
-import { CategoriesFormDataType, UnitsFormDataType } from '@/types/FormDataTypes'
+import {
+  CategoriesFormDataType,
+  UnitsFormDataType,
+} from '@/types/FormDataTypes'
 import { Button } from '@/components/ui/button'
 import { CategoriesFormFields } from './CategoriesFormFields'
 
@@ -43,7 +46,7 @@ export const CategoriesForm = ({
           variant="blue"
           size="sm"
           disabled
-          onClick={() => append({ name: ''})}
+          onClick={() => append({ name: '' })}
         >
           <Plus />
           Novo Campo

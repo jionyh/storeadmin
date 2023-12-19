@@ -1,12 +1,9 @@
 import { api } from '@/lib/axios'
-import {  UnitsResponse } from '@/types/productTypes'
+import { UnitsResponse } from '@/types/productTypes'
 import axios from 'axios'
 
 export const unitApi = {
-  getAllUnits: async (): Promise<
-    UnitsResponse | ErrorConstructor
-  > => {
-
+  getAllUnits: async (): Promise<UnitsResponse | ErrorConstructor> => {
     try {
       const response = await api.get(`/units`)
       return response.data
@@ -20,5 +17,5 @@ export const unitApi = {
         throw new Error('Failed to fetch units')
       }
     }
-  }
+  },
 }

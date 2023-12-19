@@ -25,14 +25,14 @@ export const useGetSingleCosts = (id: number) => {
   const costs = useQuery({
     queryKey: ['costs', { id }],
     queryFn: () => costApi.getCost(id),
-    //staleTime: 60 * 60 * 3, // 3minutes
+    // staleTime: 60 * 60 * 3, // 3minutes
   })
 
   const returnData = {
     data: costs.data as SingleCostResponse,
     isLoading: costs.isLoading,
     isError: costs.isError,
-    isFetching: costs.isFetching
+    isFetching: costs.isFetching,
   }
   return returnData
 }

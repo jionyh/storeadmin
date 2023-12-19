@@ -1,12 +1,12 @@
-import { ResponseError } from "./commonsTypes";
+import { ResponseError } from './commonsTypes'
 
 type LoginResponseSuccess = {
-  success: true;
-  user:{
+  success: true
+  user: {
     name: string
     email: string
     role: string
   }
-};
+}
 
-export type LoginResponse = LoginResponseSuccess | ResponseError;
+export type LoginResponse = LoginResponseSuccess | ResponseError

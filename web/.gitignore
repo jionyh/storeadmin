@@ -9,6 +9,8 @@
 /coverage
 
 # next.js
+public/sw.js
+public/workbox-*
 /.next/
 /out/
 

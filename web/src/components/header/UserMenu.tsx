@@ -18,15 +18,14 @@ import { Loader } from '../Loader'
 import Link from 'next/link'
 
 type Props = {
-  user:{
+  user: {
     email: string
     name: string
     role: string
   }
 }
 
-export const UserMenu = ({user}:Props) => {
-
+export const UserMenu = ({ user }: Props) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -41,11 +40,7 @@ export const UserMenu = ({user}:Props) => {
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent
-        className="w-fit"
-        align="end"
-        forceMount
-      >
+      <DropdownMenuContent className="w-fit" align="end" forceMount>
         <DropdownMenuLabel className="font-normal text-primary">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none">
@@ -57,10 +52,10 @@ export const UserMenu = ({user}:Props) => {
         <DropdownMenuSeparator />
         <DropdownMenuGroup className="text-primary">
           <Link href={'/profile'}>
-          <DropdownMenuItem className="flex cursor-pointer items-center gap-2 hover:bg-primary/5 hover:text-primary">
-            <UserCog className="h-5 w-5" />
-            Perfil
-          </DropdownMenuItem>
+            <DropdownMenuItem className="flex cursor-pointer items-center gap-2 hover:bg-primary/5 hover:text-primary">
+              <UserCog className="h-5 w-5" />
+              Perfil
+            </DropdownMenuItem>
           </Link>
           <DropdownMenuItem className="flex cursor-pointer items-center gap-2 hover:bg-primary/5 hover:text-primary">
             <Cog className="h-5 w-5" />

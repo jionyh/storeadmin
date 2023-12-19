@@ -9,8 +9,6 @@ export const useUnits = () => {
     staleTime: Infinity,
   })
 
-  
-
   const returnData = {
     data: units.data as UnitsResponse,
     isLoading: units.isLoading,

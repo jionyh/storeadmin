@@ -13,47 +13,51 @@ type UnitsFormMainProps = {
   initialData?: UnitsFormDataType['units']
 }
 
-export const UnitsFormMain = ({initialData}:UnitsFormMainProps)=>{
-
+export const UnitsFormMain = ({ initialData }: UnitsFormMainProps) => {
   const { setFormData, isDialogOpen, setIsDialogOpen, submitForm } =
-  useFormSubmit<UnitsFormDataType['units']>({
-    endpoint: 'units',
-    name: 'unidades',
+    useFormSubmit<UnitsFormDataType['units']>({
+      endpoint: 'units',
+      name: 'unidades',
+    })
+
+  const form = useForm<UnitsFormDataType>({
+    resolver: zodResolver(unitsFormSchema),
+    defaultValues: {
+      units:
+        initialData && initialData?.length > 0
+          ? initialData
+          : [{ name: '', abbreviation: '' }],
+    },
   })
 
-const form = useForm<UnitsFormDataType>({
-  resolver: zodResolver(unitsFormSchema),
-  defaultValues: {
-    units: initialData && initialData?.length > 0 ? initialData : [{ name: '', abbreviation: '' }],
-  },
-})
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: 'units',
+  })
 
-const { fields, append, remove } = useFieldArray({
-  control: form.control,
-  name: 'units',
-})
+  function onSubmit(values: UnitsFormDataType) {
+    setFormData(values.units)
+    setIsDialogOpen(true)
+  }
 
-function onSubmit(values: UnitsFormDataType) {
-  setFormData(values.units)
-  setIsDialogOpen(true)
-}
-
-  return(
+  return (
     <div>
-      <h2 className='text-lg font-semibold leading-none tracking-tight text-center'>
-        {initialData && initialData?.length > 0 ? 'Editar Unidade' : 'Adicionar Unidade'}
-        </h2>
+      <h2 className="text-center text-lg font-semibold leading-none tracking-tight">
+        {initialData && initialData?.length > 0
+          ? 'Editar Unidade'
+          : 'Adicionar Unidade'}
+      </h2>
       <div className="p-4">
-          <Form {...form}>
-            <UnitsForm
-              append={append}
-              fields={fields}
-              form={form}
-              onSubmit={onSubmit}
-              remove={remove}
-            />
-          </Form>
-        </div>
+        <Form {...form}>
+          <UnitsForm
+            append={append}
+            fields={fields}
+            form={form}
+            onSubmit={onSubmit}
+            remove={remove}
+          />
+        </Form>
+      </div>
       <Alert
         open={isDialogOpen}
         setOpen={setIsDialogOpen}

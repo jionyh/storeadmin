@@ -9,7 +9,7 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: 'jwt',
     maxAge: 60 * 60 * 8, // 8 horas
-  },  
+  },
   pages: {
     signIn: '/login',
   },
@@ -28,27 +28,26 @@ export const authOptions: NextAuthOptions = {
 
         const response = await getLogin({ email, password })
 
+        if (!response) throw new Error('failed to fetch login')
 
-        if(!response)throw new Error('failed to fetch login')
-
-        if(!response.success)throw new Error(response.error)
+        if (!response.success) throw new Error(response.error)
 
         return response.user
- 
       },
     }),
   ],
   callbacks: {
-    async jwt({token,user}) {
-      if(user){
-      token.user = user
-    }
+    async jwt({ token, user }) {
+      if (user) {
+        token.user = user
+      }
       return token
     },
-    async session({token, session}){
-      if(token){
+    async session({ token, session }) {
+      if (token) {
         session.user = token.user as AuthUser
       }
       return session
-    }
-}}
+    },
+  },
+}

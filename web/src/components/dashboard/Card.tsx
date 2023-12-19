@@ -9,7 +9,7 @@ type Props = {
   value: string
   period: string
 }
-export const DashboardCard = ({ type, title, value , period }: Props) => {
+export const DashboardCard = ({ type, title, value, period }: Props) => {
   return (
     <Card className="flex-1">
       <CardHeader className="pb-2">

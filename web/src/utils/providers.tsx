@@ -9,7 +9,7 @@ import { SessionProvider } from 'next-auth/react'
 type Props = {
   children: ReactNode
 }
-//<ReactQueryDevtools initialIsOpen={false} panelPosition="right" />
+// <ReactQueryDevtools initialIsOpen={false} panelPosition="right" />
 
 export const Providers = ({ children }: Props) => {
   return (

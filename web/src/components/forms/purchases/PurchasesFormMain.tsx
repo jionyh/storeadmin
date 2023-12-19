@@ -33,7 +33,7 @@ const emptyFields = [
     product_id: '',
     unit_id: '',
     supplier: '',
-    payment: 'cartao'
+    payment: 'cartao',
   },
 ]
 
@@ -55,7 +55,7 @@ export const PurchasesFormMain = ({
   const form = useForm<PurchaseFormDataType>({
     resolver: zodResolver(purchaseFormSchema),
     mode: 'onSubmit',
-    
+
     defaultValues: {
       purchases: itsEditForm ? initialData : emptyFields,
       category: itsEditForm ? initialData[0].category : '',

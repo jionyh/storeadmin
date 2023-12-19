@@ -15,12 +15,11 @@ const useLogin = () => {
         callbackUrl: `/`,
       })
 
-      if (!loginResponse?.error && loginResponse?.ok) {        
-            return true
-          }
-        //router.push(
+      if (!loginResponse?.error && loginResponse?.ok) {
+        return true
+      }
+      // router.push(
       setHasError(loginResponse!.error)
-    
     } catch (error) {
       // Handle any errors that occur during the login process
     }
