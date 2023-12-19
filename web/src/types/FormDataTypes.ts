@@ -103,3 +103,30 @@ export const productsFormSchema = z.object({
 })
 
 export type ProductsFormDataType = z.infer<typeof productsFormSchema>
+
+const addPasswordConfirmationValidation = (schema) =>
+  schema.refine((data) => data.confirmNewPassword === data.newPassword, {
+    message: "As senhas não coincidem",
+  });
+
+export const userFormSchema = addPasswordConfirmationValidation(
+  z.object({
+    name: z.string(),
+    email: z.string().email(),
+    role: z.string(),
+    currentPassword: z.string(),
+    newPassword: z.string().min(6, "Requerimento mínimo de 6 caracteres"),
+    confirmNewPassword: z.string().min(6)
+  }).refine((data)=>{
+    if(data.newPassword !== data.confirmNewPassword){
+      throw new z.ZodError([{
+          code: "custom",
+          path: ["confirmNewPassword"],
+          message: "As senhas não coincidem",
+        }])
+    }
+    return true
+  })
+  )
+
+export type UserFormDataType = z.infer<typeof userFormSchema>

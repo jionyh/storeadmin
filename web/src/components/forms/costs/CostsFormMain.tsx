@@ -44,7 +44,7 @@ export const CostsFormMain = ({
       endpoint: 'costs',
       name: 'despesa',
       onSuccess,
-      edit: itsEditForm
+      put: itsEditForm
     })
 
   const form = useForm<CostFormDataType>({

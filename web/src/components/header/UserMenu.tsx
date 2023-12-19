@@ -15,6 +15,7 @@ import { Cog, LogOut, UserCog } from 'lucide-react'
 import { getInitials } from '@/utils/getInitials'
 import { capitalize } from '@/utils/capitalizeNames'
 import { Loader } from '../Loader'
+import Link from 'next/link'
 
 type Props = {
   user:{
@@ -55,10 +56,12 @@ export const UserMenu = ({user}:Props) => {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup className="text-primary">
+          <Link href={'/profile'}>
           <DropdownMenuItem className="flex cursor-pointer items-center gap-2 hover:bg-primary/5 hover:text-primary">
             <UserCog className="h-5 w-5" />
             Perfil
           </DropdownMenuItem>
+          </Link>
           <DropdownMenuItem className="flex cursor-pointer items-center gap-2 hover:bg-primary/5 hover:text-primary">
             <Cog className="h-5 w-5" />
             Configurações
