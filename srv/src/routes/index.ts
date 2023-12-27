@@ -9,6 +9,7 @@ import productsRoutes from "./products.routes";
 import authRoutes from "./auth.routes";
 import paymentRoutes from "./paymentMethods.routes";
 import userRoutes from "./user.routes";
+import reportRoutes from "./report.routes";
 
 const router = express.Router();
 
@@ -25,6 +26,7 @@ router.use("/units", Auth.private, unitsRoutes);
 router.use("/paymentsmethods", Auth.private, paymentRoutes);
 router.use("/products", Auth.private, productsRoutes);
 router.use("/users", Auth.private, userRoutes);
+router.use("/reports", Auth.private, reportRoutes);
 router.use("/", authRoutes);
 
 export default router;
