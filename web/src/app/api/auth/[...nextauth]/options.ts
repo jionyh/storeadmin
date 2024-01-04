@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { api } from '@/lib/axios'
 import { AuthUser } from '@/types/AuthLoginTypes'
 import { getLogin } from '@/utils/api/auth'
 import type { NextAuthOptions } from 'next-auth'
@@ -25,13 +24,9 @@ export const authOptions: NextAuthOptions = {
           throw new Error('invalid Credentials')
         }
         const { email, password } = credentials
-
         const response = await getLogin({ email, password })
-
         if (!response) throw new Error('failed to fetch login')
-
         if (!response.success) throw new Error(response.error)
-
         return response.user
       },
     }),

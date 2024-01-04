@@ -7,11 +7,11 @@ import { Toaster } from '@/components/ui/toaster'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'PWA with Next 13',
-  description: 'PWA application with Next 13',
+  title: 'Storeadmin',
+  description: 'Storeadmin',
   generator: 'Next.js',
   manifest: '/manifest.json',
-  keywords: ['nextjs', 'nextjs13', 'next13', 'pwa', 'next-pwa'],
+  keywords: ['nextjs', 'storeadmin', 'saas'],
   themeColor: [{ media: '(prefers-color-scheme: dark)', color: '#fff' }],
   authors: [
     { name: 'Jiony Santos' },

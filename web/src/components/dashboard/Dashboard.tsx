@@ -7,7 +7,11 @@ import { usePurchases } from '@/utils/queries/purchases'
 import { useSales } from '@/utils/queries/sales'
 import { Loader } from '../Loader'
 
-export const Dashboard = () => {
+type DashboardProps = {
+  children: React.ReactNode
+}
+
+export const Dashboard = ({ children }: DashboardProps) => {
   const [selectedPeriod, setSelectedPeriod] = useState<string>('week')
 
   const { data: purchasesData, isLoading: purchasesLoading } = usePurchases({
@@ -52,13 +56,11 @@ export const Dashboard = () => {
 
       <div className="p-5">
         <div className="flex flex-col items-center justify-center gap-2 text-sm">
-          <Card className="flex-1">
+          <Card className="w-full flex-1">
             <CardHeader>
               <CardTitle>Fluxo de Caixa</CardTitle>
             </CardHeader>
-            <CardContent>
-              <img alt="" src="/chart.png"></img>
-            </CardContent>
+            <CardContent>{children}</CardContent>
           </Card>
           <div className="my-4 flex w-full items-center justify-center gap-2 border-t-2 pt-4">
             <ButtonsHeader srvFn={dataFetchFunction} />

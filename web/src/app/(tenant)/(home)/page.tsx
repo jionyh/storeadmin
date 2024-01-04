@@ -1,12 +1,14 @@
+import { CashflowChart } from '@/components/dashboard/CashFlowChart'
 import { Dashboard } from '@/components/dashboard/Dashboard'
-import { getPurchases } from '@/utils/api'
-import { getLogin } from '@/utils/api/auth'
-import { cookies } from 'next/headers'
+import { cashflowReport } from '@/utils/api/reports'
 
 export default async function Home() {
+  const data = await cashflowReport()
   return (
     <div>
-      <Dashboard />
+      <Dashboard>
+        <CashflowChart data={data.cashflow} />
+      </Dashboard>
     </div>
   )
 }

@@ -25,6 +25,7 @@ export default function Login() {
     e.preventDefault()
     const email = emailRef.current?.value || ''
     const password = passwordRef.current?.value || ''
+    // await getLogin({ email, password })
     const loggedUser = await login(email, password)
     if (loggedUser) {
       await getLogin({ email, password })
