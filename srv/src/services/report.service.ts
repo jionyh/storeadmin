@@ -8,10 +8,10 @@ export const inflow = async (tenant_id: number, date: string) => {
         tenant_id,
         createAt: {
           gte: dayjs(date as string)
-            .subtract(5, "months")
             .startOf("month")
             .toDate(),
           lte: dayjs(date as string)
+            .add(5, "months")
             .endOf("month")
             .toDate(),
         },
@@ -38,10 +38,10 @@ export const outflow = async (tenant_id: number, date: string) => {
       tenant_id,
       createAt: {
         gte: dayjs(date as string)
-          .subtract(5, "months")
           .startOf("month")
           .toDate(),
         lte: dayjs(date as string)
+          .add(5, "months")
           .endOf("month")
           .toDate(),
       },
