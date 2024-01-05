@@ -73,7 +73,7 @@ export const CashflowChart = ({ data }: Props) => {
 
   const config = {
     options: {
-      responsive: true,
+      maintainAspectRatio: false,
       plugins: {
         title: {
           display: true,
@@ -111,7 +111,7 @@ export const CashflowChart = ({ data }: Props) => {
   }
 
   return (
-    <div className="w-full">
+    <div className="flex h-60 w-full border border-blue-500">
       <Chart type="bar" data={chartData} options={config.options} />
     </div>
   )

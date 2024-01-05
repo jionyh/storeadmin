@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { z } from "zod";
-import { defaultDate } from "./dateUtils";
+import { todayDate } from "./dateUtils";
 
 export const createCostSchema = z.object({
   name: z.string({ required_error: "o campo nome é obrigatório" }).nonempty("preencha o nome da despesa").toLowerCase(),
@@ -10,7 +10,7 @@ export const createCostSchema = z.object({
     .transform((number) => parseFloat(number.replace(",", "."))),
   date: z
     .string()
-    .default(defaultDate)
+    .default(todayDate)
     .transform((date) => dayjs(date).toDate()),
   recurrent: z.boolean().default(false),
 });
@@ -23,7 +23,7 @@ export const signInSchema = z.object({
 export const createSaleSchema = z.object({
   date: z
     .string()
-    .default(defaultDate)
+    .default(todayDate)
     .transform((date) => dayjs(date).toDate()),
   sales: z.array(
     z.object({

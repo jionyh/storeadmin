@@ -8,6 +8,15 @@ export const getLogin = async (data: {
 }): Promise<LoginResponse> => {
   try {
     const result = await api.post('/signin', data)
+    const resultFetch = fetch('https://api.jiony.dev/signin', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    }).then((response) => response.json())
+    console.log('fetchResult', resultFetch)
     return result.data
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
