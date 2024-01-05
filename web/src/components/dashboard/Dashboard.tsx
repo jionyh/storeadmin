@@ -57,10 +57,7 @@ export const Dashboard = ({ children }: DashboardProps) => {
       <div className="p-5">
         <div className="flex flex-col items-center justify-center gap-2 text-sm">
           <Card className="w-full flex-1">
-            <CardHeader>
-              <CardTitle>Fluxo de Caixa</CardTitle>
-            </CardHeader>
-            <CardContent>{children}</CardContent>
+            <CardContent className="m-2 p-0">{children}</CardContent>
           </Card>
           <div className="my-4 flex w-full items-center justify-center gap-2 border-t-2 pt-4">
             <ButtonsHeader srvFn={dataFetchFunction} />

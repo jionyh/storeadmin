@@ -216,8 +216,15 @@
 	"editor.formatOnSave": false,
 	"eslint.codeActionsOnSave.rules": null,
 	"cSpell.words": [
+		"Caixa",
+		"chartjs",
 		"ducanh",
+		"Fluxo",
 		"hookform",
+		"netflow",
+		"Pagamentos",
+		"Recebimentos",
+		"Saldo",
 		"swipeable",
 		"Swipeable"
 	],

@@ -1,8 +1,12 @@
-import { baseUrl, fetchOptions } from '@/utils/fetchOptions'
+import { baseUrl } from '@/utils/fetchOptions'
 
-export const cashflowReport = async () => {
+export const cashflowReport = async (authToken: string | undefined) => {
   try {
-    const result = await fetch(`${baseUrl}/cashflow`, fetchOptions)
+    const result = await fetch(`${baseUrl}/cashflow`, {
+      headers: {
+        Cookie: `authToken=${authToken}`,
+      },
+    })
 
     if (!result.ok) throw new Error('Failed to fetch data!')
 
