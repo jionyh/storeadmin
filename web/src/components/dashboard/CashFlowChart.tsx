@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Chart as ChartJS,
   LinearScale,
@@ -32,15 +32,38 @@ ChartJS.register(
 )
 
 type Props = {
-  data: { month: string; inflow: string; outflow: string }[]
+  data: {
+    month: string
+    inflow: string
+    outflow: string
+  }[]
 }
+
 export const CashflowChart = ({ data }: Props) => {
-  const labels = data.map((item) => item.month)
-  const inflow = data.map((item) => parseFloat(item.inflow))
-  const outflow = data.map((item) => parseFloat(item.outflow) * -1)
-  const netflow = data.map(
-    (item) => parseFloat(item.outflow) * -1 + parseFloat(item.inflow),
-  )
+  const [chart, setChart] = useState<any[]>()
+  const [labels, setLabels] = useState<string[]>([])
+  const [inflow, setInflow] = useState<number[]>([])
+  const [outflow, setOutflow] = useState<number[]>([])
+  const [netflow, setNetflow] = useState<number[]>([])
+
+  useEffect(() => {
+    if (chart) {
+      setLabels(chart.map((item) => item.month))
+      setInflow(chart.map((item) => parseFloat(item.inflow)))
+      setOutflow(chart.map((item) => parseFloat(item.outflow) * -1))
+      setNetflow(
+        chart.map(
+          (item) => parseFloat(item.outflow) * -1 + parseFloat(item.inflow),
+        ),
+      )
+    }
+  }, [chart])
+
+  useEffect(() => {
+    if (data && !chart) {
+      setChart(data)
+    }
+  }, [data])
 
   const chartData = {
     labels,

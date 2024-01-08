@@ -3,6 +3,7 @@ import { AuthUser } from '@/types/AuthLoginTypes'
 import { getLogin } from '@/utils/api/auth'
 import type { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
+import { cookies } from 'next/headers'
 
 export const authOptions: NextAuthOptions = {
   session: {

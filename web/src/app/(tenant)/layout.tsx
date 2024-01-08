@@ -5,7 +5,7 @@ export default function TenantLayout({ children }: { children: ReactNode }) {
   return (
     <div className="m-auto flex min-h-screen w-full min-w-[375px] flex-col bg-primary-foreground">
       <Header />
-      {children}
+      <Suspense>{children}</Suspense>
     </div>
   )
 }

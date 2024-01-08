@@ -11,7 +11,7 @@ type DashboardProps = {
   children: React.ReactNode
 }
 
-export const Dashboard = ({ children }: DashboardProps) => {
+export const DashboardComponent = ({ children }: DashboardProps) => {
   const [selectedPeriod, setSelectedPeriod] = useState<string>('week')
 
   const { data: purchasesData, isLoading: purchasesLoading } = usePurchases({
