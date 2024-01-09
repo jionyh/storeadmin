@@ -1,13 +1,17 @@
-import { api } from '@/lib/axios'
 import { LoginResponse } from '@/types/loginTypes'
 import axios from 'axios'
+import { API_URL } from '../fetchOptions'
+import { api } from '@/lib/axios'
 
 export const getLogin = async (data: {
   email: string
   password: string
 }): Promise<LoginResponse> => {
   try {
-    const res = await fetch('https://api.jiony.dev/signin', {
+    // request login para o axios pegar o token
+    await api.post('/signin', data)
+    // request login do fetch para pegar o token
+    const res = await fetch(`${API_URL}/signin`, {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -24,6 +28,7 @@ export const getLogin = async (data: {
       ?.split('=')[1]
 
     console.log(json)
+
     return {
       success: json.success,
       user: {

@@ -125,16 +125,12 @@ export const CashflowChart = ({ data }: Props) => {
           },
         },
       },
-      scales: {
-        y: {
-          suggestedMin: 30,
-        },
-      },
+      scales: {},
     },
   }
 
   return (
-    <div className="flex h-60 w-full border border-blue-500">
+    <div className="flex h-60 w-full">
       <Chart type="bar" data={chartData} options={config.options} />
     </div>
   )

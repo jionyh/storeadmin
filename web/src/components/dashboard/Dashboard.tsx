@@ -1,17 +1,11 @@
 'use client'
 import React, { useCallback, useEffect, useState } from 'react'
 import { ButtonsHeader } from './ButtonHeader'
-import { Card, CardHeader, CardTitle, CardContent } from '../ui/card'
 import { DashboardCard } from './Card'
 import { usePurchases } from '@/utils/queries/purchases'
 import { useSales } from '@/utils/queries/sales'
-import { Loader } from '../Loader'
 
-type DashboardProps = {
-  children: React.ReactNode
-}
-
-export const DashboardComponent = ({ children }: DashboardProps) => {
+export const DashboardComponent = () => {
   const [selectedPeriod, setSelectedPeriod] = useState<string>('week')
 
   const { data: purchasesData, isLoading: purchasesLoading } = usePurchases({
@@ -52,31 +46,22 @@ export const DashboardComponent = ({ children }: DashboardProps) => {
 
   return (
     <>
-      {purchasesLoading || (salesLoading && <Loader visible />)}
-
-      <div className="p-5">
-        <div className="flex flex-col items-center justify-center gap-2 text-sm">
-          <Card className="w-full flex-1">
-            <CardContent className="m-2 p-0">{children}</CardContent>
-          </Card>
-          <div className="my-4 flex w-full items-center justify-center gap-2 border-t-2 pt-4">
-            <ButtonsHeader srvFn={dataFetchFunction} />
-          </div>
-          <div className="flex w-full flex-1 items-center justify-center gap-1">
-            <DashboardCard
-              type="purchase"
-              title="Compras"
-              period={selectedPeriod}
-              value={purchasesValue}
-            />
-            <DashboardCard
-              type="sell"
-              title="Vendas"
-              period={selectedPeriod}
-              value={salesValue}
-            />
-          </div>
-        </div>
+      <div className="my-4 flex w-full items-center justify-center gap-2 border-t-2 pt-4">
+        <ButtonsHeader srvFn={dataFetchFunction} />
+      </div>
+      <div className="flex w-full flex-1 items-center justify-center gap-1">
+        <DashboardCard
+          type="purchase"
+          title="Compras"
+          period={selectedPeriod}
+          value={purchasesValue}
+        />
+        <DashboardCard
+          type="sell"
+          title="Vendas"
+          period={selectedPeriod}
+          value={salesValue}
+        />
       </div>
     </>
   )
