@@ -190,7 +190,11 @@ export default function Purchases() {
         submit={deleteAction}
       />
       <ModalForm open={open} setOpen={setOpen}>
-        <PurchasesFormMain initialData={activePurchase} onSuccess={setOpen} />
+        <PurchasesFormMain
+          initialData={activePurchase}
+          date={date}
+          onSuccess={setOpen}
+        />
       </ModalForm>
     </>
   )

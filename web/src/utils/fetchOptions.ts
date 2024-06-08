@@ -11,7 +11,7 @@ export async function getAuthToken() {
   }
 }
 
-export const API_URL = 'http://localhost:4001'
+export const API_URL = 'https://api.jiony.dev'
 /* export const fetchOptions = {
   credentials: 'include',
   headers: {

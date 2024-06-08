@@ -54,7 +54,7 @@ function useFormSubmit<T>(props: {
         })
       }
     } catch (error) {
-      console.error('API request error:', error)
+      console.log('API request error:', error)
       toast({
         variant: 'destructive',
         description:

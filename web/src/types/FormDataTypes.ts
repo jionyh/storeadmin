@@ -23,6 +23,14 @@ export type SalesFormDataType = z.infer<typeof salesFormSchema>
 // PurchaseForm //
 
 export const purchaseFormSchema = z.object({
+  date: z
+    .date()
+    .or(
+      z
+        .string({ required_error: 'Campo obrigatório' })
+        .nonempty('Campo obrigatório'),
+    )
+    .transform((date) => dayjs(date).format('YYYY-MM-DD')),
   category: z.string().nonempty('Campo obrigatório'),
   purchases: z.array(
     z.object({

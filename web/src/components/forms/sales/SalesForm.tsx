@@ -52,48 +52,6 @@ export const SalesForm = ({
       className="w=full flex flex-col gap-2"
       onSubmit={form.handleSubmit(onSubmit)}
     >
-      <FormField
-        control={form.control}
-        name={`date`}
-        render={({ field }) => (
-          <FormItem className="top-0 flex-1">
-            <FormLabel>Data</FormLabel>
-            <Popover>
-              <PopoverTrigger asChild>
-                <FormControl>
-                  <Button
-                    disabled={edit}
-                    variant={'outline'}
-                    className={cn(
-                      'w-full pl-3 text-left font-normal',
-                      !field.value && 'text-muted-foreground',
-                    )}
-                  >
-                    {field.value ? (
-                      dataUtils.formatFormData(field.value)
-                    ) : (
-                      <span>Selecione a data</span>
-                    )}
-                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                  </Button>
-                </FormControl>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={new Date(field.value)}
-                  onSelect={field.onChange}
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-
-      <Separator className="my-2" />
-
       {fields.map((fields, index) => (
         <SalesFormFields
           key={fields.id}

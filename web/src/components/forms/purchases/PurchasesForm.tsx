@@ -1,21 +1,35 @@
 'use-client'
-import { Plus, Save } from 'lucide-react'
+import { CalendarIcon, Plus, Save } from 'lucide-react'
 import {
   FieldArrayWithId,
   UseFieldArrayAppend,
   UseFieldArrayRemove,
   UseFormReturn,
 } from 'react-hook-form'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
 import { PurchaseFormDataType } from '@/types/FormDataTypes'
 import { Button } from '@/components/ui/button'
 import { PurchasesFormFields } from './PurchasesFormFields'
 import { CommonSelect } from '../commons/Select'
-import { FormField } from '@/components/ui/form'
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
 import { useCategory } from '@/utils/queries/category'
+import { Calendar } from '@/components/ui/calendar'
 import { Separator } from '@/components/ui/separator'
 import { useProducts } from '@/utils/queries/products'
 import { useUnits } from '@/utils/queries/units'
 import { Input } from '@/components/ui/input'
+import { cn } from '@/lib/utils'
+import { dataUtils } from '@/utils/dataUtils'
 
 type Props = {
   form: UseFormReturn<PurchaseFormDataType>
@@ -44,6 +58,48 @@ export const PurchasesForm = ({
       className="w=full flex flex-col gap-2"
       onSubmit={form.handleSubmit(onSubmit)}
     >
+      <FormField
+        control={form.control}
+        name={`date`}
+        render={({ field }) => (
+          <FormItem className="top-0 flex-1">
+            <FormLabel>Data</FormLabel>
+            <Popover>
+              <PopoverTrigger asChild>
+                <FormControl>
+                  <Button
+                    disabled={edit}
+                    variant={'outline'}
+                    className={cn(
+                      'w-full pl-3 text-left font-normal',
+                      !field.value && 'text-muted-foreground',
+                    )}
+                  >
+                    {field.value ? (
+                      dataUtils.formatFormData(field.value)
+                    ) : (
+                      <span>Selecione a data</span>
+                    )}
+                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                  </Button>
+                </FormControl>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={new Date(field.value)}
+                  onSelect={field.onChange}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <Separator className="my-2" />
+
       {edit ? (
         <FormField
           control={form.control}

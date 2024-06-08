@@ -1,4 +1,4 @@
-import { baseUrl } from '@/utils/fetchOptions'
+import { API_URL } from '@/utils/fetchOptions'
 import { cookies } from 'next/headers'
 
 export const cashflowReport = async () => {
@@ -7,7 +7,7 @@ export const cashflowReport = async () => {
   console.log('cashFlowFn =>', authToken)
   console.log('cookies =>', cookies().getAll())
   try {
-    const result = await fetch(`${baseUrl}/cashflow`, {
+    const result = await fetch(`${API_URL}/cashflow`, {
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',

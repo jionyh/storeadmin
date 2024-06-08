@@ -13,6 +13,7 @@ import { PurchaseFormDataType, purchaseFormSchema } from '@/types/FormDataTypes'
 import { useCategory } from '@/utils/queries/category'
 
 type PurchaseFormMainProps = {
+  date: string
   initialData: {
     purchase_id?: number
     quantity: string
@@ -38,6 +39,7 @@ const emptyFields = [
 ]
 
 export const PurchasesFormMain = ({
+  date,
   initialData,
   onSuccess,
 }: PurchaseFormMainProps) => {
@@ -46,7 +48,7 @@ export const PurchasesFormMain = ({
   const itsEditForm = initialData?.some((el) => el.purchase_id !== undefined)
 
   const { setFormData, isDialogOpen, setIsDialogOpen, submitForm } =
-    useFormSubmit<PurchaseFormDataType['purchases']>({
+    useFormSubmit<PurchaseFormDataType>({
       endpoint: 'purchases',
       name: 'compra',
       onSuccess,
@@ -55,8 +57,8 @@ export const PurchasesFormMain = ({
   const form = useForm<PurchaseFormDataType>({
     resolver: zodResolver(purchaseFormSchema),
     mode: 'onSubmit',
-
     defaultValues: {
+      date: new Date(date).toISOString(),
       purchases: itsEditForm ? initialData : emptyFields,
       category: itsEditForm ? initialData[0].category : '',
     },
@@ -68,7 +70,7 @@ export const PurchasesFormMain = ({
   })
 
   function onSubmit(values: PurchaseFormDataType) {
-    setFormData(values.purchases)
+    setFormData(values)
     setIsDialogOpen(true)
   }
 
