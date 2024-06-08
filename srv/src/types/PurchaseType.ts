@@ -1,6 +1,7 @@
 type paymentType = "dinheiro" | "cartao" | "outros";
 
 export type PurchaseType = {
+  createAt: Date;
   quantity: number;
   value: number;
   product_id: number;

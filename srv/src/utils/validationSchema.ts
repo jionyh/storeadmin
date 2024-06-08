@@ -53,7 +53,14 @@ export const createProductSchema = z.object({
 });
 
 export const createPurchaseSchema = z.object({
-  quantity: z
+  date: z
+    .string()
+    .default(todayDate)
+    .transform((date) => dayjs(date).toDate()),
+  category: z.string(),
+  purchases: z.array(
+    z.object({
+    quantity: z
     .string({ required_error: "o campo quantidade é obrigatório" })
     .nonempty("preencha a quantidade")
     .transform((number) => parseFloat(number.replace(",", "."))),
@@ -74,6 +81,8 @@ export const createPurchaseSchema = z.object({
     .optional()
     .transform((i) => (i === "" ? "---" : i)),
   payment: z.union([z.literal("dinheiro"), z.literal("cartao"), z.literal("outros")]),
+    })
+  )
 });
 
 export const editUserSchema = z.object({

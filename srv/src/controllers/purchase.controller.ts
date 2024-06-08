@@ -55,7 +55,7 @@ export const purchase = {
   },
 
   createPurchase: async (req: Request, res: Response) => {
-    const parse = createPurchaseSchema.array().nonempty("Dados não enviados").safeParse(req.body);
+    const parse = createPurchaseSchema.safeParse(req.body);
 
     if (!parse.success) return sendErrorResponse(res, 400, parse.error.issues);
 
@@ -63,8 +63,9 @@ export const purchase = {
 
     let purchaseData: PurchaseDataType = [];
 
-    parse.data.map((i) => {
+    parse.data.purchases.map((i) => {
       purchaseData.push({
+        createAt: parse.data.date,
         quantity: i.quantity,
         value: i.value,
         product_id: i.product_id,
